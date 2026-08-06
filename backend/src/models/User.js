@@ -14,6 +14,7 @@ const userSchema = new mongoose.Schema(
     studentId: { type: String, default: '' },
     facultyId: { type: String, default: '' },
     designation: { type: String, default: '' }, // For faculty (e.g. Assistant Professor)
+    isCR: { type: Boolean, default: false }, // Class Representative flag
     avatar: { type: String, default: '' },
   },
   { timestamps: true }

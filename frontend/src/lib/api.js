@@ -118,3 +118,47 @@ export async function registerUser(userData) {
   }
   return data.user;
 }
+
+export async function fetchUsers() {
+  try {
+    const res = await fetch(`${API_BASE}/users`, { cache: 'no-store' });
+    if (!res.ok) throw new Error('Failed to fetch users');
+    const data = await res.json();
+    return data.users || [];
+  } catch (err) {
+    console.warn('[API Client] User fetch error:', err.message);
+    return [];
+  }
+}
+
+export async function toggleUserCR(userId, isCR) {
+  const res = await fetch(`${API_BASE}/users/${userId}/cr`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ isCR }),
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error || 'Failed to update CR status');
+  }
+  return await res.json();
+}
+
+export async function updateUserRole(userId, role) {
+  const res = await fetch(`${API_BASE}/users/${userId}/role`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ role }),
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error || 'Failed to update user role');
+  }
+  return await res.json();
+}
+
+export async function deleteUser(userId) {
+  const res = await fetch(`${API_BASE}/users/${userId}`, { method: 'DELETE' });
+  if (!res.ok) throw new Error('Failed to delete user');
+  return await res.json();
+}

@@ -33,7 +33,10 @@ export default function LoginPage() {
   };
 
   const setDemoRole = (role) => {
-    if (role === 'faculty') {
+    if (role === 'admin') {
+      setEmail('admin@gmail.com');
+      setPassword('admin123');
+    } else if (role === 'faculty') {
       setEmail('sarah.jenkins@univ.edu');
       setPassword('password123');
     } else {
@@ -44,34 +47,41 @@ export default function LoginPage() {
 
   return (
     <div className="max-w-md mx-auto py-12">
-      <div className="bg-white rounded-3xl p-8 border border-slate-100 shadow-xl space-y-6">
+      <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-100 dark:border-slate-800 shadow-xl space-y-6">
         
         {/* Header */}
         <div className="text-center space-y-2">
-          <div className="w-12 h-12 rounded-2xl bg-slate-900 text-white flex items-center justify-center mx-auto shadow-md">
-            <GraduationCap className="w-6 h-6 text-blue-400" />
+          <div className="w-12 h-12 rounded-2xl bg-slate-900 dark:bg-blue-600 text-white flex items-center justify-center mx-auto shadow-md">
+            <GraduationCap className="w-6 h-6 text-blue-400 dark:text-white" />
           </div>
-          <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Sign In to UniPortal</h1>
-          <p className="text-xs text-slate-400">Access student notices, class schedules & faculty tools</p>
+          <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Sign In to UniPortal</h1>
+          <p className="text-xs text-slate-400 dark:text-slate-500">Access student notices, class schedules & admin management</p>
         </div>
 
         {/* Quick Demo Credentials Autofill */}
-        <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100 text-xs space-y-2">
-          <p className="font-semibold text-slate-700 text-center text-[11px] uppercase tracking-wider">Quick Demo Autofill</p>
-          <div className="grid grid-cols-2 gap-2">
+        <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 text-xs space-y-2">
+          <p className="font-semibold text-slate-700 dark:text-slate-300 text-center text-[11px] uppercase tracking-wider">Quick Demo Autofill</p>
+          <div className="grid grid-cols-3 gap-1.5">
             <button
               type="button"
               onClick={() => setDemoRole('student')}
-              className="py-1.5 px-3 rounded-xl bg-white border border-slate-200 hover:border-slate-300 text-slate-700 font-medium text-center shadow-sm"
+              className="py-1.5 px-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-blue-500 text-slate-700 dark:text-slate-200 font-medium text-center text-[11px] shadow-sm"
             >
-              Student Demo
+              👨‍🎓 Student
             </button>
             <button
               type="button"
               onClick={() => setDemoRole('faculty')}
-              className="py-1.5 px-3 rounded-xl bg-white border border-slate-200 hover:border-slate-300 text-slate-700 font-medium text-center shadow-sm"
+              className="py-1.5 px-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-indigo-500 text-slate-700 dark:text-slate-200 font-medium text-center text-[11px] shadow-sm"
             >
-              Faculty Demo
+              👩‍🏫 Faculty
+            </button>
+            <button
+              type="button"
+              onClick={() => setDemoRole('admin')}
+              className="py-1.5 px-2 rounded-xl bg-purple-50 dark:bg-purple-950/60 border border-purple-200 dark:border-purple-800/60 hover:border-purple-500 text-purple-700 dark:text-purple-300 font-bold text-center text-[11px] shadow-sm"
+            >
+              👑 Admin
             </button>
           </div>
         </div>

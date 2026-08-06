@@ -21,8 +21,21 @@ export const connectDB = async () => {
 async function seedInitialData() {
   try {
     // Seed Users
+    const adminExists = await User.findOne({ email: 'admin@gmail.com' });
+    if (!adminExists) {
+      await User.create({
+        name: 'System Administrator',
+        email: 'admin@gmail.com',
+        password: 'admin123',
+        role: 'admin',
+        department: 'System Administration',
+        designation: 'Head Admin'
+      });
+      console.log('[MongoDB Seed] Admin user (admin@gmail.com) created.');
+    }
+
     const userCount = await User.countDocuments();
-    if (userCount === 0) {
+    if (userCount <= 1) {
       await User.create([
         {
           name: 'Dr. Sarah Jenkins',
@@ -39,7 +52,8 @@ async function seedInitialData() {
           password: 'password123',
           role: 'student',
           department: 'Computer Science & Engineering',
-          studentId: 'CSE-2024-042'
+          studentId: 'CSE-2024-042',
+          isCR: true
         }
       ]);
       console.log('[MongoDB Seed] Sample users created.');

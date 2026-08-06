@@ -6,6 +6,15 @@ const router = express.Router();
 // Mock store in case local MongoDB instance isn't running
 const mockUsers = [
   {
+    _id: 'usr_admin_1',
+    name: 'System Administrator',
+    email: 'admin@gmail.com',
+    role: 'admin',
+    department: 'System Administration',
+    designation: 'Head Admin',
+    password: 'admin123'
+  },
+  {
     _id: 'usr_faculty_1',
     name: 'Dr. Sarah Jenkins',
     email: 'sarah.jenkins@univ.edu',
@@ -21,6 +30,7 @@ const mockUsers = [
     role: 'student',
     department: 'Computer Science & Engineering',
     studentId: 'CSE-2024-042',
+    isCR: true,
     password: 'password123'
   }
 ];
