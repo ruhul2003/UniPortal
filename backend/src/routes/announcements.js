@@ -37,12 +37,12 @@ let initialAnnouncements = [
 router.get('/', async (req, res) => {
   try {
     try {
-      const dbItems = await Announcement.find().sort({ isPinned: -1, date: -1 });
-      if (dbItems && dbItems.length > 0) {
-        return res.json({ success: true, announcements: dbItems });
-      }
-    } catch (e) {}
-    res.json({ success: true, announcements: initialAnnouncements });
+      const dbItems = await Announcement.find().sort({ isPinned: -1, createdAt: -1, date: -1 });
+      return res.json({ success: true, announcements: dbItems });
+    } catch (e) {
+      console.warn('[Announcement DB Fetch Fallback]', e.message);
+      return res.json({ success: true, announcements: initialAnnouncements });
+    }
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

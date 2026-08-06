@@ -44,13 +44,11 @@ router.get('/', async (req, res) => {
   try {
     try {
       const dbNotices = await Notice.find().sort({ createdAt: -1 });
-      if (dbNotices && dbNotices.length > 0) {
-        return res.json({ success: true, notices: dbNotices });
-      }
+      return res.json({ success: true, notices: dbNotices });
     } catch (e) {
-      // Use in-memory store if DB query fails
+      console.warn('[Notice DB Fetch Fallback]', e.message);
+      return res.json({ success: true, notices: initialNotices });
     }
-    res.json({ success: true, notices: initialNotices });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

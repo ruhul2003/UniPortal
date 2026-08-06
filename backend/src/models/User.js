@@ -12,6 +12,7 @@ const userSchema = new mongoose.Schema(
     },
     department: { type: String, default: 'Computer Science & Engineering' },
     studentId: { type: String, default: '' },
+    facultyId: { type: String, default: '' },
     designation: { type: String, default: '' }, // For faculty (e.g. Assistant Professor)
     avatar: { type: String, default: '' },
   },

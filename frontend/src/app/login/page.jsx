@@ -62,14 +62,14 @@ export default function LoginPage() {
             <button
               type="button"
               onClick={() => setDemoRole('student')}
-              className="py-1.5 px-3 rounded-xl bg-white border border-slate-200 hover:border-slate-300 text-slate-700 font-medium text-center shadow-2xs"
+              className="py-1.5 px-3 rounded-xl bg-white border border-slate-200 hover:border-slate-300 text-slate-700 font-medium text-center shadow-sm"
             >
               Student Demo
             </button>
             <button
               type="button"
               onClick={() => setDemoRole('faculty')}
-              className="py-1.5 px-3 rounded-xl bg-white border border-slate-200 hover:border-slate-300 text-slate-700 font-medium text-center shadow-2xs"
+              className="py-1.5 px-3 rounded-xl bg-white border border-slate-200 hover:border-slate-300 text-slate-700 font-medium text-center shadow-sm"
             >
               Faculty Demo
             </button>

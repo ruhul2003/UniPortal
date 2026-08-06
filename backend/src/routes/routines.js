@@ -81,13 +81,11 @@ router.get('/', async (req, res) => {
   try {
     try {
       const dbRoutines = await Routine.find();
-      if (dbRoutines && dbRoutines.length > 0) {
-        return res.json({ success: true, routines: dbRoutines });
-      }
+      return res.json({ success: true, routines: dbRoutines });
     } catch (e) {
-      // ignore
+      console.warn('[Routine DB Fetch Fallback]', e.message);
+      return res.json({ success: true, routines: initialRoutines });
     }
-    res.json({ success: true, routines: initialRoutines });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

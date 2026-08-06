@@ -28,42 +28,61 @@ const mockUsers = [
 // Register endpoint
 router.post('/register', async (req, res) => {
   try {
-    const { name, email, password, role, department, studentId, designation } = req.body;
+    const { name, email, password, role, department, studentId, facultyId, designation } = req.body;
     if (!name || !email || !password) {
       return res.status(400).json({ error: 'Name, email, and password are required' });
     }
 
+    const targetRole = role === 'faculty' ? 'faculty' : 'student';
+    const cleanEmail = email.trim().toLowerCase();
+
+    // Validation per role
+    if (targetRole === 'student' && !studentId) {
+      return res.status(400).json({ error: 'Student ID is required for student registration' });
+    }
+
+    if (targetRole === 'faculty' && (!designation || !facultyId)) {
+      return res.status(400).json({ error: 'Faculty Designation and Faculty ID are required for faculty registration' });
+    }
+
     try {
-      const existing = await User.findOne({ email });
+      const existing = await User.findOne({ email: cleanEmail });
       if (existing) {
-        return res.status(400).json({ error: 'Email already registered' });
+        return res.status(400).json({ error: 'Email address already registered' });
       }
       const user = await User.create({
-        name,
-        email,
+        name: name.trim(),
+        email: cleanEmail,
         password,
-        role: role || 'student',
+        role: targetRole,
         department: department || 'Computer Science & Engineering',
-        studentId: studentId || '',
-        designation: designation || ''
+        studentId: targetRole === 'student' ? studentId.trim() : '',
+        facultyId: targetRole === 'faculty' ? facultyId.trim() : '',
+        designation: targetRole === 'faculty' ? designation.trim() : ''
       });
-      return res.status(201).json({ success: true, user });
+      
+      const userObj = user.toObject ? user.toObject() : { ...user };
+      delete userObj.password;
+      return res.status(201).json({ success: true, user: userObj });
     } catch (dbErr) {
       // Fallback in-memory
-      const existsMock = mockUsers.find(u => u.email === email);
-      if (existsMock) return res.status(400).json({ error: 'Email already registered' });
+      const existsMock = mockUsers.find(u => u.email.toLowerCase() === cleanEmail);
+      if (existsMock) return res.status(400).json({ error: 'Email address already registered' });
       const newUser = {
         _id: 'usr_' + Date.now(),
-        name,
-        email,
+        name: name.trim(),
+        email: cleanEmail,
         password,
-        role: role || 'student',
+        role: targetRole,
         department: department || 'Computer Science & Engineering',
-        studentId: studentId || '',
-        designation: designation || ''
+        studentId: targetRole === 'student' ? studentId.trim() : '',
+        facultyId: targetRole === 'faculty' ? facultyId.trim() : '',
+        designation: targetRole === 'faculty' ? designation.trim() : ''
       };
       mockUsers.push(newUser);
-      return res.status(201).json({ success: true, user: newUser });
+      const userObj = { ...newUser };
+      delete userObj.password;
+      return res.status(201).json({ success: true, user: userObj });
     }
   } catch (err) {
     res.status(500).json({ error: err.message });
