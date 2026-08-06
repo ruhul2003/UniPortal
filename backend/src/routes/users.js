@@ -118,6 +118,51 @@ router.patch('/:id/role', async (req, res) => {
   }
 });
 
+// PUT update user profile (name, avatar, section, department, studentId, facultyId, designation)
+router.put('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, avatar, section, department, studentId, facultyId, designation } = req.body;
+
+    try {
+      const user = await User.findById(id);
+      if (user) {
+        if (name !== undefined) user.name = name;
+        if (avatar !== undefined) user.avatar = avatar;
+        if (section !== undefined) user.section = section;
+        if (department !== undefined) user.department = department;
+        if (studentId !== undefined) user.studentId = studentId;
+        if (facultyId !== undefined) user.facultyId = facultyId;
+        if (designation !== undefined) user.designation = designation;
+
+        await user.save();
+        const userObj = user.toObject();
+        delete userObj.password;
+        return res.json({ success: true, message: 'Profile updated successfully', user: userObj });
+      }
+    } catch (dbErr) {
+      console.warn('[User Update DB Fallback]', dbErr.message);
+    }
+
+    // Mock fallback
+    const mockItem = mockUserStore.find(u => u._id === id);
+    if (mockItem) {
+      if (name !== undefined) mockItem.name = name;
+      if (avatar !== undefined) mockItem.avatar = avatar;
+      if (section !== undefined) mockItem.section = section;
+      if (department !== undefined) mockItem.department = department;
+      if (studentId !== undefined) mockItem.studentId = studentId;
+      if (facultyId !== undefined) mockItem.facultyId = facultyId;
+      if (designation !== undefined) mockItem.designation = designation;
+      return res.json({ success: true, message: 'Profile updated successfully', user: mockItem });
+    }
+
+    return res.status(404).json({ error: 'User not found' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // DELETE user (Admin operation)
 router.delete('/:id', async (req, res) => {
   try {

@@ -162,3 +162,16 @@ export async function deleteUser(userId) {
   if (!res.ok) throw new Error('Failed to delete user');
   return await res.json();
 }
+
+export async function updateUserProfile(userId, updateData) {
+  const res = await fetch(`${API_BASE}/users/${userId}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(updateData),
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error || 'Failed to update profile');
+  }
+  return await res.json();
+}

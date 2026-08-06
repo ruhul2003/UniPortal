@@ -55,8 +55,15 @@ export function AuthProvider({ children }) {
     localStorage.setItem('uniportal_user', JSON.stringify(updated));
   };
 
+  const updateUser = (updateData) => {
+    if (!user) return;
+    const updated = { ...user, ...updateData };
+    setUser(updated);
+    localStorage.setItem('uniportal_user', JSON.stringify(updated));
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout, toggleRole }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, toggleRole, updateUser }}>
       {children}
     </AuthContext.Provider>
   );
