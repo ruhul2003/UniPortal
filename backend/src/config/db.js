@@ -1,22 +1,37 @@
+import { MongoClient } from 'mongodb';
 import mongoose from 'mongoose';
 import { User } from '../models/User.js';
 import { Notice } from '../models/Notice.js';
 import { Routine } from '../models/Routine.js';
 import { Announcement } from '../models/Announcement.js';
 
+let client;
+let db;
+
 export const connectDB = async () => {
   try {
     const connStr = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/uniportal';
+    
+    // Connect Mongoose Adapter
     const conn = await mongoose.connect(connStr);
-    console.log(`[MongoDB] Connected: ${conn.connection.host}`);
+    console.log(`[MongoDB Mongoose Adapter] Connected: ${conn.connection.host}`);
+
+    // Connect Native MongoDB Driver Adapter
+    client = new MongoClient(connStr);
+    await client.connect();
+    db = client.db();
+    console.log(`[MongoDB Native MongoClient Adapter] Connected to database: ${db.databaseName}`);
 
     // Auto-seed database if empty
     await seedInitialData();
   } catch (error) {
-    console.error(`[MongoDB Error] Connection failed: ${error.message}`);
+    console.error(`[MongoDB Adapter Error] Connection failed: ${error.message}`);
     console.log(`[MongoDB Notice] Backend will operate using fallback database mode if DB unreachable.`);
   }
 };
+
+export const getDb = () => db;
+export const getMongoClient = () => client;
 
 async function seedInitialData() {
   try {
