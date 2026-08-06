@@ -18,7 +18,8 @@ import {
   GraduationCap,
   ShieldCheck,
   RefreshCw,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Lock
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../context/AuthContext';
@@ -350,14 +351,22 @@ export default function ProfilePage() {
             {/* Student ID / Faculty Details */}
             {user.role === 'student' ? (
               <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Official Student ID</label>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">Official Student ID</label>
+                  <span className="text-[10px] text-amber-600 dark:text-amber-400 font-bold flex items-center gap-1">
+                    <Lock className="w-3 h-3 text-amber-500" />
+                    Permanent (Cannot be changed)
+                  </span>
+                </div>
                 <div className="relative">
-                  <IdCard className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <IdCard className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
                   <input
                     type="text"
                     value={studentId}
-                    onChange={(e) => setStudentId(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                    disabled
+                    readOnly
+                    title="Student ID is permanent and cannot be modified after registration"
+                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-mono font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800/80 cursor-not-allowed select-none"
                   />
                 </div>
               </div>

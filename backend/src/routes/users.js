@@ -131,7 +131,10 @@ router.put('/:id', async (req, res) => {
         if (avatar !== undefined) user.avatar = avatar;
         if (section !== undefined) user.section = section;
         if (department !== undefined) user.department = department;
-        if (studentId !== undefined) user.studentId = studentId;
+        // Student ID immutability rule: Only allow setting if studentId is currently blank
+        if (studentId !== undefined && (!user.studentId || user.role !== 'student')) {
+          user.studentId = studentId;
+        }
         if (facultyId !== undefined) user.facultyId = facultyId;
         if (designation !== undefined) user.designation = designation;
 
@@ -151,7 +154,9 @@ router.put('/:id', async (req, res) => {
       if (avatar !== undefined) mockItem.avatar = avatar;
       if (section !== undefined) mockItem.section = section;
       if (department !== undefined) mockItem.department = department;
-      if (studentId !== undefined) mockItem.studentId = studentId;
+      if (studentId !== undefined && (!mockItem.studentId || mockItem.role !== 'student')) {
+        mockItem.studentId = studentId;
+      }
       if (facultyId !== undefined) mockItem.facultyId = facultyId;
       if (designation !== undefined) mockItem.designation = designation;
       return res.json({ success: true, message: 'Profile updated successfully', user: mockItem });
