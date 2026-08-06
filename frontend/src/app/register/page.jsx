@@ -82,8 +82,8 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-5rem)] flex items-center justify-center py-10 px-4 sm:px-6 lg:px-8 bg-slate-50/50">
-      <div className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-12 rounded-3xl border border-slate-200/80 bg-white shadow-2xl overflow-hidden">
+    <div className="min-h-[calc(100vh-5rem)] flex items-center justify-center py-10 px-4 sm:px-6 lg:px-8 bg-slate-50/50 dark:bg-slate-950/50">
+      <div className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-12 rounded-3xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xl overflow-hidden transition-colors">
         
         {/* Left Hero / Brand Panel (Visible on lg screens) */}
         <div className="lg:col-span-5 bg-gradient-to-br from-slate-900 via-slate-850 to-indigo-950 p-8 lg:p-10 text-white flex flex-col justify-between relative overflow-hidden">
@@ -203,13 +203,13 @@ export default function RegisterPage() {
             
             {/* Header */}
             <div>
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Create Account</h1>
-              <p className="text-xs sm:text-sm text-slate-500 mt-1">Select your portal role and complete registration</p>
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">Create Account</h1>
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">Select your portal role and complete registration</p>
             </div>
 
             {/* Interactive Dual Role Picker Cards */}
             <div className="space-y-2">
-              <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400">Account Type *</label>
+              <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Account Type *</label>
               <div className="grid grid-cols-2 gap-3">
                 
                 {/* Student Card */}
@@ -218,21 +218,21 @@ export default function RegisterPage() {
                   onClick={() => { setRole('student'); setError(''); }}
                   className={`relative p-3.5 rounded-2xl border-2 text-left transition-all flex items-start gap-3 ${
                     role === 'student'
-                      ? 'border-blue-600 bg-blue-50/50 shadow-sm ring-2 ring-blue-500/20'
-                      : 'border-slate-200/80 hover:border-slate-300 bg-slate-50/30'
+                      ? 'border-blue-600 dark:border-blue-500 bg-blue-50/50 dark:bg-blue-950/40 shadow-sm ring-2 ring-blue-500/20'
+                      : 'border-slate-200/80 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-slate-50/30 dark:bg-slate-800/30'
                   }`}
                 >
                   <div className={`w-9 h-9 rounded-xl flex items-center justify-center font-bold text-xs shrink-0 ${
-                    role === 'student' ? 'bg-blue-600 text-white shadow-sm' : 'bg-slate-200 text-slate-600'
+                    role === 'student' ? 'bg-blue-600 text-white shadow-sm' : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300'
                   }`}>
                     <GraduationCap className="w-4 h-4" />
                   </div>
                   <div>
                     <div className="flex items-center gap-1">
-                      <span className="font-extrabold text-xs text-slate-900">Student</span>
-                      {role === 'student' && <Check className="w-3.5 h-3.5 text-blue-600" />}
+                      <span className="font-extrabold text-xs text-slate-900 dark:text-white">Student</span>
+                      {role === 'student' && <Check className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />}
                     </div>
-                    <p className="text-[10px] text-slate-500 font-medium">Undergrad / Postgrad</p>
+                    <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">Undergrad / Postgrad</p>
                   </div>
                 </button>
 
@@ -242,21 +242,21 @@ export default function RegisterPage() {
                   onClick={() => { setRole('faculty'); setError(''); }}
                   className={`relative p-3.5 rounded-2xl border-2 text-left transition-all flex items-start gap-3 ${
                     role === 'faculty'
-                      ? 'border-indigo-600 bg-indigo-50/50 shadow-sm ring-2 ring-indigo-500/20'
-                      : 'border-slate-200/80 hover:border-slate-300 bg-slate-50/30'
+                      ? 'border-indigo-600 dark:border-indigo-500 bg-indigo-50/50 dark:bg-indigo-950/40 shadow-sm ring-2 ring-indigo-500/20'
+                      : 'border-slate-200/80 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-slate-50/30 dark:bg-slate-800/30'
                   }`}
                 >
                   <div className={`w-9 h-9 rounded-xl flex items-center justify-center font-bold text-xs shrink-0 ${
-                    role === 'faculty' ? 'bg-indigo-600 text-white shadow-sm' : 'bg-slate-200 text-slate-600'
+                    role === 'faculty' ? 'bg-indigo-600 text-white shadow-sm' : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300'
                   }`}>
                     <Award className="w-4 h-4" />
                   </div>
                   <div>
                     <div className="flex items-center gap-1">
-                      <span className="font-extrabold text-xs text-slate-900">Faculty</span>
-                      {role === 'faculty' && <Check className="w-3.5 h-3.5 text-indigo-600" />}
+                      <span className="font-extrabold text-xs text-slate-900 dark:text-white">Faculty</span>
+                      {role === 'faculty' && <Check className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />}
                     </div>
-                    <p className="text-[10px] text-slate-500 font-medium">Teacher / Professor</p>
+                    <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">Teacher / Professor</p>
                   </div>
                 </button>
 
@@ -280,15 +280,15 @@ export default function RegisterPage() {
               
               {/* Full Name */}
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">Full Name *</label>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Full Name *</label>
                 <div className="relative">
-                  <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <User className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
                   <input
                     type="text"
                     placeholder={role === 'faculty' ? 'Dr. Sarah Jenkins' : 'Alex Rivera'}
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-xs text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-white bg-white dark:bg-slate-900/90 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600"
                     required
                   />
                 </div>
@@ -296,15 +296,15 @@ export default function RegisterPage() {
 
               {/* University Email */}
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">University Email *</label>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">University Email *</label>
                 <div className="relative">
-                  <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <Mail className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
                   <input
                     type="email"
                     placeholder={role === 'faculty' ? 's.jenkins@univ.edu' : 'a.rivera@student.univ.edu'}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-xs text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-white bg-white dark:bg-slate-900/90 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600"
                     required
                   />
                 </div>
@@ -312,21 +312,21 @@ export default function RegisterPage() {
 
               {/* Password */}
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">Password *</label>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Password *</label>
                 <div className="relative">
-                  <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <Lock className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
                   <input
                     type={showPassword ? 'text' : 'password'}
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-200 text-xs text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                    className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-white bg-white dark:bg-slate-900/90 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600"
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -335,13 +335,13 @@ export default function RegisterPage() {
 
               {/* Department */}
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">Academic Department *</label>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Academic Department *</label>
                 <div className="relative">
-                  <Building className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <Building className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                   <select
                     value={department}
                     onChange={(e) => setDepartment(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-xs text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all appearance-none"
+                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-white bg-white dark:bg-slate-900/90 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all appearance-none"
                   >
                     <option value="Computer Science & Engineering">Computer Science & Engineering</option>
                     <option value="Electrical & Electronic Engineering">Electrical & Electronic Engineering</option>
@@ -361,15 +361,15 @@ export default function RegisterPage() {
                   animate={{ opacity: 1, height: 'auto' }}
                   transition={{ duration: 0.2 }}
                 >
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">Official Student ID *</label>
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Official Student ID *</label>
                   <div className="relative">
-                    <IdCard className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                    <IdCard className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
                     <input
                       type="text"
                       placeholder="e.g. CSE-2024-042 or 2024-1-60-042"
                       value={studentId}
                       onChange={(e) => setStudentId(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-xs text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                      className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-white bg-white dark:bg-slate-900/90 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600"
                       required
                     />
                   </div>
@@ -382,13 +382,13 @@ export default function RegisterPage() {
                   className="grid grid-cols-1 sm:grid-cols-2 gap-3"
                 >
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">Faculty Designation *</label>
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Faculty Designation *</label>
                     <div className="relative">
-                      <Award className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                      <Award className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                       <select
                         value={designation}
                         onChange={(e) => setDesignation(e.target.value)}
-                        className="w-full pl-10 pr-2 py-2.5 rounded-xl border border-slate-200 text-xs text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all appearance-none"
+                        className="w-full pl-10 pr-2 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-white bg-white dark:bg-slate-900/90 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all appearance-none"
                       >
                         <option value="Professor">Professor</option>
                         <option value="Associate Professor">Associate Professor</option>
@@ -401,15 +401,15 @@ export default function RegisterPage() {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">Employee ID *</label>
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Employee ID *</label>
                     <div className="relative">
-                      <Briefcase className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                      <Briefcase className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
                       <input
                         type="text"
                         placeholder="e.g. FAC-2024-102"
                         value={facultyId}
                         onChange={(e) => setFacultyId(e.target.value)}
-                        className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-xs text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
+                        className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-white bg-white dark:bg-slate-900/90 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600"
                         required
                       />
                     </div>
@@ -423,8 +423,8 @@ export default function RegisterPage() {
                 disabled={loading}
                 className={`w-full py-3.5 rounded-xl text-white text-xs font-bold flex items-center justify-center gap-2 shadow-md transition-all disabled:opacity-50 mt-2 ${
                   role === 'faculty' 
-                    ? 'bg-indigo-600 hover:bg-indigo-700 shadow-indigo-200' 
-                    : 'bg-slate-900 hover:bg-slate-800 shadow-slate-200'
+                    ? 'bg-indigo-600 hover:bg-indigo-700 shadow-indigo-200 dark:shadow-none' 
+                    : 'bg-slate-900 dark:bg-blue-600 hover:bg-slate-800 dark:hover:bg-blue-700 shadow-slate-200 dark:shadow-none'
                 }`}
               >
                 <UserCheck className="w-4 h-4 text-blue-400" />
