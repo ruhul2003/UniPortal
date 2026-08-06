@@ -1,5 +1,6 @@
 import express from 'express';
-import { Notice } from '../models/Notice.js';
+import { ObjectId } from 'mongodb';
+import { getNoticesCollection } from '../config/db.js';
 
 const router = express.Router();
 
@@ -39,22 +40,25 @@ let initialNotices = [
   }
 ];
 
-// GET all notices
+// GET all notices (Native MongoDB Driver)
 router.get('/', async (req, res) => {
   try {
     try {
-      const dbNotices = await Notice.find().sort({ createdAt: -1 });
-      return res.json({ success: true, notices: dbNotices });
+      const noticesCol = getNoticesCollection();
+      if (noticesCol) {
+        const dbNotices = await noticesCol.find().sort({ createdAt: -1 }).toArray();
+        return res.json({ success: true, notices: dbNotices });
+      }
     } catch (e) {
       console.warn('[Notice DB Fetch Fallback]', e.message);
-      return res.json({ success: true, notices: initialNotices });
     }
+    return res.json({ success: true, notices: initialNotices });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// POST new notice (Faculty action)
+// POST new notice (Native MongoDB Driver)
 router.post('/', async (req, res) => {
   try {
     const { title, content, category, department, isUrgent, publishedBy, facultyRole } = req.body;
@@ -70,29 +74,40 @@ router.post('/', async (req, res) => {
       isUrgent: !!isUrgent,
       publishedBy: publishedBy || 'Faculty Member',
       facultyRole: facultyRole || 'Faculty',
-      createdAt: new Date().toISOString()
+      createdAt: new Date()
     };
 
     try {
-      const createdNotice = await Notice.create(noticeData);
-      return res.status(201).json({ success: true, notice: createdNotice });
+      const noticesCol = getNoticesCollection();
+      if (noticesCol) {
+        const result = await noticesCol.insertOne(noticeData);
+        const createdNotice = { _id: result.insertedId, ...noticeData };
+        return res.status(201).json({ success: true, notice: createdNotice });
+      }
     } catch (e) {
-      // Fallback update in-memory
-      const newNotice = { _id: 'n_' + Date.now(), ...noticeData };
-      initialNotices.unshift(newNotice);
-      return res.status(201).json({ success: true, notice: newNotice });
+      console.warn('[Notice Post DB Fallback]', e.message);
     }
+
+    // Fallback update in-memory
+    const newNotice = { _id: 'n_' + Date.now(), ...noticeData };
+    initialNotices.unshift(newNotice);
+    return res.status(201).json({ success: true, notice: newNotice });
+
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// DELETE notice (Faculty/Admin action)
+// DELETE notice (Native MongoDB Driver)
 router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params;
     try {
-      await Notice.findByIdAndDelete(id);
+      const noticesCol = getNoticesCollection();
+      if (noticesCol) {
+        const filter = ObjectId.isValid(id) ? { _id: new ObjectId(id) } : { _id: id };
+        await noticesCol.deleteOne(filter);
+      }
     } catch (e) {
       // ignore DB delete failure
     }

@@ -1,5 +1,6 @@
 import express from 'express';
-import { Announcement } from '../models/Announcement.js';
+import { ObjectId } from 'mongodb';
+import { getAnnouncementsCollection } from '../config/db.js';
 
 const router = express.Router();
 
@@ -33,22 +34,25 @@ let initialAnnouncements = [
   }
 ];
 
-// GET announcements
+// GET announcements (Native MongoDB Driver)
 router.get('/', async (req, res) => {
   try {
     try {
-      const dbItems = await Announcement.find().sort({ isPinned: -1, createdAt: -1, date: -1 });
-      return res.json({ success: true, announcements: dbItems });
+      const annCol = getAnnouncementsCollection();
+      if (annCol) {
+        const dbItems = await annCol.find().sort({ isPinned: -1, createdAt: -1 }).toArray();
+        return res.json({ success: true, announcements: dbItems });
+      }
     } catch (e) {
       console.warn('[Announcement DB Fetch Fallback]', e.message);
-      return res.json({ success: true, announcements: initialAnnouncements });
     }
+    return res.json({ success: true, announcements: initialAnnouncements });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// POST announcement (Faculty/Admin action)
+// POST announcement (Native MongoDB Driver)
 router.post('/', async (req, res) => {
   try {
     const { title, description, tag, isPinned, publishedBy } = req.body;
@@ -62,28 +66,40 @@ router.post('/', async (req, res) => {
       tag: tag || 'General',
       isPinned: !!isPinned,
       publishedBy: publishedBy || 'Faculty Member',
-      date: new Date().toISOString()
+      date: new Date().toISOString(),
+      createdAt: new Date()
     };
 
     try {
-      const created = await Announcement.create(item);
-      return res.status(201).json({ success: true, announcement: created });
+      const annCol = getAnnouncementsCollection();
+      if (annCol) {
+        const result = await annCol.insertOne(item);
+        const created = { _id: result.insertedId, ...item };
+        return res.status(201).json({ success: true, announcement: created });
+      }
     } catch (e) {
-      const newItem = { _id: 'a_' + Date.now(), ...item };
-      initialAnnouncements.unshift(newItem);
-      return res.status(201).json({ success: true, announcement: newItem });
+      console.warn('[Announcement Post DB Fallback]', e.message);
     }
+
+    const newItem = { _id: 'a_' + Date.now(), ...item };
+    initialAnnouncements.unshift(newItem);
+    return res.status(201).json({ success: true, announcement: newItem });
+
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// DELETE announcement
+// DELETE announcement (Native MongoDB Driver)
 router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params;
     try {
-      await Announcement.findByIdAndDelete(id);
+      const annCol = getAnnouncementsCollection();
+      if (annCol) {
+        const filter = ObjectId.isValid(id) ? { _id: new ObjectId(id) } : { _id: id };
+        await annCol.deleteOne(filter);
+      }
     } catch (e) {}
     initialAnnouncements = initialAnnouncements.filter(a => a._id !== id);
     res.json({ success: true, message: 'Announcement deleted successfully' });

@@ -1,5 +1,6 @@
 import express from 'express';
-import { User } from '../models/User.js';
+import { ObjectId } from 'mongodb';
+import { getUsersCollection } from '../config/db.js';
 
 const router = express.Router();
 
@@ -31,16 +32,18 @@ let mockUserStore = [
     role: 'student',
     department: 'Computer Science & Engineering',
     studentId: 'CSE-2024-042',
+    section: 'Section A',
     isCR: true
   }
 ];
 
-// GET all users (Admin operation)
+// GET all users (Native MongoDB Driver)
 router.get('/', async (req, res) => {
   try {
     try {
-      const users = await User.find({}, '-password').sort({ createdAt: -1 });
-      if (users) {
+      const usersCol = getUsersCollection();
+      if (usersCol) {
+        const users = await usersCol.find({}, { projection: { password: 0 } }).sort({ createdAt: -1 }).toArray();
         return res.json({ success: true, users });
       }
     } catch (dbErr) {
@@ -52,29 +55,32 @@ router.get('/', async (req, res) => {
   }
 });
 
-// PATCH toggle CR (Class Representative) status for a user
+// PATCH toggle CR (Class Representative) status (Native MongoDB Driver)
 router.patch('/:id/cr', async (req, res) => {
   try {
     const { id } = req.params;
     const { isCR } = req.body;
 
     try {
-      const user = await User.findById(id);
-      if (user) {
-        user.isCR = typeof isCR === 'boolean' ? isCR : !user.isCR;
-        await user.save();
-        const userObj = user.toObject();
-        delete userObj.password;
-        return res.json({ success: true, message: `Class Representative (CR) status updated`, user: userObj });
+      const usersCol = getUsersCollection();
+      if (usersCol) {
+        const filter = ObjectId.isValid(id) ? { _id: new ObjectId(id) } : { _id: id };
+        const user = await usersCol.findOne(filter);
+        if (user) {
+          const newStatus = typeof isCR === 'boolean' ? isCR : !user.isCR;
+          await usersCol.updateOne(filter, { $set: { isCR: newStatus, updatedAt: new Date() } });
+          const updatedUser = await usersCol.findOne(filter, { projection: { password: 0 } });
+          return res.json({ success: true, message: 'Class Representative (CR) status updated', user: updatedUser });
+        }
       }
     } catch (dbErr) {
-      // Mock fallback
+      console.warn('[User CR Update DB Fallback]', dbErr.message);
     }
 
     const mockItem = mockUserStore.find(u => u._id === id);
     if (mockItem) {
       mockItem.isCR = typeof isCR === 'boolean' ? isCR : !mockItem.isCR;
-      return res.json({ success: true, message: `Class Representative (CR) status updated`, user: mockItem });
+      return res.json({ success: true, message: 'Class Representative (CR) status updated', user: mockItem });
     }
 
     return res.status(404).json({ error: 'User not found' });
@@ -83,7 +89,7 @@ router.patch('/:id/cr', async (req, res) => {
   }
 });
 
-// PATCH change user role
+// PATCH change user role (Native MongoDB Driver)
 router.patch('/:id/role', async (req, res) => {
   try {
     const { id } = req.params;
@@ -94,16 +100,18 @@ router.patch('/:id/role', async (req, res) => {
     }
 
     try {
-      const user = await User.findById(id);
-      if (user) {
-        user.role = role;
-        await user.save();
-        const userObj = user.toObject();
-        delete userObj.password;
-        return res.json({ success: true, message: `User role updated to ${role}`, user: userObj });
+      const usersCol = getUsersCollection();
+      if (usersCol) {
+        const filter = ObjectId.isValid(id) ? { _id: new ObjectId(id) } : { _id: id };
+        const user = await usersCol.findOne(filter);
+        if (user) {
+          await usersCol.updateOne(filter, { $set: { role, updatedAt: new Date() } });
+          const updatedUser = await usersCol.findOne(filter, { projection: { password: 0 } });
+          return res.json({ success: true, message: `User role updated to ${role}`, user: updatedUser });
+        }
       }
     } catch (dbErr) {
-      // Mock fallback
+      console.warn('[User Role Update DB Fallback]', dbErr.message);
     }
 
     const mockItem = mockUserStore.find(u => u._id === id);
@@ -118,33 +126,37 @@ router.patch('/:id/role', async (req, res) => {
   }
 });
 
-// PUT update user profile (name, avatar, section, department, studentId, facultyId, designation)
+// PUT update user profile (Native MongoDB Driver)
 router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const { name, avatar, section, department, studentId, facultyId, designation } = req.body;
 
     try {
-      const user = await User.findById(id);
-      if (user) {
-        if (name !== undefined) user.name = name;
-        if (avatar !== undefined) user.avatar = avatar;
-        if (section !== undefined) user.section = section;
-        if (department !== undefined) user.department = department;
-        // Student ID immutability rule: Only allow setting if studentId is currently blank
-        if (studentId !== undefined && (!user.studentId || user.role !== 'student')) {
-          user.studentId = studentId;
-        }
-        if (facultyId !== undefined) user.facultyId = facultyId;
-        if (designation !== undefined) user.designation = designation;
+      const usersCol = getUsersCollection();
+      if (usersCol) {
+        const filter = ObjectId.isValid(id) ? { _id: new ObjectId(id) } : { _id: id };
+        const user = await usersCol.findOne(filter);
+        if (user) {
+          const updateFields = { updatedAt: new Date() };
+          if (name !== undefined) updateFields.name = name;
+          if (avatar !== undefined) updateFields.avatar = avatar;
+          if (section !== undefined) updateFields.section = section;
+          if (department !== undefined) updateFields.department = department;
+          // Student ID immutability rule: Only allow setting if studentId is currently blank
+          if (studentId !== undefined && (!user.studentId || user.role !== 'student')) {
+            updateFields.studentId = studentId;
+          }
+          if (facultyId !== undefined) updateFields.facultyId = facultyId;
+          if (designation !== undefined) updateFields.designation = designation;
 
-        await user.save();
-        const userObj = user.toObject();
-        delete userObj.password;
-        return res.json({ success: true, message: 'Profile updated successfully', user: userObj });
+          await usersCol.updateOne(filter, { $set: updateFields });
+          const updatedUser = await usersCol.findOne(filter, { projection: { password: 0 } });
+          return res.json({ success: true, message: 'Profile updated successfully', user: updatedUser });
+        }
       }
     } catch (dbErr) {
-      console.warn('[User Update DB Fallback]', dbErr.message);
+      console.warn('[User Profile Update DB Fallback]', dbErr.message);
     }
 
     // Mock fallback
@@ -168,19 +180,23 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// DELETE user (Admin operation)
+// DELETE user (Native MongoDB Driver)
 router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params;
 
     try {
-      const deleted = await User.findByIdAndDelete(id);
-      if (deleted) {
-        mockUserStore = mockUserStore.filter(u => u._id !== id);
-        return res.json({ success: true, message: 'User deleted successfully' });
+      const usersCol = getUsersCollection();
+      if (usersCol) {
+        const filter = ObjectId.isValid(id) ? { _id: new ObjectId(id) } : { _id: id };
+        const result = await usersCol.deleteOne(filter);
+        if (result.deletedCount > 0) {
+          mockUserStore = mockUserStore.filter(u => u._id !== id);
+          return res.json({ success: true, message: 'User deleted successfully' });
+        }
       }
     } catch (dbErr) {
-      // Mock fallback
+      console.warn('[User Delete DB Fallback]', dbErr.message);
     }
 
     mockUserStore = mockUserStore.filter(u => u._id !== id);

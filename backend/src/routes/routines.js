@@ -1,5 +1,6 @@
 import express from 'express';
-import { Routine } from '../models/Routine.js';
+import { ObjectId } from 'mongodb';
+import { getRoutinesCollection } from '../config/db.js';
 
 const router = express.Router();
 
@@ -15,7 +16,7 @@ let initialRoutines = [
     building: 'IT Complex',
     department: 'Computer Science & Engineering',
     semester: 'Spring 2026',
-    section: 'A',
+    section: 'Section A',
     facultyName: 'Dr. Sarah Jenkins'
   },
   {
@@ -29,7 +30,7 @@ let initialRoutines = [
     building: 'Academic Building 1',
     department: 'Computer Science & Engineering',
     semester: 'Spring 2026',
-    section: 'A',
+    section: 'Section A',
     facultyName: 'Prof. Alan Vance'
   },
   {
@@ -43,7 +44,7 @@ let initialRoutines = [
     building: 'Software Engineering Annex',
     department: 'Computer Science & Engineering',
     semester: 'Spring 2026',
-    section: 'B',
+    section: 'Section B',
     facultyName: 'Dr. Marcus Thorne'
   },
   {
@@ -57,7 +58,7 @@ let initialRoutines = [
     building: 'Main Academic Block',
     department: 'Computer Science & Engineering',
     semester: 'Spring 2026',
-    section: 'A',
+    section: 'Section A',
     facultyName: 'Dr. Elena Rostova'
   },
   {
@@ -71,27 +72,30 @@ let initialRoutines = [
     building: 'Science & Tech Hub',
     department: 'Computer Science & Engineering',
     semester: 'Spring 2026',
-    section: 'A',
+    section: 'Section A',
     facultyName: 'Dr. Sarah Jenkins'
   }
 ];
 
-// GET routines
+// GET routines (Native MongoDB Driver)
 router.get('/', async (req, res) => {
   try {
     try {
-      const dbRoutines = await Routine.find();
-      return res.json({ success: true, routines: dbRoutines });
+      const routinesCol = getRoutinesCollection();
+      if (routinesCol) {
+        const dbRoutines = await routinesCol.find().toArray();
+        return res.json({ success: true, routines: dbRoutines });
+      }
     } catch (e) {
       console.warn('[Routine DB Fetch Fallback]', e.message);
-      return res.json({ success: true, routines: initialRoutines });
     }
+    return res.json({ success: true, routines: initialRoutines });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// POST new routine slot (Faculty action)
+// POST new routine slot (Native MongoDB Driver)
 router.post('/', async (req, res) => {
   try {
     const { courseCode, courseTitle, day, startTime, endTime, room, building, department, semester, section, facultyName } = req.body;
@@ -109,29 +113,41 @@ router.post('/', async (req, res) => {
       building: building || 'Academic Building 1',
       department: department || 'Computer Science & Engineering',
       semester: semester || 'Spring 2026',
-      section: section || 'A',
-      facultyName: facultyName || 'Faculty Member'
+      section: section || 'Section A',
+      facultyName: facultyName || 'Faculty Member',
+      createdAt: new Date()
     };
 
     try {
-      const created = await Routine.create(item);
-      return res.status(201).json({ success: true, routine: created });
+      const routinesCol = getRoutinesCollection();
+      if (routinesCol) {
+        const result = await routinesCol.insertOne(item);
+        const created = { _id: result.insertedId, ...item };
+        return res.status(201).json({ success: true, routine: created });
+      }
     } catch (e) {
-      const newItem = { _id: 'r_' + Date.now(), ...item };
-      initialRoutines.push(newItem);
-      return res.status(201).json({ success: true, routine: newItem });
+      console.warn('[Routine Post DB Fallback]', e.message);
     }
+
+    const newItem = { _id: 'r_' + Date.now(), ...item };
+    initialRoutines.push(newItem);
+    return res.status(201).json({ success: true, routine: newItem });
+
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// DELETE routine slot
+// DELETE routine slot (Native MongoDB Driver)
 router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params;
     try {
-      await Routine.findByIdAndDelete(id);
+      const routinesCol = getRoutinesCollection();
+      if (routinesCol) {
+        const filter = ObjectId.isValid(id) ? { _id: new ObjectId(id) } : { _id: id };
+        await routinesCol.deleteOne(filter);
+      }
     } catch (e) {}
     initialRoutines = initialRoutines.filter(r => r._id !== id);
     res.json({ success: true, message: 'Routine deleted successfully' });

@@ -1,9 +1,9 @@
 import express from 'express';
-import { User } from '../models/User.js';
+import { getUsersCollection } from '../config/db.js';
 
 const router = express.Router();
 
-// Mock store in case local MongoDB instance isn't running
+// Mock store fallback if MongoDB is unreachable
 const mockUsers = [
   {
     _id: 'usr_admin_1',
@@ -30,12 +30,13 @@ const mockUsers = [
     role: 'student',
     department: 'Computer Science & Engineering',
     studentId: 'CSE-2024-042',
+    section: 'Section A',
     isCR: true,
     password: 'password123'
   }
 ];
 
-// Register endpoint
+// Register endpoint (Native MongoDB Driver)
 router.post('/register', async (req, res) => {
   try {
     const { name, email, password, role, department, studentId, facultyId, designation } = req.body;
@@ -56,50 +57,67 @@ router.post('/register', async (req, res) => {
     }
 
     try {
-      const existing = await User.findOne({ email: cleanEmail });
-      if (existing) {
-        return res.status(400).json({ error: 'Email address already registered' });
+      const usersCol = getUsersCollection();
+      if (usersCol) {
+        const existing = await usersCol.findOne({ email: cleanEmail });
+        if (existing) {
+          return res.status(400).json({ error: 'Email address already registered' });
+        }
+
+        const newUserDoc = {
+          name: name.trim(),
+          email: cleanEmail,
+          password,
+          role: targetRole,
+          department: department || 'Computer Science & Engineering',
+          studentId: targetRole === 'student' ? studentId.trim() : '',
+          section: targetRole === 'student' ? 'Section A' : '',
+          facultyId: targetRole === 'faculty' ? facultyId.trim() : '',
+          designation: targetRole === 'faculty' ? designation.trim() : '',
+          isCR: false,
+          avatar: '',
+          createdAt: new Date(),
+          updatedAt: new Date()
+        };
+
+        const result = await usersCol.insertOne(newUserDoc);
+        const createdUser = { _id: result.insertedId, ...newUserDoc };
+        delete createdUser.password;
+        return res.status(201).json({ success: true, user: createdUser });
       }
-      const user = await User.create({
-        name: name.trim(),
-        email: cleanEmail,
-        password,
-        role: targetRole,
-        department: department || 'Computer Science & Engineering',
-        studentId: targetRole === 'student' ? studentId.trim() : '',
-        facultyId: targetRole === 'faculty' ? facultyId.trim() : '',
-        designation: targetRole === 'faculty' ? designation.trim() : ''
-      });
-      
-      const userObj = user.toObject ? user.toObject() : { ...user };
-      delete userObj.password;
-      return res.status(201).json({ success: true, user: userObj });
     } catch (dbErr) {
-      // Fallback in-memory
-      const existsMock = mockUsers.find(u => u.email.toLowerCase() === cleanEmail);
-      if (existsMock) return res.status(400).json({ error: 'Email address already registered' });
-      const newUser = {
-        _id: 'usr_' + Date.now(),
-        name: name.trim(),
-        email: cleanEmail,
-        password,
-        role: targetRole,
-        department: department || 'Computer Science & Engineering',
-        studentId: targetRole === 'student' ? studentId.trim() : '',
-        facultyId: targetRole === 'faculty' ? facultyId.trim() : '',
-        designation: targetRole === 'faculty' ? designation.trim() : ''
-      };
-      mockUsers.push(newUser);
-      const userObj = { ...newUser };
-      delete userObj.password;
-      return res.status(201).json({ success: true, user: userObj });
+      console.warn('[Register DB Fallback]', dbErr.message);
     }
+
+    // Fallback in-memory
+    const existsMock = mockUsers.find(u => u.email.toLowerCase() === cleanEmail);
+    if (existsMock) return res.status(400).json({ error: 'Email address already registered' });
+    
+    const newUser = {
+      _id: 'usr_' + Date.now(),
+      name: name.trim(),
+      email: cleanEmail,
+      password,
+      role: targetRole,
+      department: department || 'Computer Science & Engineering',
+      studentId: targetRole === 'student' ? studentId.trim() : '',
+      section: targetRole === 'student' ? 'Section A' : '',
+      facultyId: targetRole === 'faculty' ? facultyId.trim() : '',
+      designation: targetRole === 'faculty' ? designation.trim() : '',
+      isCR: false,
+      avatar: ''
+    };
+    mockUsers.push(newUser);
+    const userObj = { ...newUser };
+    delete userObj.password;
+    return res.status(201).json({ success: true, user: userObj });
+
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// Login endpoint
+// Login endpoint (Native MongoDB Driver)
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -107,21 +125,31 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ error: 'Email and password required' });
     }
 
+    const cleanEmail = email.trim().toLowerCase();
+
     try {
-      const user = await User.findOne({ email, password });
-      if (user) {
-        return res.json({ success: true, user });
+      const usersCol = getUsersCollection();
+      if (usersCol) {
+        const user = await usersCol.findOne({ email: cleanEmail, password });
+        if (user) {
+          const userObj = { ...user };
+          delete userObj.password;
+          return res.json({ success: true, user: userObj });
+        }
       }
     } catch (dbErr) {
-      // ignore
+      console.warn('[Login DB Fallback]', dbErr.message);
     }
 
     // Check mockUsers
-    const user = mockUsers.find(u => u.email === email && u.password === password);
-    if (!user) {
+    const mockUser = mockUsers.find(u => u.email.toLowerCase() === cleanEmail && u.password === password);
+    if (!mockUser) {
       return res.status(401).json({ error: 'Invalid email or password' });
     }
-    res.json({ success: true, user });
+    const mockUserObj = { ...mockUser };
+    delete mockUserObj.password;
+    res.json({ success: true, user: mockUserObj });
+
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

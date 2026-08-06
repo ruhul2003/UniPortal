@@ -1,9 +1,4 @@
 import { MongoClient } from 'mongodb';
-import mongoose from 'mongoose';
-import { User } from '../models/User.js';
-import { Notice } from '../models/Notice.js';
-import { Routine } from '../models/Routine.js';
-import { Announcement } from '../models/Announcement.js';
 
 let client;
 let db;
@@ -11,21 +6,15 @@ let db;
 export const connectDB = async () => {
   try {
     const connStr = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/uniportal';
-    
-    // Connect Mongoose Adapter
-    const conn = await mongoose.connect(connStr);
-    console.log(`[MongoDB Mongoose Adapter] Connected: ${conn.connection.host}`);
-
-    // Connect Native MongoDB Driver Adapter
     client = new MongoClient(connStr);
     await client.connect();
     db = client.db();
-    console.log(`[MongoDB Native MongoClient Adapter] Connected to database: ${db.databaseName}`);
+    console.log(`[MongoDB Native Driver] Connected to database: ${db.databaseName}`);
 
     // Auto-seed database if empty
     await seedInitialData();
   } catch (error) {
-    console.error(`[MongoDB Adapter Error] Connection failed: ${error.message}`);
+    console.error(`[MongoDB Connection Error] ${error.message}`);
     console.log(`[MongoDB Notice] Backend will operate using fallback database mode if DB unreachable.`);
   }
 };
@@ -33,25 +22,39 @@ export const connectDB = async () => {
 export const getDb = () => db;
 export const getMongoClient = () => client;
 
+export const getUsersCollection = () => db?.collection('users');
+export const getNoticesCollection = () => db?.collection('notices');
+export const getRoutinesCollection = () => db?.collection('routines');
+export const getAnnouncementsCollection = () => db?.collection('announcements');
+
 async function seedInitialData() {
+  if (!db) return;
   try {
-    // Seed Users
-    const adminExists = await User.findOne({ email: 'admin@gmail.com' });
+    const usersCol = db.collection('users');
+    const noticesCol = db.collection('notices');
+    const routinesCol = db.collection('routines');
+    const announcementsCol = db.collection('announcements');
+
+    // Seed Admin User
+    const adminExists = await usersCol.findOne({ email: 'admin@gmail.com' });
     if (!adminExists) {
-      await User.create({
+      await usersCol.insertOne({
         name: 'System Administrator',
         email: 'admin@gmail.com',
         password: 'admin123',
         role: 'admin',
         department: 'System Administration',
-        designation: 'Head Admin'
+        designation: 'Head Admin',
+        isCR: false,
+        createdAt: new Date(),
+        updatedAt: new Date()
       });
-      console.log('[MongoDB Seed] Admin user (admin@gmail.com) created.');
+      console.log('[MongoDB Native Seed] Admin user (admin@gmail.com) created.');
     }
 
-    const userCount = await User.countDocuments();
+    const userCount = await usersCol.countDocuments();
     if (userCount <= 1) {
-      await User.create([
+      await usersCol.insertMany([
         {
           name: 'Dr. Sarah Jenkins',
           email: 'sarah.jenkins@univ.edu',
@@ -59,7 +62,10 @@ async function seedInitialData() {
           role: 'faculty',
           department: 'Computer Science & Engineering',
           facultyId: 'FAC-2024-101',
-          designation: 'Associate Professor'
+          designation: 'Associate Professor',
+          isCR: false,
+          createdAt: new Date(),
+          updatedAt: new Date()
         },
         {
           name: 'Alex Rivera',
@@ -68,16 +74,19 @@ async function seedInitialData() {
           role: 'student',
           department: 'Computer Science & Engineering',
           studentId: 'CSE-2024-042',
-          isCR: true
+          section: 'Section A',
+          isCR: true,
+          createdAt: new Date(),
+          updatedAt: new Date()
         }
       ]);
-      console.log('[MongoDB Seed] Sample users created.');
+      console.log('[MongoDB Native Seed] Sample users created.');
     }
 
     // Seed Notices
-    const noticeCount = await Notice.countDocuments();
+    const noticeCount = await noticesCol.countDocuments();
     if (noticeCount === 0) {
-      await Notice.create([
+      await noticesCol.insertMany([
         {
           title: 'Spring 2026 Midterm Examination Schedule Released',
           content: 'The official schedule for Midterm Examinations Spring 2026 has been published. All students are advised to check their respective course dates and room allocations carefully.',
@@ -85,7 +94,9 @@ async function seedInitialData() {
           department: 'All Departments',
           isUrgent: true,
           publishedBy: 'Dr. Sarah Jenkins',
-          facultyRole: 'Controller of Examinations'
+          facultyRole: 'Controller of Examinations',
+          createdAt: new Date(),
+          updatedAt: new Date()
         },
         {
           title: 'Submission Deadline for Capstone Project Proposal',
@@ -94,7 +105,9 @@ async function seedInitialData() {
           department: 'Computer Science & Engineering',
           isUrgent: false,
           publishedBy: 'Prof. Alan Vance',
-          facultyRole: 'Head of CSE'
+          facultyRole: 'Head of CSE',
+          createdAt: new Date(),
+          updatedAt: new Date()
         },
         {
           title: 'Campus Maintenance & Library Hours Update',
@@ -103,16 +116,18 @@ async function seedInitialData() {
           department: 'All Departments',
           isUrgent: false,
           publishedBy: 'Admin Office',
-          facultyRole: 'System Administrator'
+          facultyRole: 'System Administrator',
+          createdAt: new Date(),
+          updatedAt: new Date()
         }
       ]);
-      console.log('[MongoDB Seed] Sample notices created.');
+      console.log('[MongoDB Native Seed] Sample notices created.');
     }
 
     // Seed Routines
-    const routineCount = await Routine.countDocuments();
+    const routineCount = await routinesCol.countDocuments();
     if (routineCount === 0) {
-      await Routine.create([
+      await routinesCol.insertMany([
         {
           courseCode: 'CSE-3101',
           courseTitle: 'Database Management Systems',
@@ -123,8 +138,10 @@ async function seedInitialData() {
           building: 'IT Complex',
           department: 'Computer Science & Engineering',
           semester: 'Spring 2026',
-          section: 'A',
-          facultyName: 'Dr. Sarah Jenkins'
+          section: 'Section A',
+          facultyName: 'Dr. Sarah Jenkins',
+          createdAt: new Date(),
+          updatedAt: new Date()
         },
         {
           courseCode: 'CSE-3105',
@@ -136,8 +153,10 @@ async function seedInitialData() {
           building: 'Academic Building 1',
           department: 'Computer Science & Engineering',
           semester: 'Spring 2026',
-          section: 'A',
-          facultyName: 'Prof. Alan Vance'
+          section: 'Section A',
+          facultyName: 'Prof. Alan Vance',
+          createdAt: new Date(),
+          updatedAt: new Date()
         },
         {
           courseCode: 'CSE-3109',
@@ -149,36 +168,41 @@ async function seedInitialData() {
           building: 'Software Engineering Annex',
           department: 'Computer Science & Engineering',
           semester: 'Spring 2026',
-          section: 'B',
-          facultyName: 'Dr. Marcus Thorne'
+          section: 'Section B',
+          facultyName: 'Dr. Marcus Thorne',
+          createdAt: new Date(),
+          updatedAt: new Date()
         }
       ]);
-      console.log('[MongoDB Seed] Sample routines created.');
+      console.log('[MongoDB Native Seed] Sample routines created.');
     }
 
     // Seed Announcements
-    const annCount = await Announcement.countDocuments();
+    const annCount = await announcementsCol.countDocuments();
     if (annCount === 0) {
-      await Announcement.create([
+      await announcementsCol.insertMany([
         {
           title: 'Annual Tech Symposium & Hackathon 2026 Registration Open',
           description: 'We are excited to announce the annual UniPortal Hackathon! Register your team of up to 4 members by February 20th. Cash prizes up to $5,000 for top projects!',
           tag: 'Seminar',
           isPinned: true,
-          publishedBy: 'Department of Computer Science'
+          publishedBy: 'Department of Computer Science',
+          createdAt: new Date(),
+          updatedAt: new Date()
         },
         {
           title: 'Spring Festival Holiday Notice (Feb 21)',
           description: 'All academic and administrative activities will remain closed on February 21st in observance of International Mother Language Day.',
           tag: 'Holiday',
           isPinned: true,
-          publishedBy: 'Registrar Office'
+          publishedBy: 'Registrar Office',
+          createdAt: new Date(),
+          updatedAt: new Date()
         }
       ]);
-      console.log('[MongoDB Seed] Sample announcements created.');
+      console.log('[MongoDB Native Seed] Sample announcements created.');
     }
   } catch (err) {
-    console.error('[MongoDB Seed Error]', err.message);
+    console.error('[MongoDB Native Seed Error]', err.message);
   }
 }
-
