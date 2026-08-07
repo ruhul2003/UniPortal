@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { CalendarDays, Plus, Clock, BookOpen } from 'lucide-react';
+import { motion } from 'framer-motion';
 import RoutineTable from '../../components/RoutineTable';
 import AddRoutineModal from '../../components/AddRoutineModal';
 import { useAuth } from '../../context/AuthContext';
@@ -38,28 +39,35 @@ export default function RoutinePage() {
   };
 
   return (
-    <div className="space-y-8">
+    <motion.div 
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className="space-y-8"
+    >
       {/* Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-slate-100 dark:border-slate-800">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="p-1.5 rounded-lg bg-indigo-50 text-indigo-600">
+            <span className="p-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400">
               <CalendarDays className="w-4 h-4" />
             </span>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Class Routine & Schedule</h1>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">Class Routine & Schedule</h1>
           </div>
-          <p className="text-xs sm:text-sm text-slate-500">
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
             Interactive weekly class schedule for students and faculty course planning.
           </p>
         </div>
 
         {isFaculty && (
-          <button
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             onClick={() => setIsModalOpen(true)}
-            className="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold flex items-center gap-2 shadow-sm transition-all whitespace-nowrap"
+            className="px-5 py-2.5 rounded-xl bg-slate-900 dark:bg-indigo-600 hover:bg-slate-800 dark:hover:bg-indigo-500 text-white text-xs font-semibold flex items-center gap-2 shadow-sm transition-all whitespace-nowrap"
           >
-            <Plus className="w-4 h-4 text-indigo-400" /> Add Routine Slot
-          </button>
+            <Plus className="w-4 h-4 text-indigo-400 dark:text-white" /> Add Routine Slot
+          </motion.button>
         )}
       </div>
 
@@ -70,7 +78,13 @@ export default function RoutinePage() {
           <p className="text-xs text-slate-400 font-medium">Loading class timetable...</p>
         </div>
       ) : (
-        <RoutineTable routines={routines} onDelete={handleDeleteRoutine} />
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          <RoutineTable routines={routines} onDelete={handleDeleteRoutine} />
+        </motion.div>
       )}
 
       {/* Faculty Add Modal */}
@@ -79,6 +93,7 @@ export default function RoutinePage() {
         onClose={() => setIsModalOpen(false)}
         onSubmit={handleAddRoutine}
       />
-    </div>
+    </motion.div>
   );
 }
+
