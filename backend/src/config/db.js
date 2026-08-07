@@ -8,7 +8,7 @@ export const connectDB = async () => {
     const connStr = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/uniportal';
     client = new MongoClient(connStr);
     await client.connect();
-    db = client.db();
+    db = client.db('UniPortal');
     console.log(`[MongoDB Native Driver] Connected to database: ${db.databaseName}`);
 
     // Auto-seed database if empty
@@ -52,36 +52,126 @@ async function seedInitialData() {
       console.log('[MongoDB Native Seed] Admin user (admin@gmail.com) created.');
     }
 
-    const userCount = await usersCol.countDocuments();
-    if (userCount <= 1) {
-      await usersCol.insertMany([
-        {
-          name: 'Dr. Sarah Jenkins',
-          email: 'sarah.jenkins@univ.edu',
-          password: 'password123',
-          role: 'faculty',
-          department: 'Computer Science & Engineering',
-          facultyId: 'FAC-2024-101',
-          designation: 'Associate Professor',
-          isCR: false,
-          createdAt: new Date(),
-          updatedAt: new Date()
-        },
-        {
-          name: 'Alex Rivera',
-          email: 'alex.rivera@student.univ.edu',
-          password: 'password123',
-          role: 'student',
-          department: 'Computer Science & Engineering',
-          studentId: 'CSE-2024-042',
-          section: 'Section A',
-          isCR: true,
-          createdAt: new Date(),
-          updatedAt: new Date()
-        }
-      ]);
-      console.log('[MongoDB Native Seed] Sample users created.');
+    // Seed Faculty and Students with Bengali Names
+    const initialUsers = [
+      {
+        name: 'Dr. Sarah Abedin',
+        email: 'sarah.jenkins@univ.edu', // retain email for backward compatibility
+        password: 'password123',
+        role: 'faculty',
+        department: 'Computer Science & Engineering',
+        facultyId: 'FAC-2024-101',
+        designation: 'Associate Professor',
+        isCR: false,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Rahim Chowdhury',
+        email: 'alex.rivera@student.univ.edu',
+        password: 'password123',
+        role: 'student',
+        department: 'Computer Science & Engineering',
+        studentId: 'CSE-2024-042',
+        section: 'Section A',
+        isCR: true,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Nusrat Jahan',
+        email: 'nusrat.jahan@student.univ.edu',
+        password: 'password123',
+        role: 'student',
+        department: 'Computer Science & Engineering',
+        studentId: 'CSE-2024-089',
+        section: 'Section B',
+        isCR: false,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Tanvir Hossain',
+        email: 'tanvir.hossain@student.univ.edu',
+        password: 'password123',
+        role: 'student',
+        department: 'Software Engineering',
+        studentId: 'SWE-2024-015',
+        section: 'Section C',
+        isCR: false,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Anika Rahman',
+        email: 'anika.rahman@student.univ.edu',
+        password: 'password123',
+        role: 'student',
+        department: 'Computer Science & Engineering',
+        studentId: 'CSE-2024-104',
+        section: 'Section A',
+        isCR: false,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Mahmudul Hasan',
+        email: 'mahmudul.hasan@student.univ.edu',
+        password: 'password123',
+        role: 'student',
+        department: 'Computer Science & Engineering',
+        studentId: 'CSE-2024-055',
+        section: 'Section B',
+        isCR: true,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Sadia Islam',
+        email: 'sadia.islam@student.univ.edu',
+        password: 'password123',
+        role: 'student',
+        department: 'Electrical & Electronic Engineering',
+        studentId: 'EEE-2024-022',
+        section: 'Section D',
+        isCR: false,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Arifur Rahman',
+        email: 'arifur.rahman@student.univ.edu',
+        password: 'password123',
+        role: 'student',
+        department: 'Software Engineering',
+        studentId: 'SWE-2024-077',
+        section: 'Section A',
+        isCR: false,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Farhana Akter',
+        email: 'farhana.akter@student.univ.edu',
+        password: 'password123',
+        role: 'student',
+        department: 'Computer Science & Engineering',
+        studentId: 'CSE-2024-112',
+        section: 'Section C',
+        isCR: false,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
+    ];
+
+    for (const uDoc of initialUsers) {
+      await usersCol.updateOne(
+        { email: uDoc.email },
+        { $set: uDoc },
+        { upsert: true }
+      );
     }
+    console.log('[MongoDB Native Seed] Student & Faculty user records updated with Bengali names.');
 
     // Seed Notices
     const noticeCount = await noticesCol.countDocuments();

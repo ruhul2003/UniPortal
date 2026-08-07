@@ -4,61 +4,21 @@ import { getNoticesCollection } from '../config/db.js';
 
 const router = express.Router();
 
-let initialNotices = [
-  {
-    _id: 'n_1',
-    title: 'Spring 2026 Midterm Examination Schedule Released',
-    content: 'The official schedule for Midterm Examinations Spring 2026 has been published. All students are advised to check their respective course dates and room allocations carefully.',
-    category: 'Exam',
-    department: 'All Departments',
-    isUrgent: true,
-    publishedBy: 'Dr. Sarah Jenkins',
-    facultyRole: 'Controller of Examinations',
-    createdAt: new Date(Date.now() - 3600000 * 4).toISOString()
-  },
-  {
-    _id: 'n_2',
-    title: 'Submission Deadline for Capstone Project Proposal',
-    content: 'All 7th & 8th-semester CSE students must submit their initial Capstone Project design document to the department office by February 15th, 2026.',
-    category: 'Academic',
-    department: 'Computer Science & Engineering',
-    isUrgent: false,
-    publishedBy: 'Prof. Alan Vance',
-    facultyRole: 'Head of CSE',
-    createdAt: new Date(Date.now() - 3600000 * 24).toISOString()
-  },
-  {
-    _id: 'n_3',
-    title: 'Campus Maintenance & Library Hours Update',
-    content: 'The Central Library will operate with extended opening hours (8:00 AM - 10:00 PM) during the upcoming exam week. Wi-Fi maintenance will occur on Sunday midnight.',
-    category: 'Administrative',
-    department: 'All Departments',
-    isUrgent: false,
-    publishedBy: 'Admin Office',
-    facultyRole: 'System Administrator',
-    createdAt: new Date(Date.now() - 3600000 * 48).toISOString()
-  }
-];
-
-// GET all notices (Native MongoDB Driver)
+// GET all notices directly from MongoDB
 router.get('/', async (req, res) => {
   try {
-    try {
-      const noticesCol = getNoticesCollection();
-      if (noticesCol) {
-        const dbNotices = await noticesCol.find().sort({ createdAt: -1 }).toArray();
-        return res.json({ success: true, notices: dbNotices });
-      }
-    } catch (e) {
-      console.warn('[Notice DB Fetch Fallback]', e.message);
+    const noticesCol = getNoticesCollection();
+    if (!noticesCol) {
+      return res.status(503).json({ error: 'Database connection unavailable' });
     }
-    return res.json({ success: true, notices: initialNotices });
+    const notices = await noticesCol.find().sort({ createdAt: -1 }).toArray();
+    return res.json({ success: true, notices });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// POST new notice (Native MongoDB Driver)
+// POST new notice directly to MongoDB
 router.post('/', async (req, res) => {
   try {
     const { title, content, category, department, isUrgent, publishedBy, facultyRole } = req.body;
@@ -66,53 +26,54 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ error: 'Title and content are required' });
     }
 
-    const noticeData = {
-      title,
-      content,
-      category: category || 'Academic',
-      department: department || 'All Departments',
-      isUrgent: !!isUrgent,
-      publishedBy: publishedBy || 'Faculty Member',
-      facultyRole: facultyRole || 'Faculty',
-      createdAt: new Date()
-    };
-
-    try {
-      const noticesCol = getNoticesCollection();
-      if (noticesCol) {
-        const result = await noticesCol.insertOne(noticeData);
-        const createdNotice = { _id: result.insertedId, ...noticeData };
-        return res.status(201).json({ success: true, notice: createdNotice });
-      }
-    } catch (e) {
-      console.warn('[Notice Post DB Fallback]', e.message);
+    const noticesCol = getNoticesCollection();
+    if (!noticesCol) {
+      return res.status(503).json({ error: 'Database connection unavailable' });
     }
 
-    // Fallback update in-memory
-    const newNotice = { _id: 'n_' + Date.now(), ...noticeData };
-    initialNotices.unshift(newNotice);
-    return res.status(201).json({ success: true, notice: newNotice });
+    const newNotice = {
+      title: title.trim(),
+      content: content.trim(),
+      category: category || 'General',
+      department: department || 'All Departments',
+      isUrgent: Boolean(isUrgent),
+      publishedBy: publishedBy || 'Faculty Member',
+      facultyRole: facultyRole || 'Academic Faculty',
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
 
+    const result = await noticesCol.insertOne(newNotice);
+    const createdNotice = { _id: result.insertedId, ...newNotice };
+
+    return res.status(201).json({ 
+      success: true, 
+      message: 'Notice published successfully', 
+      notice: createdNotice 
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// DELETE notice (Native MongoDB Driver)
+// DELETE notice directly from MongoDB
 router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    try {
-      const noticesCol = getNoticesCollection();
-      if (noticesCol) {
-        const filter = ObjectId.isValid(id) ? { _id: new ObjectId(id) } : { _id: id };
-        await noticesCol.deleteOne(filter);
-      }
-    } catch (e) {
-      // ignore DB delete failure
+
+    const noticesCol = getNoticesCollection();
+    if (!noticesCol) {
+      return res.status(503).json({ error: 'Database connection unavailable' });
     }
-    initialNotices = initialNotices.filter(n => n._id !== id);
-    res.json({ success: true, message: 'Notice deleted successfully' });
+
+    const filter = ObjectId.isValid(id) ? { _id: new ObjectId(id) } : { _id: id };
+    const result = await noticesCol.deleteOne(filter);
+
+    if (result.deletedCount > 0) {
+      return res.json({ success: true, message: 'Notice deleted successfully' });
+    }
+
+    return res.status(404).json({ error: 'Notice not found in database' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

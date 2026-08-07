@@ -19,7 +19,7 @@ export function AuthProvider({ children }) {
       // Default initial state: Student view for immediate demo
       const defaultStudent = {
         _id: 'usr_demo_student',
-        name: 'Alex Rivera',
+        name: 'Rahim Chowdhury',
         email: 'alex.rivera@student.univ.edu',
         role: 'student',
         department: 'Computer Science & Engineering',
@@ -47,7 +47,7 @@ export function AuthProvider({ children }) {
     const updated = {
       ...user,
       role: newRole,
-      name: newRole === 'faculty' ? 'Dr. Sarah Jenkins' : 'Alex Rivera',
+      name: newRole === 'faculty' ? 'Dr. Sarah Abedin' : 'Rahim Chowdhury',
       email: newRole === 'faculty' ? 'sarah.jenkins@univ.edu' : 'alex.rivera@student.univ.edu',
       designation: newRole === 'faculty' ? 'Associate Professor' : '',
     };
