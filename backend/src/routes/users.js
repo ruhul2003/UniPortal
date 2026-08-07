@@ -34,6 +34,36 @@ let mockUserStore = [
     studentId: 'CSE-2024-042',
     section: 'Section A',
     isCR: true
+  },
+  {
+    _id: 'usr_student_2',
+    name: 'Emily Watson',
+    email: 'emily.watson@student.univ.edu',
+    role: 'student',
+    department: 'Computer Science & Engineering',
+    studentId: 'CSE-2024-089',
+    section: 'Section B',
+    isCR: false
+  },
+  {
+    _id: 'usr_student_3',
+    name: 'Liam Chen',
+    email: 'liam.chen@student.univ.edu',
+    role: 'student',
+    department: 'Software Engineering',
+    studentId: 'SWE-2024-015',
+    section: 'Section C',
+    isCR: false
+  },
+  {
+    _id: 'usr_student_4',
+    name: 'Sophia Patel',
+    email: 'sophia.patel@student.univ.edu',
+    role: 'student',
+    department: 'Computer Science & Engineering',
+    studentId: 'CSE-2024-104',
+    section: 'Section A',
+    isCR: false
   }
 ];
 

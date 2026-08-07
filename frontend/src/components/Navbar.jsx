@@ -19,7 +19,8 @@ import {
   ArrowRightLeft,
   Sun,
   Moon,
-  Crown
+  Crown,
+  Users
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -38,6 +39,8 @@ export default function Navbar() {
 
   const navLinks = user?.role === 'admin' 
     ? [...baseNavLinks, { name: 'Admin Panel', href: '/admin', icon: Crown }] 
+    : user?.role === 'faculty'
+    ? [...baseNavLinks, { name: 'Students & CRs', href: '/admin', icon: Users }]
     : baseNavLinks;
 
   return (
@@ -189,6 +192,17 @@ export default function Navbar() {
                         >
                           <Crown className="w-3.5 h-3.5 text-purple-500" />
                           Admin Control Center
+                        </Link>
+                      )}
+
+                      {user.role === 'faculty' && (
+                        <Link
+                          href="/admin"
+                          onClick={() => setShowProfileMenu(false)}
+                          className="w-full px-4 py-2 text-left text-xs font-semibold text-blue-700 dark:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-950/40 flex items-center gap-2 transition-colors"
+                        >
+                          <Users className="w-3.5 h-3.5 text-blue-500" />
+                          Student Directory & CRs
                         </Link>
                       )}
 
