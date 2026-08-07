@@ -33,14 +33,26 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ error: 'Email address already registered' });
     }
 
+    const SECTION_DEPARTMENT_MAP = {
+      'Section A': 'Computer Science & Engineering',
+      'Section B': 'Computer Science & Engineering',
+      'Section C': 'Software Engineering',
+      'Section D': 'Electrical & Electronic Engineering'
+    };
+
+    const studentSec = req.body.section || 'Section A';
+    const studentDept = targetRole === 'student'
+      ? (SECTION_DEPARTMENT_MAP[studentSec] || department || 'Computer Science & Engineering')
+      : (department || 'Computer Science & Engineering');
+
     const newUserDoc = {
       name: name.trim(),
       email: cleanEmail,
       password,
       role: targetRole,
-      department: department || 'Computer Science & Engineering',
+      department: studentDept,
       studentId: targetRole === 'student' ? studentId.trim() : '',
-      section: targetRole === 'student' ? 'Section A' : '',
+      section: targetRole === 'student' ? studentSec : '',
       facultyId: targetRole === 'faculty' ? facultyId.trim() : '',
       designation: targetRole === 'faculty' ? designation.trim() : '',
       isCR: false,

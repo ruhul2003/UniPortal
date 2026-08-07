@@ -14,7 +14,9 @@ const userSchema = new mongoose.Schema(
     studentId: { type: String, default: '' },
     section: { type: String, default: 'Section A' }, // E.g. Section A, Section B, Section C, Section D
     facultyId: { type: String, default: '' },
-    designation: { type: String, default: '' }, // For faculty (e.g. Assistant Professor)
+    designation: { type: String, default: '' }, // For faculty (e.g. Associate Professor)
+    acronym: { type: String, default: '' }, // Faculty acronym e.g. SAB, AV, MT
+    phone: { type: String, default: '' }, // Phone number e.g. +880 1711-234567
     isCR: { type: Boolean, default: false }, // Class Representative flag
     avatar: { type: String, default: '' },
   },

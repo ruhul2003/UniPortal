@@ -26,6 +26,7 @@ import {
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { fetchNotices, fetchRoutines, fetchAnnouncements, fetchUsers, createNotice, deleteNotice } from '../lib/api';
+import FacultyList from '../components/FacultyList';
 import NoticeCard from '../components/NoticeCard';
 import CreateNoticeModal from '../components/CreateNoticeModal';
 
@@ -433,10 +434,12 @@ export default function HomePage() {
               )}
             </div>
           </div>
-
         </div>
 
       </div>
+
+      {/* Department-wise Faculty List Section */}
+      <FacultyList />
 
       {/* Modal for Faculty Notice Creation */}
       <CreateNoticeModal

@@ -118,16 +118,30 @@ router.put('/:id', async (req, res) => {
       return res.status(404).json({ error: 'User not found in database' });
     }
 
+    const SECTION_DEPARTMENT_MAP = {
+      'Section A': 'Computer Science & Engineering',
+      'Section B': 'Computer Science & Engineering',
+      'Section C': 'Software Engineering',
+      'Section D': 'Electrical & Electronic Engineering'
+    };
+
     const updateFields = { updatedAt: new Date() };
     if (name !== undefined) updateFields.name = name;
     if (avatar !== undefined) updateFields.avatar = avatar;
-    if (section !== undefined) updateFields.section = section;
-    if (department !== undefined) updateFields.department = department;
+    if (section !== undefined) {
+      updateFields.section = section;
+      if (user.role === 'student' && SECTION_DEPARTMENT_MAP[section]) {
+        updateFields.department = SECTION_DEPARTMENT_MAP[section];
+      }
+    }
+    if (department !== undefined && !updateFields.department) updateFields.department = department;
     if (studentId !== undefined && (!user.studentId || user.role !== 'student')) {
       updateFields.studentId = studentId;
     }
     if (facultyId !== undefined) updateFields.facultyId = facultyId;
     if (designation !== undefined) updateFields.designation = designation;
+    if (req.body.acronym !== undefined) updateFields.acronym = req.body.acronym;
+    if (req.body.phone !== undefined) updateFields.phone = req.body.phone;
 
     await usersCol.updateOne(filter, { $set: updateFields });
     const updatedUser = await usersCol.findOne(filter, { projection: { password: 0 } });

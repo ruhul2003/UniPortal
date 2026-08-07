@@ -32,6 +32,7 @@ export default function Navbar() {
 
   const baseNavLinks = [
     { name: 'Dashboard', href: '/', icon: LayoutDashboard },
+    { name: 'Faculty Members', href: '/faculty', icon: GraduationCap },
     { name: 'Notices', href: '/notices', icon: Bell },
     { name: 'Class Routine', href: '/routine', icon: CalendarDays },
     { name: 'Announcements', href: '/announcements', icon: Megaphone },

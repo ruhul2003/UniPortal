@@ -18,7 +18,9 @@ import {
   Filter,
   UserX,
   RefreshCw,
-  Eye
+  Eye,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../context/AuthContext';
@@ -41,6 +43,15 @@ export default function AdminPage() {
   const [actionError, setActionError] = useState('');
   const [deletingId, setDeletingId] = useState(null);
   
+  // Pagination State (25 items per page)
+  const ITEMS_PER_PAGE = 25;
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Reset to Page 1 whenever search or filter controls change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search, roleFilter, sectionFilter, crOnly]);
+
   // Student Details Modal state
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -157,6 +168,14 @@ export default function AdminPage() {
 
     return matchesSearch && matchesRole && matchesCR && matchesSection;
   });
+
+  // Pagination Calculations
+  const totalFiltered = filteredUsers.length;
+  const totalPages = Math.ceil(totalFiltered / ITEMS_PER_PAGE) || 1;
+  const validPage = Math.min(Math.max(1, currentPage), totalPages);
+  const startIndex = (validPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, totalFiltered);
+  const paginatedUsers = filteredUsers.slice(startIndex, endIndex);
 
   const totalUsers = users.length;
   const studentCount = users.filter(u => u.role === 'student').length;
@@ -415,7 +434,7 @@ export default function AdminPage() {
                   </td>
                 </tr>
               ) : (
-                filteredUsers.map((u) => (
+                paginatedUsers.map((u) => (
                   <tr key={u._id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition-colors">
                     
                     {/* User Info */}
@@ -585,6 +604,58 @@ export default function AdminPage() {
 
           </table>
         </div>
+
+        {/* Pagination Bar (25 items per page) */}
+        {filteredUsers.length > 0 && (
+          <div className="p-4 bg-slate-50 dark:bg-slate-800/80 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
+            <div className="text-slate-500 dark:text-slate-400 font-medium">
+              Showing <span className="font-extrabold text-slate-900 dark:text-white">{startIndex + 1}</span> to{' '}
+              <span className="font-extrabold text-slate-900 dark:text-white">{endIndex}</span> of{' '}
+              <span className="font-extrabold text-slate-900 dark:text-white">{totalFiltered}</span> records (25 per page)
+            </div>
+
+            {totalPages > 1 && (
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  disabled={validPage === 1}
+                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  className="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-bold disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors flex items-center gap-1"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                  Prev
+                </button>
+
+                <div className="flex items-center gap-1">
+                  {Array.from({ length: totalPages }, (_, idx) => idx + 1).map((pageNum) => (
+                    <button
+                      key={pageNum}
+                      type="button"
+                      onClick={() => setCurrentPage(pageNum)}
+                      className={`w-8 h-8 rounded-xl text-xs font-extrabold transition-all ${
+                        validPage === pageNum
+                          ? 'bg-blue-600 text-white shadow-xs'
+                          : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+                      }`}
+                    >
+                      {pageNum}
+                    </button>
+                  ))}
+                </div>
+
+                <button
+                  type="button"
+                  disabled={validPage === totalPages}
+                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                  className="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-bold disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors flex items-center gap-1"
+                >
+                  Next
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Student Details Modal */}
