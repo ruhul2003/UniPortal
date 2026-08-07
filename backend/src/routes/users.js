@@ -36,6 +36,24 @@ router.patch('/:id/cr', async (req, res) => {
     }
 
     const newStatus = typeof isCR === 'boolean' ? isCR : !user.isCR;
+
+    // Enforce 2 CRs per section limit
+    if (newStatus && user.role === 'student') {
+      const studentSection = user.section || 'Section A';
+      const currentCRCount = await usersCol.countDocuments({
+        role: 'student',
+        section: studentSection,
+        isCR: true,
+        _id: { $ne: user._id }
+      });
+
+      if (currentCRCount >= 2) {
+        return res.status(400).json({ 
+          error: `${studentSection} already has the maximum limit of 2 Class Representatives (CRs). Please revoke an existing CR in ${studentSection} before appointing a new one.` 
+        });
+      }
+    }
+
     await usersCol.updateOne(filter, { $set: { isCR: newStatus, updatedAt: new Date() } });
     const updatedUser = await usersCol.findOne(filter, { projection: { password: 0 } });
 

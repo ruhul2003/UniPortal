@@ -35,6 +35,7 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [roleFilter, setRoleFilter] = useState('all');
+  const [sectionFilter, setSectionFilter] = useState('all');
   const [crOnly, setCrOnly] = useState(false);
   const [actionSuccess, setActionSuccess] = useState('');
   const [actionError, setActionError] = useState('');
@@ -66,6 +67,20 @@ export default function AdminPage() {
     try {
       setActionError('');
       const newStatus = !targetUser.isCR;
+
+      // Enforce Max 2 CRs per section on client side before request
+      if (newStatus && targetUser.role === 'student') {
+        const studentSec = targetUser.section || 'Section A';
+        const currentSectionCRs = users.filter(
+          u => u.role === 'student' && (u.section || 'Section A') === studentSec && u.isCR && u._id !== targetUser._id
+        );
+        if (currentSectionCRs.length >= 2) {
+          const errMsg = `${studentSec} already has the maximum limit of 2 Class Representatives (CRs). Please revoke an existing CR in ${studentSec} before appointing a new one.`;
+          setActionError(errMsg);
+          return;
+        }
+      }
+
       await toggleUserCR(targetUser._id, newStatus);
       setUsers(users.map(u => u._id === targetUser._id ? { ...u, isCR: newStatus } : u));
       if (selectedStudent && selectedStudent._id === targetUser._id) {
@@ -138,14 +153,21 @@ export default function AdminPage() {
 
     const matchesRole = roleFilter === 'all' || u.role === roleFilter;
     const matchesCR = !crOnly || u.isCR;
+    const matchesSection = sectionFilter === 'all' || (u.role === 'student' && (u.section || 'Section A') === sectionFilter);
 
-    return matchesSearch && matchesRole && matchesCR;
+    return matchesSearch && matchesRole && matchesCR && matchesSection;
   });
 
   const totalUsers = users.length;
   const studentCount = users.filter(u => u.role === 'student').length;
   const facultyCount = users.filter(u => u.role === 'faculty').length;
   const crCount = users.filter(u => u.isCR).length;
+
+  // Section-wise CR Counts
+  const sectionsList = ['Section A', 'Section B', 'Section C', 'Section D'];
+  const getSectionCRCount = (sec) => {
+    return users.filter(u => u.role === 'student' && (u.section || 'Section A') === sec && u.isCR).length;
+  };
 
   return (
     <div className="space-y-8">
@@ -246,6 +268,56 @@ export default function AdminPage() {
         )}
       </AnimatePresence>
 
+      {/* Section Filter Quick Pills & CR Capacity Bar */}
+      <div className="flex flex-wrap items-center gap-2 p-3 rounded-2xl bg-slate-100/80 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-800 text-xs">
+        <span className="font-bold text-slate-500 dark:text-slate-400 px-2 flex items-center gap-1.5 text-[11px] uppercase tracking-wider">
+          <Building className="w-3.5 h-3.5 text-blue-500" />
+          Filter Section:
+        </span>
+        
+        <button
+          type="button"
+          onClick={() => setSectionFilter('all')}
+          className={`px-3 py-1.5 rounded-xl font-bold transition-all ${
+            sectionFilter === 'all'
+              ? 'bg-slate-900 dark:bg-blue-600 text-white shadow-xs'
+              : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+          }`}
+        >
+          All Sections
+        </button>
+
+        {sectionsList.map((sec) => {
+          const crsInSec = getSectionCRCount(sec);
+          const isFull = crsInSec >= 2;
+          const isSelected = sectionFilter === sec;
+          return (
+            <button
+              key={sec}
+              type="button"
+              onClick={() => setSectionFilter(sec)}
+              className={`px-3 py-1.5 rounded-xl font-bold flex items-center gap-2 transition-all ${
+                isSelected
+                  ? 'bg-blue-600 text-white shadow-xs'
+                  : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+              }`}
+            >
+              <span>{sec}</span>
+              <span className={`px-1.5 py-0.5 rounded-md text-[10px] font-black ${
+                isSelected
+                  ? 'bg-white/20 text-white'
+                  : isFull
+                  ? 'bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300'
+                  : 'bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300'
+              }`}>
+                <Crown className="w-2.5 h-2.5 inline-block mr-0.5 fill-current" />
+                {crsInSec}/2 CRs
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
       {/* Filter Toolbar */}
       <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
         
@@ -263,6 +335,22 @@ export default function AdminPage() {
 
         {/* Filters */}
         <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
+          {/* Section Filter Dropdown */}
+          <div className="flex items-center gap-1.5 text-xs">
+            <Building className="w-3.5 h-3.5 text-slate-400" />
+            <select
+              value={sectionFilter}
+              onChange={(e) => setSectionFilter(e.target.value)}
+              className="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 text-xs bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-semibold"
+            >
+              <option value="all">All Sections</option>
+              <option value="Section A">Section A</option>
+              <option value="Section B">Section B</option>
+              <option value="Section C">Section C</option>
+              <option value="Section D">Section D</option>
+            </select>
+          </div>
+
           {/* Role Filter */}
           <div className="flex items-center gap-1.5 text-xs">
             <Filter className="w-3.5 h-3.5 text-slate-400" />
