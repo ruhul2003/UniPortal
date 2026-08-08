@@ -10,16 +10,23 @@ import {
   GraduationCap, 
   Sparkles,
   Award,
-  BookOpen
+  BookOpen,
+  ArrowUpDown,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { fetchUsers } from '../lib/api';
+
+const ITEMS_PER_PAGE = 30;
 
 export default function FacultyList() {
   const [faculties, setFaculties] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedDept, setSelectedDept] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [sortOrder, setSortOrder] = useState('asc'); // 'asc' = A-Z, 'desc' = Z-A
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     async function loadFaculties() {
@@ -37,6 +44,11 @@ export default function FacultyList() {
     loadFaculties();
   }, []);
 
+  // Reset to page 1 whenever filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedDept, searchQuery, sortOrder]);
+
   // Department List
   const departments = [
     'all',
@@ -46,27 +58,51 @@ export default function FacultyList() {
     'Business Administration'
   ];
 
-  // Filtering Logic
-  const filteredFaculties = faculties.filter(f => {
-    const matchesDept = selectedDept === 'all' || f.department === selectedDept;
-    const matchesSearch = 
-      f.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      f.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      f.acronym?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      f.designation?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      f.department?.toLowerCase().includes(searchQuery.toLowerCase());
+  // Filtering & Sorting Logic (A-Z)
+  const filteredFaculties = faculties
+    .filter(f => {
+      const matchesDept = selectedDept === 'all' || f.department === selectedDept;
+      const matchesSearch = 
+        f.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        f.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        f.acronym?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        f.designation?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        f.department?.toLowerCase().includes(searchQuery.toLowerCase());
 
-    return matchesDept && matchesSearch;
-  });
+      return matchesDept && matchesSearch;
+    })
+    .sort((a, b) => {
+      const nameA = (a.name || '').trim().toLowerCase();
+      const nameB = (b.name || '').trim().toLowerCase();
+      if (sortOrder === 'asc') {
+        return nameA.localeCompare(nameB);
+      } else {
+        return nameB.localeCompare(nameA);
+      }
+    });
 
-  // Group by Department if "all" selected
+  // Pagination Calculation
+  const totalPages = Math.ceil(filteredFaculties.length / ITEMS_PER_PAGE) || 1;
+  const validCurrentPage = Math.min(Math.max(currentPage, 1), totalPages);
+  const startIndex = (validCurrentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const paginatedFaculties = filteredFaculties.slice(startIndex, endIndex);
+
+  // Group by Department for the current paginated items if "all" selected
   const groupedFaculties = departments.filter(d => d !== 'all').reduce((acc, dept) => {
-    const list = filteredFaculties.filter(f => f.department === dept);
+    const list = paginatedFaculties.filter(f => f.department === dept);
     if (list.length > 0) {
       acc[dept] = list;
     }
     return acc;
   }, {});
+
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+      window.scrollTo({ top: 300, behavior: 'smooth' });
+    }
+  };
 
   return (
     <section className="space-y-8 py-4">
@@ -87,7 +123,7 @@ export default function FacultyList() {
         </div>
       </div>
 
-      {/* Control Bar: Department Tabs & Search */}
+      {/* Control Bar: Department Tabs, Search & Sort */}
       <div className="p-4 rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-xl space-y-4">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-4">
           
@@ -122,16 +158,27 @@ export default function FacultyList() {
             })}
           </div>
 
-          {/* Search Box */}
-          <div className="relative w-full lg:w-72">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-            <input
-              type="text"
-              placeholder="Search name, email, acronym..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800/50 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-            />
+          {/* Search Box & Sort Toggle */}
+          <div className="flex items-center gap-2 w-full lg:w-auto">
+            <div className="relative w-full lg:w-72">
+              <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                placeholder="Search name, email, acronym..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800/50 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+              />
+            </div>
+
+            <button
+              onClick={() => setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc')}
+              title={`Sort ${sortOrder === 'asc' ? 'Z-A' : 'A-Z'}`}
+              className="px-3 py-2 rounded-2xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all text-xs font-bold flex items-center gap-1.5 shrink-0"
+            >
+              <ArrowUpDown className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+              <span>{sortOrder === 'asc' ? 'A-Z' : 'Z-A'}</span>
+            </button>
           </div>
 
         </div>
@@ -150,15 +197,20 @@ export default function FacultyList() {
       ) : selectedDept !== 'all' ? (
         /* Single Selected Department Grid */
         <div className="space-y-4">
-          <div className="flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
-            <Building2 className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-            <h2 className="text-lg font-black text-slate-900 dark:text-white">
-              {selectedDept} ({filteredFaculties.length})
-            </h2>
+          <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+            <div className="flex items-center gap-2">
+              <Building2 className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+              <h2 className="text-lg font-black text-slate-900 dark:text-white">
+                {selectedDept} ({filteredFaculties.length})
+              </h2>
+            </div>
+            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+              Showing {startIndex + 1}–{Math.min(endIndex, filteredFaculties.length)} of {filteredFaculties.length}
+            </span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredFaculties.map((faculty) => (
+            {paginatedFaculties.map((faculty) => (
               <FacultyCard key={faculty._id} faculty={faculty} />
             ))}
           </div>
@@ -178,13 +230,13 @@ export default function FacultyList() {
                       {deptName}
                     </h2>
                     <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
-                      {deptList.length} Faculty Member{deptList.length > 1 ? 's' : ''}
+                      {deptList.length} Faculty Member{deptList.length > 1 ? 's' : ''} on this page
                     </p>
                   </div>
                 </div>
 
                 <span className="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-bold">
-                  {deptList.length} Academic Staff
+                  {deptList.length} Staff
                 </span>
               </div>
 
@@ -195,6 +247,51 @@ export default function FacultyList() {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* Pagination Controls */}
+      {!loading && filteredFaculties.length > 0 && totalPages > 1 && (
+        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-100 dark:border-slate-800">
+          <p className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+            Showing <span className="font-extrabold text-slate-900 dark:text-white">{startIndex + 1}</span> to{' '}
+            <span className="font-extrabold text-slate-900 dark:text-white">{Math.min(endIndex, filteredFaculties.length)}</span> of{' '}
+            <span className="font-extrabold text-blue-600 dark:text-blue-400">{filteredFaculties.length}</span> Faculty Members
+          </p>
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => handlePageChange(validCurrentPage - 1)}
+              disabled={validCurrentPage === 1}
+              className="p-2 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-100 dark:hover:bg-slate-800 transition-all shadow-sm"
+              title="Previous Page"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
+              <button
+                key={pageNum}
+                onClick={() => handlePageChange(pageNum)}
+                className={`w-9 h-9 rounded-2xl text-xs font-extrabold transition-all shadow-sm ${
+                  validCurrentPage === pageNum
+                    ? 'bg-blue-600 text-white shadow-blue-500/25 scale-105'
+                    : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+                }`}
+              >
+                {pageNum}
+              </button>
+            ))}
+
+            <button
+              onClick={() => handlePageChange(validCurrentPage + 1)}
+              disabled={validCurrentPage === totalPages}
+              className="p-2 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-100 dark:hover:bg-slate-800 transition-all shadow-sm"
+              title="Next Page"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       )}
     </section>

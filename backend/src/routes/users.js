@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
     if (!usersCol) {
       return res.status(503).json({ error: 'Database connection unavailable' });
     }
-    const users = await usersCol.find({}, { projection: { password: 0 } }).sort({ createdAt: -1 }).toArray();
+    const users = await usersCol.find({}, { projection: { password: 0 } }).sort({ name: 1 }).toArray();
     return res.json({ success: true, users });
   } catch (err) {
     res.status(500).json({ error: err.message });
