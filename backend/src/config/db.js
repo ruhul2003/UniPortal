@@ -171,7 +171,7 @@ async function seedInitialData() {
         { upsert: true }
       );
     }
-    console.log('[MongoDB Native Seed] Student & Faculty user records updated with Bengali names.');
+    console.log('[MongoDB Native Seed] Student & Faculty user records updated with CSE department faculty list.');
 
     // Seed Notices
     const noticeCount = await noticesCol.countDocuments();
