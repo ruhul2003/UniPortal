@@ -24,11 +24,36 @@ import {
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
+import { fetchNotices } from '../lib/api';
+
 export default function Navbar() {
   const pathname = usePathname();
   const { user, logout, toggleRole } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+
+  // Notice signal state
+  const [hasNotices, setHasNotices] = useState(false);
+  const [noticeCount, setNoticeCount] = useState(0);
+  const [hasUrgentNotice, setHasUrgentNotice] = useState(false);
+
+  useEffect(() => {
+    async function checkNotices() {
+      try {
+        const data = await fetchNotices();
+        if (Array.isArray(data) && data.length > 0) {
+          setHasNotices(true);
+          setNoticeCount(data.length);
+          setHasUrgentNotice(data.some(n => n.isUrgent));
+        } else {
+          setHasNotices(false);
+        }
+      } catch (err) {
+        console.warn('Navbar notice check error:', err);
+      }
+    }
+    checkNotices();
+  }, [pathname]);
 
   const baseNavLinks = [
     { name: 'Dashboard', href: '/', icon: LayoutDashboard },
@@ -68,6 +93,8 @@ export default function Navbar() {
             {navLinks.map((link) => {
               const Icon = link.icon;
               const isActive = pathname === link.href;
+              const isNoticeLink = link.href === '/notices';
+
               return (
                 <Link
                   key={link.href}
@@ -78,8 +105,22 @@ export default function Navbar() {
                       : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800/60'
                   }`}
                 >
-                  <Icon className={`w-4 h-4 ${isActive ? 'text-blue-600 dark:text-blue-400' : 'text-slate-400 dark:text-slate-500'}`} />
-                  {link.name}
+                  <div className="relative">
+                    <Icon className={`w-4 h-4 ${isActive ? 'text-blue-600 dark:text-blue-400' : 'text-slate-400 dark:text-slate-500'}`} />
+                    {isNoticeLink && hasNotices && (
+                      <span className={`absolute -top-1 -right-1 w-2 h-2 rounded-full ${hasUrgentNotice ? 'bg-amber-500 animate-pulse' : 'bg-rose-500'}`} />
+                    )}
+                  </div>
+                  <span>{link.name}</span>
+
+                  {/* Pulsing Notification Badge for Notices */}
+                  {isNoticeLink && hasNotices && (
+                    <span className="relative flex h-2 w-2 ml-0.5">
+                      <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${hasUrgentNotice ? 'bg-amber-400' : 'bg-rose-400'}`} />
+                      <span className={`relative inline-flex rounded-full h-2 w-2 ${hasUrgentNotice ? 'bg-amber-500' : 'bg-rose-500'}`} />
+                    </span>
+                  )}
+
                   {isActive && (
                     <motion.div
                       layoutId="nav-active-indicator"
@@ -255,6 +296,8 @@ export default function Navbar() {
           {navLinks.map((link) => {
             const Icon = link.icon;
             const isActive = pathname === link.href;
+            const isNoticeLink = link.href === '/notices';
+
             return (
               <Link
                 key={link.href}
@@ -263,7 +306,12 @@ export default function Navbar() {
                   isActive ? 'text-blue-600 dark:text-blue-400 font-bold' : 'text-slate-500 dark:text-slate-400'
                 }`}
               >
-                <Icon className="w-4 h-4" />
+                <div className="relative">
+                  <Icon className="w-4 h-4" />
+                  {isNoticeLink && hasNotices && (
+                    <span className={`absolute -top-1 -right-1.5 w-2 h-2 rounded-full ${hasUrgentNotice ? 'bg-amber-500 animate-pulse' : 'bg-rose-500'}`} />
+                  )}
+                </div>
                 <span className="text-[10px]">{link.name}</span>
               </Link>
             );
