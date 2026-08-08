@@ -26,7 +26,6 @@ import {
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { fetchNotices, fetchRoutines, fetchAnnouncements, fetchUsers, createNotice, deleteNotice } from '../lib/api';
-import FacultyList from '../components/FacultyList';
 import NoticeCard from '../components/NoticeCard';
 import CreateNoticeModal from '../components/CreateNoticeModal';
 
@@ -288,46 +287,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Section: Faculty Members Showcase Grid */}
-      <section className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <div className="flex items-center gap-2">
-              <h2 className="text-xl font-bold text-slate-900 dark:text-white">Department Faculty Members</h2>
-              <span className="px-2 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-300 text-xs font-bold border border-indigo-200 dark:border-indigo-800">
-                Course Instructors
-              </span>
-            </div>
-            <p className="text-xs text-slate-400 dark:text-slate-500">Faculty & Professors teaching in {user?.department || 'CSE Department'}</p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {facultyMembers.map((fac) => (
-            <div
-              key={fac._id}
-              className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-100 dark:border-slate-800 shadow-sm flex items-center gap-4 hover:shadow-md transition-all"
-            >
-              <div className="w-12 h-12 rounded-2xl bg-indigo-600 text-white font-bold flex items-center justify-center text-sm shrink-0 overflow-hidden shadow-xs">
-                {fac.avatar ? (
-                  <img src={fac.avatar} alt={fac.name} className="w-full h-full object-cover" />
-                ) : (
-                  <span>{fac.name ? fac.name.charAt(0) : 'F'}</span>
-                )}
-              </div>
-              <div className="min-w-0 flex-1">
-                <h4 className="text-sm font-bold text-slate-900 dark:text-white truncate">{fac.name}</h4>
-                <p className="text-[11px] font-semibold text-indigo-600 dark:text-indigo-400">{fac.designation || 'Faculty Member'}</p>
-                <p className="text-[11px] text-slate-400 dark:text-slate-500 truncate flex items-center gap-1 mt-0.5">
-                  <Mail className="w-3 h-3 text-slate-400 shrink-0" />
-                  {fac.email}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
       {/* Main Grid: Recent Notices & Pinned Announcements */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
@@ -438,8 +397,24 @@ export default function HomePage() {
 
       </div>
 
-      {/* Department-wise Faculty List Section */}
-      <FacultyList />
+      {/* Quick Link Banner to Faculty Directory */}
+      <section className="bg-gradient-to-r from-indigo-900/90 via-slate-900 to-blue-900/90 rounded-3xl p-6 sm:p-8 text-white shadow-xl flex flex-col sm:flex-row items-center justify-between gap-6 border border-indigo-500/20">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center shrink-0 border border-white/10 text-blue-300">
+            <School className="w-6 h-6" />
+          </div>
+          <div>
+            <h3 className="text-lg font-extrabold text-white">Department Faculty Directory</h3>
+            <p className="text-xs text-slate-300 mt-0.5">Looking for professors, lecturers, and faculty contact details?</p>
+          </div>
+        </div>
+        <Link
+          href="/faculty"
+          className="px-5 py-2.5 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all flex items-center gap-2 shadow-md shadow-blue-500/20 shrink-0"
+        >
+          View Faculty Members <ArrowRight className="w-4 h-4" />
+        </Link>
+      </section>
 
       {/* Modal for Faculty Notice Creation */}
       <CreateNoticeModal
