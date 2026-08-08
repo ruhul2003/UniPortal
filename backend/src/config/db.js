@@ -6,7 +6,7 @@ let db;
 export const connectDB = async () => {
   if (db) return db;
   try {
-    const connStr = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/uniportal';
+    const connStr = process.env.MONGODB_URI || 'mongodb+srv://hire_loop_db_user:wwiIRfECMOKwPwpl@tilux-server.cltfmst.mongodb.net/?appName=Tilux-server';
     client = new MongoClient(connStr);
     await client.connect();
     db = client.db('UniPortal');
