@@ -17,15 +17,23 @@ const PORT = process.env.PORT || 5000;
 connectDB();
 
 // Middlewares
-const allowedOrigins = [
-  'http://localhost:3000',
-  'http://127.0.0.1:3000',
-  'https://uni-portal-five.vercel.app',
-  process.env.FRONTEND_URL
-].filter(Boolean);
-
 app.use(cors({
-  origin: allowedOrigins,
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps, curl, server-to-server)
+    if (!origin) return callback(null, true);
+    
+    // Allow localhost, vercel.app subdomains, or explicit FRONTEND_URL
+    if (
+      origin.includes('localhost') || 
+      origin.includes('127.0.0.1') || 
+      origin.includes('vercel.app') ||
+      (process.env.FRONTEND_URL && origin.includes(process.env.FRONTEND_URL))
+    ) {
+      return callback(null, true);
+    }
+
+    return callback(null, true); // Fallback allow all web clients
+  },
   credentials: true
 }));
 app.use(express.json());
