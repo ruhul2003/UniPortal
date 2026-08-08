@@ -37,6 +37,23 @@ app.use('/api/routines', routinesRouter);
 app.use('/api/announcements', announcementsRouter);
 app.use('/api/users', usersRouter);
 
+// Root welcome endpoint
+app.get('/', (req, res) => {
+  res.json({
+    status: 'online',
+    message: '🚀 UniPortal Backend API Server is running successfully!',
+    endpoints: {
+      health: '/api/health',
+      users: '/api/users',
+      notices: '/api/notices',
+      routines: '/api/routines',
+      announcements: '/api/announcements',
+      auth: '/api/auth'
+    },
+    timestamp: new Date().toISOString()
+  });
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', service: 'UniPortal API Server', timestamp: new Date().toISOString() });
