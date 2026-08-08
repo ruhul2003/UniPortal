@@ -4,6 +4,7 @@ let client;
 let db;
 
 export const connectDB = async () => {
+  if (db) return db;
   try {
     const connStr = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/uniportal';
     client = new MongoClient(connStr);
@@ -13,6 +14,7 @@ export const connectDB = async () => {
 
     // Auto-seed database if empty
     await seedInitialData();
+    return db;
   } catch (error) {
     console.error(`[MongoDB Connection Error] ${error.message}`);
     console.log(`[MongoDB Notice] Backend will operate using fallback database mode if DB unreachable.`);

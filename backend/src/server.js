@@ -32,11 +32,21 @@ app.use(cors({
       return callback(null, true);
     }
 
-    return callback(null, true); // Fallback allow all web clients
   },
   credentials: true
 }));
 app.use(express.json());
+
+// Database connection middleware for Serverless Vercel environment
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    console.error('Database connection error in middleware:', err);
+    res.status(503).json({ error: 'Database connection unavailable' });
+  }
+});
 
 // Routes
 app.use('/api/auth', authRouter);
