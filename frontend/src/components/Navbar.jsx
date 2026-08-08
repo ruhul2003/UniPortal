@@ -108,18 +108,13 @@ export default function Navbar() {
                   <div className="relative">
                     <Icon className={`w-4 h-4 ${isActive ? 'text-blue-600 dark:text-blue-400' : 'text-slate-400 dark:text-slate-500'}`} />
                     {isNoticeLink && hasNotices && (
-                      <span className={`absolute -top-1 -right-1 w-2 h-2 rounded-full ${hasUrgentNotice ? 'bg-amber-500 animate-pulse' : 'bg-rose-500'}`} />
+                      <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
+                        <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${hasUrgentNotice ? 'bg-amber-400' : 'bg-rose-400'}`} />
+                        <span className={`relative inline-flex rounded-full h-2.5 w-2.5 ${hasUrgentNotice ? 'bg-amber-500' : 'bg-rose-500'}`} />
+                      </span>
                     )}
                   </div>
                   <span>{link.name}</span>
-
-                  {/* Pulsing Notification Badge for Notices */}
-                  {isNoticeLink && hasNotices && (
-                    <span className="relative flex h-2 w-2 ml-0.5">
-                      <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${hasUrgentNotice ? 'bg-amber-400' : 'bg-rose-400'}`} />
-                      <span className={`relative inline-flex rounded-full h-2 w-2 ${hasUrgentNotice ? 'bg-amber-500' : 'bg-rose-500'}`} />
-                    </span>
-                  )}
 
                   {isActive && (
                     <motion.div
@@ -309,7 +304,10 @@ export default function Navbar() {
                 <div className="relative">
                   <Icon className="w-4 h-4" />
                   {isNoticeLink && hasNotices && (
-                    <span className={`absolute -top-1 -right-1.5 w-2 h-2 rounded-full ${hasUrgentNotice ? 'bg-amber-500 animate-pulse' : 'bg-rose-500'}`} />
+                    <span className="absolute -top-1 -right-1.5 flex h-2 w-2">
+                      <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${hasUrgentNotice ? 'bg-amber-400' : 'bg-rose-400'}`} />
+                      <span className={`relative inline-flex rounded-full h-2 w-2 ${hasUrgentNotice ? 'bg-amber-500' : 'bg-rose-500'}`} />
+                    </span>
                   )}
                 </div>
                 <span className="text-[10px]">{link.name}</span>
