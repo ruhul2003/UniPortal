@@ -28,9 +28,10 @@ import { fetchNotices } from '../lib/api';
 
 export default function Navbar() {
   const pathname = usePathname();
-  const { user, logout, toggleRole } = useAuth();
+  const { user, logout, toggleRole, switchRole } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [showRoleMenu, setShowRoleMenu] = useState(false);
 
   // Notice signal state
   const [hasNotices, setHasNotices] = useState(false);
@@ -68,6 +69,16 @@ export default function Navbar() {
     : user?.role === 'faculty'
     ? [...baseNavLinks, { name: 'Students & CRs', href: '/admin', icon: Users }]
     : baseNavLinks;
+
+  const getCurrentRoleBadge = () => {
+    if (!user) return { label: 'Guest', color: 'bg-slate-400' };
+    if (user.role === 'admin') return { label: 'Admin View', color: 'bg-purple-500' };
+    if (user.role === 'faculty') return { label: 'Faculty View', color: 'bg-indigo-500' };
+    if (user.isCR) return { label: 'CR View', color: 'bg-amber-500' };
+    return { label: 'Student View', color: 'bg-emerald-500' };
+  };
+
+  const currentBadge = getCurrentRoleBadge();
 
   return (
     <header className="sticky top-0 z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-100 dark:border-slate-800 transition-colors">
@@ -146,21 +157,111 @@ export default function Navbar() {
 
             {user ? (
               <div className="flex items-center gap-2">
-                {/* Role Switcher Pill */}
-                <button
-                  onClick={toggleRole}
-                  title="Click to toggle between Student and Faculty role view"
-                  className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-full border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all shadow-xs"
-                >
-                  <ArrowRightLeft className="w-3 h-3 text-blue-500" />
-                  <span className="capitalize">{user.role} View</span>
-                  <span className={`w-2 h-2 rounded-full ${user.role === 'admin' ? 'bg-purple-500' : user.role === 'faculty' ? 'bg-indigo-500' : 'bg-emerald-500'}`} />
-                </button>
+                
+                {/* 4-Way Role View Switcher Dropdown */}
+                <div className="relative">
+                  <button
+                    onClick={() => {
+                      setShowRoleMenu(!showRoleMenu);
+                      setShowProfileMenu(false);
+                    }}
+                    title="Switch portal view mode (Student, CR, Faculty, Admin)"
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-full border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all shadow-xs"
+                  >
+                    <ArrowRightLeft className="w-3 h-3 text-blue-500" />
+                    <span>{currentBadge.label}</span>
+                    <span className={`w-2 h-2 rounded-full ${currentBadge.color}`} />
+                  </button>
+
+                  {/* Role Picker Menu */}
+                  {showRoleMenu && (
+                    <div className="absolute right-0 mt-2 w-56 rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-xl py-2 z-50 animate-in fade-in zoom-in-95 duration-100">
+                      <div className="px-3 py-1.5 border-b border-slate-100 dark:border-slate-800 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                        Select Portal View Mode
+                      </div>
+
+                      <button
+                        onClick={() => {
+                          switchRole('student');
+                          setShowRoleMenu(false);
+                        }}
+                        className={`w-full px-3.5 py-2 text-left text-xs font-semibold flex items-center justify-between transition-colors ${
+                          user.role === 'student' && !user.isCR 
+                            ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 font-bold' 
+                            : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
+                        }`}
+                      >
+                        <span className="flex items-center gap-2">
+                          <GraduationCap className="w-4 h-4 text-emerald-500" />
+                          Student View
+                        </span>
+                        <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          switchRole('cr');
+                          setShowRoleMenu(false);
+                        }}
+                        className={`w-full px-3.5 py-2 text-left text-xs font-semibold flex items-center justify-between transition-colors ${
+                          user.role === 'student' && user.isCR 
+                            ? 'bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 font-bold' 
+                            : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
+                        }`}
+                      >
+                        <span className="flex items-center gap-2">
+                          <Crown className="w-4 h-4 text-amber-500 fill-amber-400/20" />
+                          CR View (Class Rep)
+                        </span>
+                        <span className="w-2 h-2 rounded-full bg-amber-500" />
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          switchRole('faculty');
+                          setShowRoleMenu(false);
+                        }}
+                        className={`w-full px-3.5 py-2 text-left text-xs font-semibold flex items-center justify-between transition-colors ${
+                          user.role === 'faculty' 
+                            ? 'bg-indigo-50 dark:bg-indigo-950/50 text-indigo-700 dark:text-indigo-300 font-bold' 
+                            : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
+                        }`}
+                      >
+                        <span className="flex items-center gap-2">
+                          <UserCheck className="w-4 h-4 text-indigo-500" />
+                          Faculty View
+                        </span>
+                        <span className="w-2 h-2 rounded-full bg-indigo-500" />
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          switchRole('admin');
+                          setShowRoleMenu(false);
+                        }}
+                        className={`w-full px-3.5 py-2 text-left text-xs font-semibold flex items-center justify-between transition-colors ${
+                          user.role === 'admin' 
+                            ? 'bg-purple-50 dark:bg-purple-950/50 text-purple-700 dark:text-purple-300 font-bold' 
+                            : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
+                        }`}
+                      >
+                        <span className="flex items-center gap-2">
+                          <Crown className="w-4 h-4 text-purple-500 fill-purple-400/20" />
+                          Admin View
+                        </span>
+                        <span className="w-2 h-2 rounded-full bg-purple-500" />
+                      </button>
+                    </div>
+                  )}
+                </div>
 
                 {/* Profile Pill Dropdown */}
                 <div className="relative">
                   <button
-                    onClick={() => setShowProfileMenu(!showProfileMenu)}
+                    onClick={() => {
+                      setShowProfileMenu(!showProfileMenu);
+                      setShowRoleMenu(false);
+                    }}
                     className="flex items-center gap-2.5 p-1.5 sm:px-3 sm:py-1.5 rounded-full border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-white dark:bg-slate-900 transition-all text-left"
                   >
                     <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center font-bold text-slate-700 dark:text-slate-200 text-xs relative overflow-visible">
@@ -179,7 +280,7 @@ export default function Navbar() {
                         {user.isCR && <span className="text-[10px] font-bold text-amber-600 dark:text-amber-400">CR</span>}
                       </div>
                       <p className="text-[10px] text-slate-400 dark:text-slate-500 capitalize">
-                        {user.role} {user.role === 'student' && user.section ? `• ${user.section}` : ''}
+                        {user.isCR ? 'Class Rep' : user.role} {user.role === 'student' && user.section ? `• ${user.section}` : ''}
                       </p>
                     </div>
                   </button>
@@ -200,9 +301,9 @@ export default function Navbar() {
                         <p className="text-[11px] text-slate-400 dark:text-slate-500 truncate">{user.email}</p>
                         <div className="mt-1.5 flex items-center gap-1">
                           <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase ${
-                            user.role === 'admin' ? 'bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300' : user.role === 'faculty' ? 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300' : 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300'
+                            user.role === 'admin' ? 'bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300' : user.role === 'faculty' ? 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300' : user.isCR ? 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300' : 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300'
                           }`}>
-                            {user.role}
+                            {user.isCR ? 'Class Rep (CR)' : user.role}
                           </span>
                           {user.role === 'student' && user.section && (
                             <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400">
@@ -242,14 +343,6 @@ export default function Navbar() {
                           Student Directory & CRs
                         </Link>
                       )}
-
-                      <button
-                        onClick={toggleRole}
-                        className="w-full px-4 py-2 text-left text-xs text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center gap-2 transition-colors"
-                      >
-                        <UserCheck className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-                        Switch to {user.role === 'student' ? 'Faculty' : 'Student'} Mode
-                      </button>
 
                       <div className="my-1 border-t border-slate-100 dark:border-slate-800" />
 

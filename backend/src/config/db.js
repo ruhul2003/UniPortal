@@ -28,6 +28,7 @@ export const getUsersCollection = () => db?.collection('users');
 export const getNoticesCollection = () => db?.collection('notices');
 export const getRoutinesCollection = () => db?.collection('routines');
 export const getAnnouncementsCollection = () => db?.collection('announcements');
+export const getSectionRequestsCollection = () => db?.collection('section_requests');
 
 async function seedInitialData() {
   if (!db) return;

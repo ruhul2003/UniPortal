@@ -41,18 +41,67 @@ export function AuthProvider({ children }) {
     localStorage.removeItem('uniportal_user');
   };
 
-  const toggleRole = () => {
+  const switchRole = (targetMode) => {
     if (!user) return;
-    const newRole = user.role === 'student' ? 'faculty' : 'student';
-    const updated = {
-      ...user,
-      role: newRole,
-      name: newRole === 'faculty' ? 'Dr. Sarah Abedin' : 'Rahim Chowdhury',
-      email: newRole === 'faculty' ? 'sarah.jenkins@univ.edu' : 'alex.rivera@student.univ.edu',
-      designation: newRole === 'faculty' ? 'Associate Professor' : '',
-    };
+    let updated = { ...user };
+    if (targetMode === 'student') {
+      updated = {
+        ...user,
+        role: 'student',
+        isCR: false,
+        name: 'Rahim Chowdhury',
+        email: 'alex.rivera@student.univ.edu',
+        section: user.section || 'Section A',
+        studentId: 'CSE-2024-042',
+        department: 'Computer Science & Engineering'
+      };
+    } else if (targetMode === 'cr') {
+      updated = {
+        ...user,
+        role: 'student',
+        isCR: true,
+        name: 'Rahim Chowdhury (CR)',
+        email: 'alex.rivera@student.univ.edu',
+        section: user.section || 'Section A',
+        studentId: 'CSE-2024-042',
+        department: 'Computer Science & Engineering'
+      };
+    } else if (targetMode === 'faculty') {
+      updated = {
+        ...user,
+        role: 'faculty',
+        isCR: false,
+        name: 'Dr. Sarah Abedin',
+        email: 'sarah.jenkins@univ.edu',
+        designation: 'Associate Professor',
+        department: 'Computer Science & Engineering',
+        facultyId: 'FAC-8088'
+      };
+    } else if (targetMode === 'admin') {
+      updated = {
+        ...user,
+        role: 'admin',
+        isCR: false,
+        name: 'System Administrator',
+        email: 'admin@gmail.com',
+        designation: 'Head Admin',
+        department: 'System Administration'
+      };
+    }
     setUser(updated);
     localStorage.setItem('uniportal_user', JSON.stringify(updated));
+  };
+
+  const toggleRole = () => {
+    if (!user) return;
+    let currentMode = 'student';
+    if (user.role === 'admin') currentMode = 'admin';
+    else if (user.role === 'faculty') currentMode = 'faculty';
+    else if (user.isCR) currentMode = 'cr';
+
+    const modes = ['student', 'cr', 'faculty', 'admin'];
+    const nextIndex = (modes.indexOf(currentMode) + 1) % modes.length;
+    switchRole(modes[nextIndex]);
   };
 
   const updateUser = (updateData) => {
@@ -63,7 +112,7 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout, toggleRole, updateUser }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, toggleRole, switchRole, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

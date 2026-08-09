@@ -60,6 +60,47 @@ router.post('/', async (req, res) => {
   }
 });
 
+// PUT update routine slot directly in MongoDB
+router.put('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { courseCode, courseTitle, day, startTime, endTime, room, building, department, semester, section, facultyName } = req.body;
+
+    const routinesCol = getRoutinesCollection();
+    if (!routinesCol) {
+      return res.status(503).json({ error: 'Database connection unavailable' });
+    }
+
+    const filter = ObjectId.isValid(id) ? { _id: new ObjectId(id) } : { _id: id };
+    const updateDoc = {
+      $set: {
+        ...(courseCode && { courseCode: courseCode.trim() }),
+        ...(courseTitle && { courseTitle: courseTitle.trim() }),
+        ...(day && { day: day.trim() }),
+        ...(startTime && { startTime: startTime.trim() }),
+        ...(endTime && { endTime: endTime.trim() }),
+        ...(room && { room: room.trim() }),
+        ...(building && { building: building.trim() }),
+        ...(department && { department: department.trim() }),
+        ...(semester && { semester }),
+        ...(section && { section }),
+        ...(facultyName && { facultyName: facultyName.trim() }),
+        updatedAt: new Date()
+      }
+    };
+
+    const result = await routinesCol.updateOne(filter, updateDoc);
+    if (result.matchedCount > 0) {
+      const updatedRoutine = await routinesCol.findOne(filter);
+      return res.json({ success: true, message: 'Routine slot updated successfully', routine: updatedRoutine });
+    }
+
+    return res.status(404).json({ error: 'Routine slot not found in database' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // DELETE routine slot directly from MongoDB
 router.delete('/:id', async (req, res) => {
   try {

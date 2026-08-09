@@ -7,6 +7,7 @@ import noticesRouter from './routes/notices.js';
 import routinesRouter from './routes/routines.js';
 import announcementsRouter from './routes/announcements.js';
 import usersRouter from './routes/users.js';
+import sectionRequestsRouter from './routes/sectionRequests.js';
 
 dotenv.config();
 
@@ -54,6 +55,7 @@ app.use('/api/notices', noticesRouter);
 app.use('/api/routines', routinesRouter);
 app.use('/api/announcements', announcementsRouter);
 app.use('/api/users', usersRouter);
+app.use('/api/section-requests', sectionRequestsRouter);
 
 // Root welcome endpoint
 app.get('/', (req, res) => {
