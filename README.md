@@ -15,7 +15,7 @@
 - **CR Routine Editing**: Authorized CRs (`isCR: true`), Faculty, and Admins can create, update, and delete class schedule slots.
 
 ### 📅 3. Day-Tabwise Interactive Routine & Timetable
-- **Daily Day Tabs**: Seamless tabbed schedule browsing (`Monday` – `Sunday` + `All Days`), automatically opening to today's weekday.
+- **Daily Day Tabs**: Seamless tabbed schedule  browsing (`Monday` – `Sunday` + `All Days`), automatically opening to today's weekday.
 - **Real-Time Badges**: Dynamic status badges (`Live Now`, `Upcoming`, `Completed`) with current class accent highlighting.
 
 ### 📢 4. Notices & Announcements
