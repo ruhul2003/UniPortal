@@ -20,7 +20,11 @@ import {
   Sun,
   Moon,
   Crown,
-  Users
+  Users,
+  CheckCircle2,
+  ClipboardList,
+  FolderOpen,
+  MessageSquare
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -58,10 +62,12 @@ export default function Navbar() {
 
   const baseNavLinks = [
     { name: 'Dashboard', href: '/', icon: LayoutDashboard },
-    { name: 'Faculty Members', href: '/faculty', icon: GraduationCap },
-    { name: 'Notices', href: '/notices', icon: Bell },
     { name: 'Class Routine', href: '/routine', icon: CalendarDays },
-    { name: 'Announcements', href: '/announcements', icon: Megaphone },
+    { name: 'Attendance', href: '/attendance', icon: CheckCircle2 },
+    { name: 'Assignments', href: '/assignments', icon: ClipboardList },
+    { name: 'Resources', href: '/resources', icon: FolderOpen },
+    { name: 'Q&A Forum', href: '/forum', icon: MessageSquare },
+    { name: 'Notices', href: '/notices', icon: Bell },
   ];
 
   const navLinks = user?.role === 'admin' 

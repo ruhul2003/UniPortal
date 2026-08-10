@@ -21,7 +21,10 @@ import {
   CheckCircle2,
   Mail,
   School,
-  Users
+  Users,
+  ClipboardList,
+  FolderOpen,
+  MessageSquare
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
@@ -153,36 +156,110 @@ export default function HomePage() {
           </h1>
 
           <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-            Stay updated with real-time academic notices, track section class routines dynamically, and connect with department faculty members.
+            Stay updated with real-time academic notices, track section class routines dynamically, manage attendance, and collaborate on coursework.
           </p>
 
           {/* Quick Action Badges */}
           <div className="pt-4 flex flex-wrap items-center gap-4 text-xs font-semibold">
             <Link
-              href="/notices"
-              className="px-5 py-3 rounded-2xl bg-white text-slate-900 hover:bg-slate-100 transition-all flex items-center gap-2 shadow-sm"
+              href="/attendance"
+              className="px-5 py-3 rounded-2xl bg-emerald-500 text-white hover:bg-emerald-600 transition-all flex items-center gap-2 shadow-lg shadow-emerald-500/20"
             >
-              Browse Notices <ArrowRight className="w-4 h-4 text-blue-600" />
+              Attendance Tracker <CheckCircle2 className="w-4 h-4" />
             </Link>
 
             <Link
-              href="/routine"
-              className="px-5 py-3 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/10 text-white transition-all flex items-center gap-2"
+              href="/assignments"
+              className="px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white transition-all flex items-center gap-2 shadow-lg shadow-blue-500/20"
             >
-              Class Schedule <CalendarDays className="w-4 h-4 text-blue-300" />
+              Assignments & Tasks <ClipboardList className="w-4 h-4" />
             </Link>
 
-            {isFaculty && (
-              <button
-                onClick={() => setIsNoticeModalOpen(true)}
-                className="px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white transition-all flex items-center gap-2 shadow-lg shadow-blue-500/20"
-              >
-                <Plus className="w-4 h-4" /> Post New Notice
-              </button>
-            )}
+            <Link
+              href="/resources"
+              className="px-5 py-3 rounded-2xl bg-purple-600 hover:bg-purple-500 text-white transition-all flex items-center gap-2 shadow-lg shadow-purple-500/20"
+            >
+              Study Resources <FolderOpen className="w-4 h-4" />
+            </Link>
+
+            <Link
+              href="/forum"
+              className="px-5 py-3 rounded-2xl bg-teal-600 hover:bg-teal-500 text-white transition-all flex items-center gap-2 shadow-lg shadow-teal-500/20"
+            >
+              Q&A Forum <MessageSquare className="w-4 h-4" />
+            </Link>
           </div>
         </div>
       </section>
+
+      {/* 4 Feature Hub Quick Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        
+        <Link 
+          href="/attendance" 
+          className="p-6 rounded-3xl bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/40 dark:to-teal-950/20 border border-emerald-200/80 dark:border-emerald-800/60 shadow-xs hover:shadow-md transition-all group"
+        >
+          <div className="w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center shadow-md shadow-emerald-500/20 group-hover:scale-110 transition-transform">
+            <CheckCircle2 className="w-6 h-6" />
+          </div>
+          <h3 className="mt-4 text-base font-bold text-slate-900 dark:text-white flex items-center justify-between">
+            <span>Attendance Tracker</span>
+            <ArrowRight className="w-4 h-4 text-emerald-600 group-hover:translate-x-1 transition-transform" />
+          </h3>
+          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+            Monitor course percentages & minimum 75% exam compliance.
+          </p>
+        </Link>
+
+        <Link 
+          href="/assignments" 
+          className="p-6 rounded-3xl bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/40 dark:to-indigo-950/20 border border-blue-200/80 dark:border-blue-800/60 shadow-xs hover:shadow-md transition-all group"
+        >
+          <div className="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-md shadow-blue-500/20 group-hover:scale-110 transition-transform">
+            <ClipboardList className="w-6 h-6" />
+          </div>
+          <h3 className="mt-4 text-base font-bold text-slate-900 dark:text-white flex items-center justify-between">
+            <span>Assignments Hub</span>
+            <ArrowRight className="w-4 h-4 text-blue-600 group-hover:translate-x-1 transition-transform" />
+          </h3>
+          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+            Submit coursework solutions & view deadline countdown timers.
+          </p>
+        </Link>
+
+        <Link 
+          href="/resources" 
+          className="p-6 rounded-3xl bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950/40 dark:to-pink-950/20 border border-purple-200/80 dark:border-purple-800/60 shadow-xs hover:shadow-md transition-all group"
+        >
+          <div className="w-12 h-12 rounded-2xl bg-purple-600 text-white flex items-center justify-center shadow-md shadow-purple-500/20 group-hover:scale-110 transition-transform">
+            <FolderOpen className="w-6 h-6" />
+          </div>
+          <h3 className="mt-4 text-base font-bold text-slate-900 dark:text-white flex items-center justify-between">
+            <span>Resource Locker</span>
+            <ArrowRight className="w-4 h-4 text-purple-600 group-hover:translate-x-1 transition-transform" />
+          </h3>
+          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+            Access slides, lecture notes, lab manuals & solved PYQs.
+          </p>
+        </Link>
+
+        <Link 
+          href="/forum" 
+          className="p-6 rounded-3xl bg-gradient-to-br from-teal-50 to-cyan-50 dark:from-teal-950/40 dark:to-cyan-950/20 border border-teal-200/80 dark:border-teal-800/60 shadow-xs hover:shadow-md transition-all group"
+        >
+          <div className="w-12 h-12 rounded-2xl bg-teal-600 text-white flex items-center justify-center shadow-md shadow-teal-500/20 group-hover:scale-110 transition-transform">
+            <MessageSquare className="w-6 h-6" />
+          </div>
+          <h3 className="mt-4 text-base font-bold text-slate-900 dark:text-white flex items-center justify-between">
+            <span>Course Q&A Forum</span>
+            <ArrowRight className="w-4 h-4 text-teal-600 group-hover:translate-x-1 transition-transform" />
+          </h3>
+          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+            Ask questions & receive instructor-verified answers.
+          </p>
+        </Link>
+
+      </div>
 
       {/* Section Filter Control Bar */}
       <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">

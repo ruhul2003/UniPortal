@@ -222,3 +222,167 @@ export async function updateUserProfile(userId, updateData) {
     body: JSON.stringify(updateData),
   }, 'Failed to update profile');
 }
+
+// ==================== ATTENDANCE API ====================
+export async function fetchAttendanceSessions(params = {}) {
+  try {
+    const apiBase = getApiBase();
+    const query = new URLSearchParams(params).toString();
+    const data = await safeFetchJson(`${apiBase}/attendance?${query}`, { cache: 'no-store' }, 'Failed to fetch attendance');
+    return data.sessions || [];
+  } catch (err) {
+    console.warn('[API Client] Attendance fetch error:', err.message);
+    return [];
+  }
+}
+
+export async function fetchAttendanceSummary(params = {}) {
+  try {
+    const apiBase = getApiBase();
+    const query = new URLSearchParams(params).toString();
+    const data = await safeFetchJson(`${apiBase}/attendance/summary?${query}`, { cache: 'no-store' }, 'Failed to fetch attendance summary');
+    return data.summary || [];
+  } catch (err) {
+    console.warn('[API Client] Attendance summary fetch error:', err.message);
+    return [];
+  }
+}
+
+export async function submitAttendanceSession(sessionData) {
+  const apiBase = getApiBase();
+  return await safeFetchJson(`${apiBase}/attendance`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(sessionData),
+  }, 'Failed to submit attendance');
+}
+
+// ==================== ASSIGNMENTS API ====================
+export async function fetchAssignments(section = '') {
+  try {
+    const apiBase = getApiBase();
+    const query = section ? `?section=${encodeURIComponent(section)}` : '';
+    const data = await safeFetchJson(`${apiBase}/assignments${query}`, { cache: 'no-store' }, 'Failed to fetch assignments');
+    return data.assignments || [];
+  } catch (err) {
+    console.warn('[API Client] Assignments fetch error:', err.message);
+    return [];
+  }
+}
+
+export async function createAssignment(assignmentData) {
+  const apiBase = getApiBase();
+  return await safeFetchJson(`${apiBase}/assignments`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(assignmentData),
+  }, 'Failed to create assignment');
+}
+
+export async function submitAssignmentSolution(assignmentId, submissionData) {
+  const apiBase = getApiBase();
+  return await safeFetchJson(`${apiBase}/assignments/${assignmentId}/submit`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(submissionData),
+  }, 'Failed to submit assignment');
+}
+
+export async function deleteAssignment(assignmentId) {
+  const apiBase = getApiBase();
+  return await safeFetchJson(`${apiBase}/assignments/${assignmentId}`, { method: 'DELETE' }, 'Failed to delete assignment');
+}
+
+// ==================== RESOURCES API ====================
+export async function fetchResources(params = {}) {
+  try {
+    const apiBase = getApiBase();
+    const query = new URLSearchParams(params).toString();
+    const data = await safeFetchJson(`${apiBase}/resources?${query}`, { cache: 'no-store' }, 'Failed to fetch resources');
+    return data.resources || [];
+  } catch (err) {
+    console.warn('[API Client] Resources fetch error:', err.message);
+    return [];
+  }
+}
+
+export async function createResource(resourceData) {
+  const apiBase = getApiBase();
+  return await safeFetchJson(`${apiBase}/resources`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(resourceData),
+  }, 'Failed to upload resource');
+}
+
+export async function upvoteResource(resourceId, userId) {
+  const apiBase = getApiBase();
+  return await safeFetchJson(`${apiBase}/resources/${resourceId}/upvote`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ userId }),
+  }, 'Failed to upvote resource');
+}
+
+export async function trackResourceDownload(resourceId) {
+  const apiBase = getApiBase();
+  return await safeFetchJson(`${apiBase}/resources/${resourceId}/download`, { method: 'POST' }, 'Failed to track download');
+}
+
+export async function deleteResource(resourceId) {
+  const apiBase = getApiBase();
+  return await safeFetchJson(`${apiBase}/resources/${resourceId}`, { method: 'DELETE' }, 'Failed to delete resource');
+}
+
+// ==================== FORUM / Q&A API ====================
+export async function fetchForumPosts(params = {}) {
+  try {
+    const apiBase = getApiBase();
+    const query = new URLSearchParams(params).toString();
+    const data = await safeFetchJson(`${apiBase}/forum?${query}`, { cache: 'no-store' }, 'Failed to fetch forum posts');
+    return data.posts || [];
+  } catch (err) {
+    console.warn('[API Client] Forum fetch error:', err.message);
+    return [];
+  }
+}
+
+export async function createForumPost(postData) {
+  const apiBase = getApiBase();
+  return await safeFetchJson(`${apiBase}/forum`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(postData),
+  }, 'Failed to create discussion post');
+}
+
+export async function upvoteForumPost(postId, userId) {
+  const apiBase = getApiBase();
+  return await safeFetchJson(`${apiBase}/forum/${postId}/upvote`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ userId }),
+  }, 'Failed to upvote post');
+}
+
+export async function addForumComment(postId, commentData) {
+  const apiBase = getApiBase();
+  return await safeFetchJson(`${apiBase}/forum/${postId}/comment`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(commentData),
+  }, 'Failed to add answer');
+}
+
+export async function verifyForumComment(postId, commentId) {
+  const apiBase = getApiBase();
+  return await safeFetchJson(`${apiBase}/forum/${postId}/comments/${commentId}/verify`, {
+    method: 'PATCH',
+  }, 'Failed to verify answer');
+}
+
+export async function deleteForumPost(postId) {
+  const apiBase = getApiBase();
+  return await safeFetchJson(`${apiBase}/forum/${postId}`, { method: 'DELETE' }, 'Failed to delete post');
+}
+

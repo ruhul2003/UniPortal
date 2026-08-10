@@ -8,6 +8,10 @@ import routinesRouter from './routes/routines.js';
 import announcementsRouter from './routes/announcements.js';
 import usersRouter from './routes/users.js';
 import sectionRequestsRouter from './routes/sectionRequests.js';
+import attendanceRouter from './routes/attendance.js';
+import assignmentsRouter from './routes/assignments.js';
+import resourcesRouter from './routes/resources.js';
+import forumRouter from './routes/forum.js';
 
 dotenv.config();
 
@@ -56,6 +60,10 @@ app.use('/api/routines', routinesRouter);
 app.use('/api/announcements', announcementsRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/section-requests', sectionRequestsRouter);
+app.use('/api/attendance', attendanceRouter);
+app.use('/api/assignments', assignmentsRouter);
+app.use('/api/resources', resourcesRouter);
+app.use('/api/forum', forumRouter);
 
 // Root welcome endpoint
 app.get('/', (req, res) => {
@@ -68,6 +76,10 @@ app.get('/', (req, res) => {
       notices: '/api/notices',
       routines: '/api/routines',
       announcements: '/api/announcements',
+      attendance: '/api/attendance',
+      assignments: '/api/assignments',
+      resources: '/api/resources',
+      forum: '/api/forum',
       auth: '/api/auth'
     },
     timestamp: new Date().toISOString()
