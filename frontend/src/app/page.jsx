@@ -319,12 +319,14 @@ export default function HomePage() {
             className="w-full sm:w-auto px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-bold bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
           >
             <option value="All">All Sections View</option>
+            <option value="Section 9A">Section 9A (9th Sem)</option>
             <option value="Section A">Section A</option>
             <option value="Section B">Section B</option>
             <option value="Section C">Section C</option>
             <option value="Section D">Section D</option>
             <option value="Section E">Section E</option>
           </select>
+
         </div>
       </div>
 

@@ -44,6 +44,7 @@ export default function RoutineTable({ routines, onDelete, onEdit }) {
   const [todayName, setTodayName] = useState('');
   const [selectedDay, setSelectedDay] = useState('All');
   const [selectedSemester, setSelectedSemester] = useState('All');
+  const [selectedSection, setSelectedSection] = useState('All');
   const { user } = useAuth();
   
   // Faculty, Admin, or Class Representative (CR) can manage routine
@@ -59,8 +60,12 @@ export default function RoutineTable({ routines, onDelete, onEdit }) {
   }, []);
 
   const getDayCount = (day) => {
-    if (day === 'All') return routines.length;
-    return routines.filter(r => r.day?.toLowerCase() === day.toLowerCase()).length;
+    return routines.filter(r => {
+      const dayMatch = day === 'All' || r.day?.toLowerCase() === day.toLowerCase();
+      const semMatch = selectedSemester === 'All' || r.semester === selectedSemester;
+      const secMatch = selectedSection === 'All' || r.section === selectedSection || (r.section && r.section.includes(selectedSection));
+      return dayMatch && semMatch && secMatch;
+    }).length;
   };
 
   const todayClassCount = routines.filter(r => r.day?.toLowerCase() === todayName.toLowerCase()).length;
@@ -69,13 +74,15 @@ export default function RoutineTable({ routines, onDelete, onEdit }) {
     .filter(r => {
       const dayMatch = selectedDay === 'All' || r.day?.toLowerCase() === selectedDay.toLowerCase();
       const semMatch = selectedSemester === 'All' || r.semester === selectedSemester;
-      return dayMatch && semMatch;
+      const secMatch = selectedSection === 'All' || r.section === selectedSection || (r.section && r.section.includes(selectedSection));
+      return dayMatch && semMatch && secMatch;
     })
     .sort((a, b) => {
       const minA = parseTimeToMinutes(a.startTime) ?? 0;
       const minB = parseTimeToMinutes(b.startTime) ?? 0;
       return minA - minB;
     });
+
 
   return (
     <div className="space-y-6">
@@ -159,20 +166,34 @@ export default function RoutineTable({ routines, onDelete, onEdit }) {
           })}
         </div>
 
-        {/* Semester selector */}
-        <div className="flex items-center gap-2 shrink-0">
+        {/* Section & Semester Selectors */}
+        <div className="flex items-center gap-2 shrink-0 flex-wrap">
           <Filter className="w-3.5 h-3.5 text-slate-400" />
+          <select
+            value={selectedSection}
+            onChange={(e) => setSelectedSection(e.target.value)}
+            className="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+          >
+            <option value="All">All Sections</option>
+            <option value="Section 9A">Section 9A (9th Sem)</option>
+            <option value="Section A">Section A</option>
+            <option value="Section B">Section B</option>
+            <option value="Section C">Section C</option>
+          </select>
+
           <select
             value={selectedSemester}
             onChange={(e) => setSelectedSemester(e.target.value)}
-            className="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-medium text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+            className="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
           >
             <option value="All">All Semesters</option>
+            <option value="9th Semester">9th Semester</option>
             <option value="Spring 2026">Spring 2026</option>
             <option value="Fall 2025">Fall 2025</option>
           </select>
         </div>
       </div>
+
 
       {/* Routine Cards / Matrix Grid */}
       {filteredRoutines.length === 0 ? (

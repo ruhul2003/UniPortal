@@ -218,60 +218,156 @@ async function seedInitialData() {
       console.log('[MongoDB Native Seed] Sample notices created.');
     }
 
-    // Seed Routines
-    const routineCount = await routinesCol.countDocuments();
-    if (routineCount === 0) {
-      await routinesCol.insertMany([
-        {
-          courseCode: 'CSE-3101',
-          courseTitle: 'Database Management Systems',
-          day: 'Monday',
-          startTime: '09:00 AM',
-          endTime: '10:30 AM',
-          room: 'Lab 402',
-          building: 'IT Complex',
-          department: 'Computer Science & Engineering',
-          semester: 'Spring 2026',
-          section: 'Section A',
-          facultyName: 'Dr. Sarah Jenkins',
-          createdAt: new Date(),
-          updatedAt: new Date()
-        },
-        {
-          courseCode: 'CSE-3105',
-          courseTitle: 'Software Engineering & Agile Methodologies',
-          day: 'Monday',
-          startTime: '11:00 AM',
-          endTime: '12:30 PM',
-          room: 'Room 305',
-          building: 'Academic Building 1',
-          department: 'Computer Science & Engineering',
-          semester: 'Spring 2026',
-          section: 'Section A',
-          facultyName: 'Prof. Alan Vance',
-          createdAt: new Date(),
-          updatedAt: new Date()
-        },
-        {
-          courseCode: 'CSE-3109',
-          courseTitle: 'Web Technologies & Next.js Architecture',
-          day: 'Tuesday',
-          startTime: '02:00 PM',
-          endTime: '03:30 PM',
-          room: 'Lab 201',
-          building: 'Software Engineering Annex',
-          department: 'Computer Science & Engineering',
-          semester: 'Spring 2026',
-          section: 'Section B',
-          facultyName: 'Dr. Marcus Thorne',
-          createdAt: new Date(),
-          updatedAt: new Date()
-        }
-      ]);
-      console.log('[MongoDB Native Seed] Sample routines created.');
+    // Seed Routines (including Section 9A 9th semester timetable)
+    const section9ARoutines = [
+      {
+        courseCode: 'CN',
+        courseTitle: 'Computer Networks (Room 413)',
+        day: 'Saturday',
+        startTime: '09:30 AM',
+        endTime: '10:50 AM',
+        room: '413',
+        building: 'Academic Building 1',
+        department: 'Computer Science & Engineering',
+        semester: '9th Semester',
+        section: 'Section 9A',
+        facultyName: 'Dr. Sarah Abedin',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        courseCode: 'CNLW',
+        courseTitle: 'Computer Networks Lab Work (Room 407)',
+        day: 'Saturday',
+        startTime: '11:00 AM',
+        endTime: '12:20 PM',
+        room: '407',
+        building: 'Academic Building 1',
+        department: 'Computer Science & Engineering',
+        semester: '9th Semester',
+        section: 'Section 9A',
+        facultyName: 'Dr. Sarah Abedin',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        courseCode: 'MACS',
+        courseTitle: 'Mathematical Analysis & Computer Simulation (Room 417)',
+        day: 'Sunday',
+        startTime: '09:30 AM',
+        endTime: '10:50 AM',
+        room: '417',
+        building: 'Academic Building 1',
+        department: 'Computer Science & Engineering',
+        semester: '9th Semester',
+        section: 'Section 9A',
+        facultyName: 'Prof. Alan Vance',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        courseCode: 'CN',
+        courseTitle: 'Computer Networks (Room 414)',
+        day: 'Monday',
+        startTime: '09:30 AM',
+        endTime: '10:50 AM',
+        room: '414',
+        building: 'Academic Building 1',
+        department: 'Computer Science & Engineering',
+        semester: '9th Semester',
+        section: 'Section 9A',
+        facultyName: 'Dr. Sarah Abedin',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        courseCode: 'CGMSD',
+        courseTitle: 'Computer Graphics & Multimedia System Design (Room 418)',
+        day: 'Monday',
+        startTime: '11:00 AM',
+        endTime: '12:20 PM',
+        room: '418',
+        building: 'Academic Building 1',
+        department: 'Computer Science & Engineering',
+        semester: '9th Semester',
+        section: 'Section 9A',
+        facultyName: 'Dr. Marcus Thorne',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        courseCode: 'CGLW',
+        courseTitle: 'Computer Graphics Lab Work (Room 408)',
+        day: 'Monday',
+        startTime: '01:00 PM',
+        endTime: '02:20 PM',
+        room: '408',
+        building: 'Academic Building 1',
+        department: 'Computer Science & Engineering',
+        semester: '9th Semester',
+        section: 'Section 9A',
+        facultyName: 'Dr. Marcus Thorne',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        courseCode: 'SD3',
+        courseTitle: 'Software Development 3 (Room 407)',
+        day: 'Tuesday',
+        startTime: '09:30 AM',
+        endTime: '10:50 AM',
+        room: '407',
+        building: 'Academic Building 1',
+        department: 'Computer Science & Engineering',
+        semester: '9th Semester',
+        section: 'Section 9A',
+        facultyName: 'Dr. Sarah Abedin',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        courseCode: 'MACS',
+        courseTitle: 'Mathematical Analysis & Computer Simulation (Room B013)',
+        day: 'Tuesday',
+        startTime: '11:00 AM',
+        endTime: '12:20 PM',
+        room: 'B013',
+        building: 'Building B',
+        department: 'Computer Science & Engineering',
+        semester: '9th Semester',
+        section: 'Section 9A',
+        facultyName: 'Prof. Alan Vance',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        courseCode: 'CGMSD',
+        courseTitle: 'Computer Graphics & Multimedia System Design (Room TB305)',
+        day: 'Tuesday',
+        startTime: '01:00 PM',
+        endTime: '02:20 PM',
+        room: 'TB305',
+        building: 'Tower Building 305',
+        department: 'Computer Science & Engineering',
+        semester: '9th Semester',
+        section: 'Section 9A',
+        facultyName: 'Dr. Marcus Thorne',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
+    ];
+
+    for (const rDoc of section9ARoutines) {
+      await routinesCol.updateOne(
+        { section: rDoc.section, day: rDoc.day, startTime: rDoc.startTime },
+        { $set: rDoc },
+        { upsert: true }
+      );
     }
+    console.log('[MongoDB Native Seed] Section 9A (9th Semester) routine slots upserted successfully.');
 
     // Seed Announcements
+
     const annCount = await announcementsCol.countDocuments();
     if (annCount === 0) {
       await announcementsCol.insertMany([
