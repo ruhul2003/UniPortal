@@ -13,10 +13,12 @@ import {
   BookOpen,
   ArrowUpDown,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Star
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { fetchUsers } from '../lib/api';
+import SubmitFeedbackModal from './SubmitFeedbackModal';
 
 const ITEMS_PER_PAGE = 30;
 
@@ -27,6 +29,16 @@ export default function FacultyList() {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOrder, setSortOrder] = useState('asc'); // 'asc' = A-Z, 'desc' = Z-A
   const [currentPage, setCurrentPage] = useState(1);
+
+  // Feedback Modal State
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedFacultyForModal, setSelectedFacultyForModal] = useState(null);
+
+  const handleOpenFeedbackModal = (facultyObj) => {
+    setSelectedFacultyForModal(facultyObj);
+    setIsModalOpen(true);
+  };
+
 
   useEffect(() => {
     async function loadFaculties() {
@@ -211,7 +223,11 @@ export default function FacultyList() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {paginatedFaculties.map((faculty) => (
-              <FacultyCard key={faculty._id} faculty={faculty} />
+              <FacultyCard 
+                key={faculty._id} 
+                faculty={faculty} 
+                onFeedbackClick={() => handleOpenFeedbackModal(faculty)}
+              />
             ))}
           </div>
         </div>
@@ -242,10 +258,15 @@ export default function FacultyList() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {deptList.map((faculty) => (
-                  <FacultyCard key={faculty._id} faculty={faculty} />
+                  <FacultyCard 
+                    key={faculty._id} 
+                    faculty={faculty} 
+                    onFeedbackClick={() => handleOpenFeedbackModal(faculty)}
+                  />
                 ))}
               </div>
             </div>
+
           ))}
         </div>
       )}
@@ -294,13 +315,21 @@ export default function FacultyList() {
           </div>
         </div>
       )}
+
+      {/* Course Teacher Feedback Modal */}
+      <SubmitFeedbackModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        initialFaculty={selectedFacultyForModal}
+      />
     </section>
   );
 }
 
 /* Individual Faculty Card Component */
-function FacultyCard({ faculty }) {
+function FacultyCard({ faculty, onFeedbackClick }) {
   const acronym = faculty.acronym || faculty.name.split(' ').map(n => n[0]).join('').substring(0, 3).toUpperCase();
+
 
   return (
     <motion.div
@@ -382,7 +411,19 @@ function FacultyCard({ faculty }) {
           </div>
           <span className="truncate font-mono text-[11px]">{faculty.phone || '+880 1711-000000'}</span>
         </a>
+
+        {/* Feedback Button */}
+        {onFeedbackClick && (
+          <button
+            onClick={onFeedbackClick}
+            className="w-full mt-3 py-2 px-3 rounded-2xl bg-amber-500/10 hover:bg-amber-500 hover:text-slate-950 border border-amber-500/20 text-amber-600 dark:text-amber-400 font-extrabold text-xs transition-all flex items-center justify-center gap-1.5 shadow-xs"
+          >
+            <Star className="w-3.5 h-3.5 fill-current" />
+            Evaluate Course Teacher
+          </button>
+        )}
       </div>
     </motion.div>
   );
 }
+

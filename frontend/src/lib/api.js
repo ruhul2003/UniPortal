@@ -386,3 +386,58 @@ export async function deleteForumPost(postId) {
   return await safeFetchJson(`${apiBase}/forum/${postId}`, { method: 'DELETE' }, 'Failed to delete post');
 }
 
+// ==================== TEACHER FEEDBACK API ====================
+export async function fetchFeedback(params = {}) {
+  try {
+    const apiBase = getApiBase();
+    const query = new URLSearchParams(params).toString();
+    const url = query ? `${apiBase}/feedback?${query}` : `${apiBase}/feedback`;
+    const data = await safeFetchJson(url, { cache: 'no-store' }, 'Failed to fetch feedback entries');
+    return data.feedback || [];
+  } catch (err) {
+    console.warn('[API Client] Feedback fetch error:', err.message);
+    return [];
+  }
+}
+
+export async function fetchFeedbackSummary(facultyId = '') {
+  try {
+    const apiBase = getApiBase();
+    const query = facultyId ? `?facultyId=${encodeURIComponent(facultyId)}` : '';
+    const data = await safeFetchJson(`${apiBase}/feedback/summary${query}`, { cache: 'no-store' }, 'Failed to fetch feedback summary');
+    return data.summary || {
+      totalReviews: 0,
+      averageRating: 0,
+      teachingQualityAvg: 0,
+      courseContentAvg: 0,
+      communicationAvg: 0,
+      distribution: { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 }
+    };
+  } catch (err) {
+    console.warn('[API Client] Feedback summary error:', err.message);
+    return {
+      totalReviews: 0,
+      averageRating: 0,
+      teachingQualityAvg: 0,
+      courseContentAvg: 0,
+      communicationAvg: 0,
+      distribution: { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 }
+    };
+  }
+}
+
+export async function submitFeedback(feedbackData) {
+  const apiBase = getApiBase();
+  return await safeFetchJson(`${apiBase}/feedback`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(feedbackData),
+  }, 'Failed to submit teacher evaluation');
+}
+
+export async function deleteFeedback(feedbackId) {
+  const apiBase = getApiBase();
+  return await safeFetchJson(`${apiBase}/feedback/${feedbackId}`, { method: 'DELETE' }, 'Failed to delete feedback entry');
+}
+
+

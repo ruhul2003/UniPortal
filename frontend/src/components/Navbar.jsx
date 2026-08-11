@@ -24,7 +24,8 @@ import {
   CheckCircle2,
   ClipboardList,
   FolderOpen,
-  MessageSquare
+  MessageSquare,
+  Star
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -67,6 +68,7 @@ export default function Navbar() {
     { name: 'Assignments', href: '/assignments', icon: ClipboardList },
     { name: 'Resources', href: '/resources', icon: FolderOpen },
     { name: 'Q&A Forum', href: '/forum', icon: MessageSquare },
+    { name: 'Teacher Feedback', href: '/feedback', icon: Star },
     { name: 'Notices', href: '/notices', icon: Bell },
   ];
 

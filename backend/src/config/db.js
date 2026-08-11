@@ -29,6 +29,7 @@ export const getNoticesCollection = () => db?.collection('notices');
 export const getRoutinesCollection = () => db?.collection('routines');
 export const getAnnouncementsCollection = () => db?.collection('announcements');
 export const getSectionRequestsCollection = () => db?.collection('section_requests');
+export const getFeedbackCollection = () => db?.collection('feedback');
 
 async function seedInitialData() {
   if (!db) return;
@@ -295,7 +296,63 @@ async function seedInitialData() {
       ]);
       console.log('[MongoDB Native Seed] Sample announcements created.');
     }
+
+    // Seed Course Teacher Feedback
+    const feedbackCol = db.collection('feedback');
+    const feedbackCount = await feedbackCol.countDocuments();
+    if (feedbackCount === 0) {
+      // Find faculty users to link
+      const facultyUser = await usersCol.findOne({ role: 'faculty' });
+      const facId = facultyUser?._id?.toString() || 'FAC-2024-101';
+      const facName = facultyUser?.name || 'Dr. Sarah Abedin';
+      const facEmail = facultyUser?.email || 'sarah.jenkins@univ.edu';
+
+      await feedbackCol.insertMany([
+        {
+          studentId: 'CSE-2024-042',
+          studentName: 'Rahim Chowdhury',
+          studentEmail: 'alex.rivera@student.univ.edu',
+          facultyId: facId,
+          facultyName: facName,
+          facultyEmail: facEmail,
+          department: 'Computer Science & Engineering',
+          courseCode: 'CSE-3101',
+          courseTitle: 'Database Management Systems',
+          semester: 'Spring 2026',
+          rating: 5,
+          teachingQuality: 5,
+          courseContent: 5,
+          communication: 4,
+          comment: 'Dr. Sarah explains complex database index structures and query optimization remarkably well. The practical lab sessions were extremely insightful!',
+          isAnonymous: false,
+          createdAt: new Date(Date.now() - 3 * 86400000),
+          updatedAt: new Date(Date.now() - 3 * 86400000)
+        },
+        {
+          studentId: '',
+          studentName: 'Anonymous Student',
+          studentEmail: '',
+          facultyId: facId,
+          facultyName: facName,
+          facultyEmail: facEmail,
+          department: 'Computer Science & Engineering',
+          courseCode: 'CSE-3105',
+          courseTitle: 'Software Engineering & Agile Methodologies',
+          semester: 'Spring 2026',
+          rating: 5,
+          teachingQuality: 5,
+          courseContent: 4,
+          communication: 5,
+          comment: 'Excellent teaching style, highly encouraging environment, and very punctual lectures. Would love more hands-on project reviews.',
+          isAnonymous: true,
+          createdAt: new Date(Date.now() - 1 * 86400000),
+          updatedAt: new Date(Date.now() - 1 * 86400000)
+        }
+      ]);
+      console.log('[MongoDB Native Seed] Sample course teacher feedback entries created.');
+    }
   } catch (err) {
+
     console.error('[MongoDB Native Seed Error]', err.message);
   }
 }

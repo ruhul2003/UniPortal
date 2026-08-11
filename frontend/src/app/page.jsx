@@ -24,7 +24,8 @@ import {
   Users,
   ClipboardList,
   FolderOpen,
-  MessageSquare
+  MessageSquare,
+  Star
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
@@ -156,11 +157,18 @@ export default function HomePage() {
           </h1>
 
           <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-            Stay updated with real-time academic notices, track section class routines dynamically, manage attendance, and collaborate on coursework.
+            Stay updated with real-time academic notices, track section class routines dynamically, manage attendance, and evaluate course teachers.
           </p>
 
           {/* Quick Action Badges */}
           <div className="pt-4 flex flex-wrap items-center gap-4 text-xs font-semibold">
+            <Link
+              href="/feedback"
+              className="px-5 py-3 rounded-2xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold transition-all flex items-center gap-2 shadow-lg shadow-amber-500/20"
+            >
+              Teacher Feedback <Star className="w-4 h-4 fill-slate-950" />
+            </Link>
+
             <Link
               href="/attendance"
               className="px-5 py-3 rounded-2xl bg-emerald-500 text-white hover:bg-emerald-600 transition-all flex items-center gap-2 shadow-lg shadow-emerald-500/20"
@@ -192,8 +200,25 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 4 Feature Hub Quick Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* Feature Hub Quick Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        
+        <Link 
+          href="/feedback" 
+          className="p-6 rounded-3xl bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950/40 dark:to-orange-950/20 border border-amber-200/80 dark:border-amber-800/60 shadow-xs hover:shadow-md transition-all group"
+        >
+          <div className="w-12 h-12 rounded-2xl bg-amber-500 text-slate-950 flex items-center justify-center shadow-md shadow-amber-500/20 group-hover:scale-110 transition-transform">
+            <Star className="w-6 h-6 fill-slate-950" />
+          </div>
+          <h3 className="mt-4 text-base font-bold text-slate-900 dark:text-white flex items-center justify-between">
+            <span>Teacher Evaluation</span>
+            <ArrowRight className="w-4 h-4 text-amber-600 group-hover:translate-x-1 transition-transform" />
+          </h3>
+          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+            Submit anonymous ratings & evaluation feedback for course faculty.
+          </p>
+        </Link>
+
         
         <Link 
           href="/attendance" 

@@ -12,6 +12,7 @@ import attendanceRouter from './routes/attendance.js';
 import assignmentsRouter from './routes/assignments.js';
 import resourcesRouter from './routes/resources.js';
 import forumRouter from './routes/forum.js';
+import feedbackRouter from './routes/feedback.js';
 
 dotenv.config();
 
@@ -64,6 +65,7 @@ app.use('/api/attendance', attendanceRouter);
 app.use('/api/assignments', assignmentsRouter);
 app.use('/api/resources', resourcesRouter);
 app.use('/api/forum', forumRouter);
+app.use('/api/feedback', feedbackRouter);
 
 // Root welcome endpoint
 app.get('/', (req, res) => {
@@ -80,9 +82,11 @@ app.get('/', (req, res) => {
       assignments: '/api/assignments',
       resources: '/api/resources',
       forum: '/api/forum',
+      feedback: '/api/feedback',
       auth: '/api/auth'
     },
     timestamp: new Date().toISOString()
+
   });
 });
 
