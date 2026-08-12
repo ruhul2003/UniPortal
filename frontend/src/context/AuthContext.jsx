@@ -75,7 +75,8 @@ export function AuthProvider({ children }) {
         email: 'sarah.jenkins@univ.edu',
         designation: 'Associate Professor',
         department: 'Computer Science & Engineering',
-        facultyId: 'FAC-8088'
+        facultyId: 'FAC-8088',
+        section: user?.section || 'Section A'
       };
     } else if (targetMode === 'admin') {
       updated = {

@@ -241,10 +241,13 @@ export async function fetchAttendanceSummary(params = {}) {
     const apiBase = getApiBase();
     const query = new URLSearchParams(params).toString();
     const data = await safeFetchJson(`${apiBase}/attendance/summary?${query}`, { cache: 'no-store' }, 'Failed to fetch attendance summary');
-    return data.summary || [];
+    return {
+      summary: data.summary || [],
+      studentSummaries: data.studentSummaries || []
+    };
   } catch (err) {
     console.warn('[API Client] Attendance summary fetch error:', err.message);
-    return [];
+    return { summary: [], studentSummaries: [] };
   }
 }
 

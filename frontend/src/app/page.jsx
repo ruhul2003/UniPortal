@@ -232,7 +232,7 @@ export default function HomePage() {
             <ArrowRight className="w-4 h-4 text-emerald-600 group-hover:translate-x-1 transition-transform" />
           </h3>
           <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-            Monitor course percentages & minimum 75% exam compliance.
+            Monitor course percentages & class attendance metrics.
           </p>
         </Link>
 

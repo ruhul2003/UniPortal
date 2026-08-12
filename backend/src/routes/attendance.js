@@ -1,6 +1,6 @@
 import express from 'express';
 import { ObjectId } from 'mongodb';
-import { getDb } from '../config/db.js';
+import { getDb, getUsersCollection } from '../config/db.js';
 
 const router = express.Router();
 
@@ -31,14 +31,14 @@ router.get('/', async (req, res) => {
   }
 });
 
-// GET calculated attendance summary for a student
+// GET calculated attendance summary for a student or section
 router.get('/summary', async (req, res) => {
   try {
     const col = getCol();
     const { studentId, studentName, section } = req.query;
     
     if (!col) {
-      return res.json({ success: true, summary: [] });
+      return res.json({ success: true, summary: [], studentSummaries: [] });
     }
 
     let query = {};
@@ -46,48 +46,130 @@ router.get('/summary', async (req, res) => {
 
     const allSessions = await col.find(query).toArray();
     
-    // Aggregate metrics per courseCode
+    // 1. Course-level aggregation
     const courseStats = {};
 
     allSessions.forEach(session => {
+      const code = session.courseCode;
+      if (!courseStats[code]) {
+        courseStats[code] = {
+          courseCode: code,
+          courseTitle: session.courseTitle || code,
+          totalClasses: 0,
+          present: 0,
+          absent: 0,
+          late: 0,
+          percentage: 100
+        };
+      }
+
       const records = session.records || [];
-      const rec = records.find(r => 
-        (studentId && r.studentId === studentId) || 
-        (studentName && r.studentName.toLowerCase() === studentName.toLowerCase())
-      );
 
-      if (rec) {
-        const code = session.courseCode;
-        if (!courseStats[code]) {
-          courseStats[code] = {
-            courseCode: code,
-            courseTitle: session.courseTitle || code,
-            totalClasses: 0,
-            present: 0,
-            absent: 0,
-            late: 0,
-            percentage: 100
-          };
+      if (studentId || studentName) {
+        const rec = records.find(r => 
+          (studentId && r.studentId === studentId) || 
+          (studentName && r.studentName.toLowerCase() === studentName.toLowerCase())
+        );
+        if (rec) {
+          courseStats[code].totalClasses += 1;
+          if (rec.status === 'Present') courseStats[code].present += 1;
+          else if (rec.status === 'Absent') courseStats[code].absent += 1;
+          else if (rec.status === 'Late') courseStats[code].late += 1;
         }
-
+      } else {
+        // Aggregated stats for the section overall
         courseStats[code].totalClasses += 1;
-        if (rec.status === 'Present') courseStats[code].present += 1;
-        else if (rec.status === 'Absent') courseStats[code].absent += 1;
-        else if (rec.status === 'Late') courseStats[code].late += 1;
+        records.forEach(r => {
+          if (r.status === 'Present') courseStats[code].present += 1;
+          else if (r.status === 'Absent') courseStats[code].absent += 1;
+          else if (r.status === 'Late') courseStats[code].late += 1;
+        });
       }
     });
 
     const summaryList = Object.values(courseStats).map(stat => {
       const attended = stat.present + stat.late;
-      const pct = stat.totalClasses > 0 ? Math.round((attended / stat.totalClasses) * 100) : 100;
+      const pct = stat.totalClasses > 0 ? Math.round((attended / (stat.present + stat.absent + stat.late || 1)) * 100) : 100;
       return {
         ...stat,
         percentage: pct,
-        statusLabel: pct >= 75 ? 'Safe' : pct >= 70 ? 'Warning' : 'Danger'
+        statusLabel: pct >= 80 ? 'Good' : pct >= 50 ? 'Average' : 'Low'
       };
     });
 
-    res.json({ success: true, summary: summaryList });
+    // 2. Student-level aggregation for section view (Faculty & Admin)
+    const studentMap = {};
+
+    allSessions.forEach(session => {
+      const records = session.records || [];
+      records.forEach(r => {
+        const sKey = r.studentId || r.studentName;
+        if (!sKey) return;
+
+        if (!studentMap[sKey]) {
+          studentMap[sKey] = {
+            studentId: r.studentId || 'N/A',
+            studentName: r.studentName || 'Student',
+            section: session.section || section || 'Section A',
+            totalClasses: 0,
+            present: 0,
+            absent: 0,
+            late: 0,
+            percentage: 100,
+            statusLabel: 'Good'
+          };
+        }
+
+        studentMap[sKey].totalClasses += 1;
+        if (r.status === 'Present') studentMap[sKey].present += 1;
+        else if (r.status === 'Absent') studentMap[sKey].absent += 1;
+        else if (r.status === 'Late') studentMap[sKey].late += 1;
+      });
+    });
+
+    // Cross reference with users collection to include students with 0 session records
+    try {
+      const usersCol = getUsersCollection();
+      if (usersCol && section) {
+        const dbStudents = await usersCol.find({ role: 'student', section }).toArray();
+        dbStudents.forEach(st => {
+          const sKey = st.studentId || st._id.toString();
+          const matchByName = Object.values(studentMap).find(s => s.studentName.toLowerCase() === st.name.toLowerCase());
+          
+          if (!studentMap[sKey] && !matchByName) {
+            studentMap[sKey] = {
+              studentId: st.studentId || st._id.toString(),
+              studentName: st.name,
+              section: st.section || section,
+              totalClasses: 0,
+              present: 0,
+              absent: 0,
+              late: 0,
+              percentage: 100,
+              statusLabel: 'Good'
+            };
+          }
+        });
+      }
+    } catch (uErr) {
+      console.warn('Failed to merge user collection students for attendance summary:', uErr.message);
+    }
+
+    const studentSummariesList = Object.values(studentMap).map(st => {
+      const attended = st.present + st.late;
+      const pct = st.totalClasses > 0 ? Math.round((attended / st.totalClasses) * 100) : 100;
+      return {
+        ...st,
+        percentage: pct,
+        statusLabel: pct >= 80 ? 'Good' : pct >= 50 ? 'Average' : 'Low'
+      };
+    });
+
+    res.json({ 
+      success: true, 
+      summary: summaryList, 
+      studentSummaries: studentSummariesList 
+    });
   } catch (error) {
     console.error('Error computing attendance summary:', error);
     res.status(500).json({ success: false, error: 'Failed to compute attendance summary' });
