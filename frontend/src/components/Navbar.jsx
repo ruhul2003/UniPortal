@@ -17,7 +17,14 @@ import {
   Moon,
   Crown,
   Users,
-  PanelLeft
+  PanelLeft,
+  LayoutDashboard,
+  CalendarDays,
+  CheckCircle2,
+  ClipboardList,
+  FolderOpen,
+  MessageSquare,
+  Star
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { fetchNotices } from '../lib/api';
@@ -60,6 +67,60 @@ export default function Navbar({ onToggleSidebar, isSidebarCollapsed }) {
 
   const currentBadge = getCurrentRoleBadge();
 
+  // Dynamic Role-wise Navbar items
+  const getNavItems = () => {
+    if (!user) {
+      return [
+        { name: 'Home', href: '/', icon: LayoutDashboard },
+        { name: 'Routine', href: '/routine', icon: CalendarDays },
+        { name: 'Notices', href: '/notices', icon: Bell, hasBadge: true },
+      ];
+    }
+
+    if (user.role === 'admin') {
+      return [
+        { name: 'Dashboard', href: '/', icon: LayoutDashboard },
+        { name: 'Admin Center', href: '/admin', icon: Crown },
+        { name: 'Notices', href: '/notices', icon: Bell, hasBadge: true },
+        { name: 'Routine', href: '/routine', icon: CalendarDays },
+        { name: 'Q&A Forum', href: '/forum', icon: MessageSquare },
+      ];
+    }
+
+    if (user.role === 'faculty') {
+      return [
+        { name: 'Dashboard', href: '/', icon: LayoutDashboard },
+        { name: 'Routine', href: '/routine', icon: CalendarDays },
+        { name: 'Feedback', href: '/feedback', icon: Star },
+        { name: 'Student Directory', href: '/admin', icon: Users },
+        { name: 'Notices', href: '/notices', icon: Bell, hasBadge: true },
+      ];
+    }
+
+    if (user.isCR) {
+      return [
+        { name: 'Dashboard', href: '/', icon: LayoutDashboard },
+        { name: 'Routine', href: '/routine', icon: CalendarDays },
+        { name: 'Assignments', href: '/assignments', icon: ClipboardList },
+        { name: 'Notices', href: '/notices', icon: Bell, hasBadge: true },
+        { name: 'Q&A Forum', href: '/forum', icon: MessageSquare },
+        { name: 'Resources', href: '/resources', icon: FolderOpen },
+      ];
+    }
+
+    // Default Student role
+    return [
+      { name: 'Dashboard', href: '/', icon: LayoutDashboard },
+      { name: 'Routine', href: '/routine', icon: CalendarDays },
+      { name: 'Attendance', href: '/attendance', icon: CheckCircle2 },
+      { name: 'Assignments', href: '/assignments', icon: ClipboardList },
+      { name: 'Resources', href: '/resources', icon: FolderOpen },
+      { name: 'Notices', href: '/notices', icon: Bell, hasBadge: true },
+    ];
+  };
+
+  const navItems = getNavItems();
+
   return (
     <header className="sticky top-0 z-30 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-100 dark:border-slate-800 transition-colors">
       <div className="w-full px-4 sm:px-6 lg:px-8">
@@ -77,7 +138,7 @@ export default function Navbar({ onToggleSidebar, isSidebarCollapsed }) {
             </button>
 
             {/* Brand Title */}
-            <Link href="/" className="flex items-center gap-3 group">
+            <Link href="/" className="flex items-center gap-3 group shrink-0">
               <div className="w-10 h-10 rounded-xl bg-slate-900 dark:bg-blue-600 flex items-center justify-center text-white shadow-md group-hover:scale-105 transition-transform">
                 <GraduationCap className="w-5 h-5 text-blue-400 dark:text-white" />
               </div>
@@ -90,6 +151,34 @@ export default function Navbar({ onToggleSidebar, isSidebarCollapsed }) {
               </div>
             </Link>
           </div>
+
+          {/* Role-wise Navigation Items (Center Navbar Header Links) */}
+          <nav className="hidden md:flex items-center gap-1 lg:gap-1.5 px-2.5 py-1.5 rounded-2xl bg-slate-100/80 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-700/60 shadow-xs max-w-[45vw] xl:max-w-none overflow-x-auto scrollbar-none">
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = pathname === item.href;
+              return (
+                <Link
+                  key={item.name + item.href}
+                  href={item.href}
+                  className={`relative flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
+                    isActive
+                      ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-sm font-bold border border-slate-200/80 dark:border-slate-800'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/60 dark:hover:bg-slate-800/60'
+                  }`}
+                >
+                  <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-blue-600 dark:text-blue-400' : 'text-slate-400 dark:text-slate-500'}`} />
+                  <span>{item.name}</span>
+                  {item.hasBadge && hasNotices && (
+                    <span className="relative flex h-2 w-2">
+                      <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${hasUrgentNotice ? 'bg-amber-400' : 'bg-rose-400'}`} />
+                      <span className={`relative inline-flex rounded-full h-2 w-2 ${hasUrgentNotice ? 'bg-amber-500' : 'bg-rose-500'}`} />
+                    </span>
+                  )}
+                </Link>
+              );
+            })}
+          </nav>
 
           {/* Right Controls: View Mode Switcher, Theme & Profile */}
           <div className="flex items-center gap-2 sm:gap-3">
