@@ -112,6 +112,40 @@ router.post('/:id/submit', async (req, res) => {
   }
 });
 
+// PUT update assignment (title, description, due date, points, etc.)
+router.put('/:id', async (req, res) => {
+  try {
+    const col = getCol();
+    if (!col) return res.status(503).json({ success: false, error: 'Database unavailable' });
+
+    const { id } = req.params;
+    const { title, courseCode, courseTitle, section, description, dueDate, totalPoints, attachmentUrl } = req.body;
+
+    const filter = ObjectId.isValid(id) ? { _id: new ObjectId(id) } : { _id: id };
+    const updateFields = {};
+    if (title !== undefined) updateFields.title = title.trim();
+    if (courseCode !== undefined) updateFields.courseCode = courseCode.trim();
+    if (courseTitle !== undefined) updateFields.courseTitle = courseTitle.trim();
+    if (section !== undefined) updateFields.section = section;
+    if (description !== undefined) updateFields.description = description;
+    if (dueDate !== undefined) updateFields.dueDate = new Date(dueDate);
+    if (totalPoints !== undefined) updateFields.totalPoints = Number(totalPoints);
+    if (attachmentUrl !== undefined) updateFields.attachmentUrl = attachmentUrl;
+    updateFields.updatedAt = new Date();
+
+    const result = await col.updateOne(filter, { $set: updateFields });
+    if (result.matchedCount === 0) {
+      return res.status(404).json({ success: false, error: 'Assignment not found' });
+    }
+
+    const updatedAssignment = await col.findOne(filter);
+    res.json({ success: true, message: 'Assignment updated successfully', assignment: updatedAssignment });
+  } catch (error) {
+    console.error('Error updating assignment:', error);
+    res.status(500).json({ success: false, error: 'Failed to update assignment' });
+  }
+});
+
 // DELETE assignment
 router.delete('/:id', async (req, res) => {
   try {

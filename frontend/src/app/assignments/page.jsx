@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { fetchAssignments, createAssignment, submitAssignmentSolution, deleteAssignment } from '../../lib/api';
+import { fetchAssignments, createAssignment, updateAssignment, submitAssignmentSolution, deleteAssignment } from '../../lib/api';
 import { 
   ClipboardList, 
   Clock, 
@@ -18,20 +18,25 @@ import {
   Send,
   XCircle,
   ExternalLink,
-  Crown
+  Crown,
+  Pencil,
+  Eye
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function AssignmentsPage() {
   const { user } = useAuth();
-  const isFacultyOrCR = user?.role === 'faculty' || user?.role === 'admin' || user?.isCR;
+  const isFacultyOrAdmin = user?.role === 'faculty' || user?.role === 'admin';
+  const isFacultyOrCR = isFacultyOrAdmin || user?.isCR;
+  const isStudent = user?.role === 'student' || (!user?.role && !user);
 
   const [assignments, setAssignments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('All'); // 'All', 'Pending', 'Submitted'
 
-  // Post modal state
+  // Post / Edit modal state
   const [showPostModal, setShowPostModal] = useState(false);
+  const [editingAssignment, setEditingAssignment] = useState(null);
   const [newTitle, setNewTitle] = useState('');
   const [newCourseCode, setNewCourseCode] = useState('CSE-102');
   const [newCourseTitle, setNewCourseTitle] = useState('Data Structures & Algorithms');
@@ -101,29 +106,75 @@ export default function AssignmentsPage() {
     }
   }
 
-  const handleCreateAssignment = async (e) => {
+  const handleOpenCreateModal = () => {
+    setEditingAssignment(null);
+    resetForm();
+    setShowPostModal(true);
+  };
+
+  const handleOpenEditModal = (item) => {
+    setEditingAssignment(item);
+    setNewTitle(item.title || '');
+    setNewCourseCode(item.courseCode || 'CSE-102');
+    setNewCourseTitle(item.courseTitle || 'Data Structures & Algorithms');
+    setNewSection(item.section || user?.section || 'Section A');
+    setNewDescription(item.description || '');
+
+    // Format ISO string to datetime-local string format YYYY-MM-DDTHH:mm
+    if (item.dueDate) {
+      try {
+        const d = new Date(item.dueDate);
+        const isoStr = new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+        setNewDueDate(isoStr);
+      } catch (e) {
+        setNewDueDate('');
+      }
+    } else {
+      setNewDueDate('');
+    }
+
+    setNewTotalPoints(item.totalPoints || 100);
+    setNewAttachmentUrl(item.attachmentUrl || '');
+    setShowPostModal(true);
+  };
+
+  const handleSaveAssignment = async (e) => {
     e.preventDefault();
     if (!newTitle || !newDueDate) return;
 
     setIsPosting(true);
     try {
-      await createAssignment({
-        title: newTitle,
-        courseCode: newCourseCode,
-        courseTitle: newCourseTitle,
-        section: newSection,
-        description: newDescription,
-        dueDate: newDueDate,
-        totalPoints: Number(newTotalPoints),
-        attachmentUrl: newAttachmentUrl,
-        createdBy: user?.name || 'Class Representative',
-        createdByRole: user?.role === 'student' ? 'cr' : user?.role || 'faculty'
-      });
+      if (editingAssignment) {
+        await updateAssignment(editingAssignment._id, {
+          title: newTitle,
+          courseCode: newCourseCode,
+          courseTitle: newCourseTitle,
+          section: newSection,
+          description: newDescription,
+          dueDate: newDueDate,
+          totalPoints: Number(newTotalPoints),
+          attachmentUrl: newAttachmentUrl
+        });
+      } else {
+        await createAssignment({
+          title: newTitle,
+          courseCode: newCourseCode,
+          courseTitle: newCourseTitle,
+          section: newSection,
+          description: newDescription,
+          dueDate: newDueDate,
+          totalPoints: Number(newTotalPoints),
+          attachmentUrl: newAttachmentUrl,
+          createdBy: user?.name || 'Faculty / CR',
+          createdByRole: user?.role === 'student' ? 'cr' : user?.role || 'faculty'
+        });
+      }
       setShowPostModal(false);
+      setEditingAssignment(null);
       resetForm();
       loadAssignments();
     } catch (err) {
-      alert('Failed to post assignment: ' + err.message);
+      alert(`Failed to ${editingAssignment ? 'update' : 'post'} assignment: ` + err.message);
     } finally {
       setIsPosting(false);
     }
@@ -217,7 +268,7 @@ export default function AssignmentsPage() {
 
             {isFacultyOrCR && (
               <button
-                onClick={() => setShowPostModal(true)}
+                onClick={handleOpenCreateModal}
                 className="px-6 py-3.5 rounded-2xl bg-white text-slate-900 font-bold hover:bg-blue-50 transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2.5 group shrink-0"
               >
                 <Plus className="w-5 h-5 text-blue-600 group-hover:scale-110 transition-transform" />
@@ -308,15 +359,23 @@ export default function AssignmentsPage() {
                 {/* Submissions & Footer Action */}
                 <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-3">
                   <div className="flex items-center gap-2">
-                    {isSubmitted ? (
-                      <span className="px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-bold text-xs flex items-center gap-1 border border-emerald-200">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
-                        Submitted
-                      </span>
-                    ) : (
-                      <span className="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 font-medium text-xs flex items-center gap-1">
-                        <AlertCircle className="w-3.5 h-3.5 text-amber-500" />
-                        Pending
+                    {!isFacultyOrAdmin && (
+                      isSubmitted ? (
+                        <span className="px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-bold text-xs flex items-center gap-1 border border-emerald-200">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+                          Submitted
+                        </span>
+                      ) : (
+                        <span className="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 font-medium text-xs flex items-center gap-1">
+                          <AlertCircle className="w-3.5 h-3.5 text-amber-500" />
+                          Pending
+                        </span>
+                      )
+                    )}
+                    {isFacultyOrAdmin && (
+                      <span className="px-3 py-1 rounded-full bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 font-bold text-xs flex items-center gap-1 border border-purple-200 dark:border-purple-800">
+                        <Crown className="w-3.5 h-3.5 text-purple-500" />
+                        Instructor View
                       </span>
                     )}
                   </div>
@@ -326,10 +385,22 @@ export default function AssignmentsPage() {
                       <>
                         <button
                           onClick={() => setActiveSubmissionsView(item)}
-                          className="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-800"
+                          className="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-1"
+                          title="View Student Submissions"
                         >
+                          <Eye className="w-3.5 h-3.5 text-slate-500" />
                           Submissions ({item.submissions?.length || 0})
                         </button>
+
+                        <button
+                          onClick={() => handleOpenEditModal(item)}
+                          className="px-3 py-1.5 rounded-xl border border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400 text-xs font-semibold hover:bg-blue-50 dark:hover:bg-blue-950/40 flex items-center gap-1"
+                          title="Edit Assignment Details & Due Date"
+                        >
+                          <Pencil className="w-3.5 h-3.5" />
+                          Edit / Due Date
+                        </button>
+
                         <button
                           onClick={() => handleDeleteAssignment(item._id)}
                           className="p-1.5 rounded-xl text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40"
@@ -340,21 +411,24 @@ export default function AssignmentsPage() {
                       </>
                     )}
 
-                    {!isSubmitted ? (
-                      <button
-                        onClick={() => setSelectedAssignment(item)}
-                        className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-all shadow-sm flex items-center gap-1.5"
-                      >
-                        <Send className="w-3.5 h-3.5" />
-                        Submit Work
-                      </button>
-                    ) : (
-                      <button
-                        onClick={() => setSelectedAssignment(item)}
-                        className="px-4 py-2 rounded-xl border border-emerald-500 text-emerald-600 dark:text-emerald-400 text-xs font-bold hover:bg-emerald-50 dark:hover:bg-emerald-950/40"
-                      >
-                        Update Submission
-                      </button>
+                    {/* Only Students can submit solutions */}
+                    {!isFacultyOrAdmin && (
+                      !isSubmitted ? (
+                        <button
+                          onClick={() => setSelectedAssignment(item)}
+                          className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-all shadow-sm flex items-center gap-1.5"
+                        >
+                          <Send className="w-3.5 h-3.5" />
+                          Submit Work
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => setSelectedAssignment(item)}
+                          className="px-4 py-2 rounded-xl border border-emerald-500 text-emerald-600 dark:text-emerald-400 text-xs font-bold hover:bg-emerald-50 dark:hover:bg-emerald-950/40"
+                        >
+                          Update Submission
+                        </button>
+                      )
                     )}
                   </div>
                 </div>
@@ -364,7 +438,7 @@ export default function AssignmentsPage() {
           })}
         </div>
 
-        {/* Post Assignment Modal */}
+        {/* Post / Edit Assignment Modal */}
         <AnimatePresence>
           {showPostModal && (
             <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
@@ -375,13 +449,15 @@ export default function AssignmentsPage() {
                 className="w-full max-w-lg bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden"
               >
                 <div className="p-6 bg-slate-900 text-white flex items-center justify-between">
-                  <h3 className="text-lg font-bold">Post New Assignment 📝</h3>
+                  <h3 className="text-lg font-bold">
+                    {editingAssignment ? 'Edit Assignment & Due Date 📝' : 'Post New Assignment 📝'}
+                  </h3>
                   <button onClick={() => setShowPostModal(false)} className="text-slate-400 hover:text-white">
                     <XCircle className="w-6 h-6" />
                   </button>
                 </div>
 
-                <form onSubmit={handleCreateAssignment} className="p-6 space-y-4">
+                <form onSubmit={handleSaveAssignment} className="p-6 space-y-4">
                   <div>
                     <label className="block text-xs font-bold mb-1">Assignment Title</label>
                     <input 
@@ -434,13 +510,13 @@ export default function AssignmentsPage() {
 
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs font-bold mb-1">Due Date & Time</label>
+                      <label className="block text-xs font-bold mb-1">Due Date & Time *</label>
                       <input 
                         type="datetime-local"
                         required
                         value={newDueDate}
                         onChange={(e) => setNewDueDate(e.target.value)}
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-medium"
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-medium focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
                     <div>
@@ -476,12 +552,80 @@ export default function AssignmentsPage() {
                     <button
                       type="submit"
                       disabled={isPosting}
-                      className="px-6 py-2.5 rounded-xl bg-blue-600 text-white text-xs font-bold hover:bg-blue-700"
+                      className="px-6 py-2.5 rounded-xl bg-blue-600 text-white text-xs font-bold hover:bg-blue-700 transition-colors"
                     >
-                      {isPosting ? 'Publishing...' : 'Publish Assignment'}
+                      {isPosting ? 'Saving...' : editingAssignment ? 'Save Changes' : 'Publish Assignment'}
                     </button>
                   </div>
                 </form>
+              </motion.div>
+            </div>
+          )}
+        </AnimatePresence>
+
+        {/* Submissions List Modal */}
+        <AnimatePresence>
+          {activeSubmissionsView && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                className="w-full max-w-2xl bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden p-6 space-y-4 max-h-[85vh] flex flex-col"
+              >
+                <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+                  <div>
+                    <h3 className="text-base font-bold text-slate-900 dark:text-white">Student Submissions</h3>
+                    <p className="text-xs text-slate-400">{activeSubmissionsView.title} ({activeSubmissionsView.courseCode})</p>
+                  </div>
+                  <button onClick={() => setActiveSubmissionsView(null)} className="text-slate-400 hover:text-slate-600 dark:hover:text-white">
+                    <XCircle className="w-5 h-5" />
+                  </button>
+                </div>
+
+                <div className="flex-1 overflow-y-auto space-y-3 pr-1">
+                  {!activeSubmissionsView.submissions || activeSubmissionsView.submissions.length === 0 ? (
+                    <div className="py-12 text-center text-xs text-slate-400 font-medium">
+                      No student submissions recorded for this assignment yet.
+                    </div>
+                  ) : (
+                    activeSubmissionsView.submissions.map((sub, idx) => (
+                      <div key={idx} className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-700/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div>
+                          <p className="text-xs font-bold text-slate-900 dark:text-white">{sub.studentName}</p>
+                          <p className="text-[11px] text-slate-400 font-mono">ID: {sub.studentId}</p>
+                          {sub.notes && (
+                            <p className="text-xs text-slate-600 dark:text-slate-300 mt-1 italic">"{sub.notes}"</p>
+                          )}
+                          <p className="text-[10px] text-slate-400 mt-1">
+                            Submitted: {new Date(sub.submittedAt).toLocaleString()}
+                          </p>
+                        </div>
+
+                        {sub.submissionUrl && (
+                          <a
+                            href={sub.submissionUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-3 py-1.5 rounded-xl bg-blue-600 text-white text-xs font-bold hover:bg-blue-700 transition-colors inline-flex items-center gap-1.5 shrink-0"
+                          >
+                            <span>Open Submission</span>
+                            <ExternalLink className="w-3.5 h-3.5" />
+                          </a>
+                        )}
+                      </div>
+                    ))
+                  )}
+                </div>
+
+                <div className="flex justify-end pt-2 border-t border-slate-100 dark:border-slate-800">
+                  <button
+                    onClick={() => setActiveSubmissionsView(null)}
+                    className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-200"
+                  >
+                    Close
+                  </button>
+                </div>
               </motion.div>
             </div>
           )}

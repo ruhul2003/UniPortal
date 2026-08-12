@@ -288,6 +288,15 @@ export async function submitAssignmentSolution(assignmentId, submissionData) {
   }, 'Failed to submit assignment');
 }
 
+export async function updateAssignment(assignmentId, updateData) {
+  const apiBase = getApiBase();
+  return await safeFetchJson(`${apiBase}/assignments/${assignmentId}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(updateData),
+  }, 'Failed to update assignment');
+}
+
 export async function deleteAssignment(assignmentId) {
   const apiBase = getApiBase();
   return await safeFetchJson(`${apiBase}/assignments/${assignmentId}`, { method: 'DELETE' }, 'Failed to delete assignment');
