@@ -4,13 +4,16 @@ import React, { useState, useEffect } from 'react';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 import Footer from './Footer';
+import InitialLoader from './InitialLoader';
 import { fetchNotices } from '../lib/api';
 
 export default function AppLayout({ children }) {
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [hasNotices, setHasNotices] = useState(false);
   const [hasUrgentNotice, setHasUrgentNotice] = useState(false);
+
 
   useEffect(() => {
     async function checkNotices() {
@@ -39,7 +42,15 @@ export default function AppLayout({ children }) {
   };
 
   return (
-    <div className="flex min-h-screen bg-slate-50/50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 antialiased selection:bg-blue-100 selection:text-blue-700 transition-colors duration-200">
+    <>
+      {isInitialLoading && (
+        <InitialLoader 
+          onComplete={() => setIsInitialLoading(false)} 
+          minDuration={850} 
+        />
+      )}
+      <div className="flex min-h-screen bg-slate-50/50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 antialiased selection:bg-blue-100 selection:text-blue-700 transition-colors duration-200">
+
       
       {/* Sidebar Navigation */}
       <Sidebar
@@ -68,5 +79,6 @@ export default function AppLayout({ children }) {
       </div>
 
     </div>
+    </>
   );
 }
