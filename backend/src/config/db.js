@@ -30,6 +30,7 @@ export const getRoutinesCollection = () => db?.collection('routines');
 export const getAnnouncementsCollection = () => db?.collection('announcements');
 export const getSectionRequestsCollection = () => db?.collection('section_requests');
 export const getFeedbackCollection = () => db?.collection('feedback');
+export const getMarksCollection = () => db?.collection('marks');
 
 async function seedInitialData() {
   if (!db) return;
@@ -446,6 +447,107 @@ async function seedInitialData() {
         }
       ]);
       console.log('[MongoDB Native Seed] Sample course teacher feedback entries created.');
+    }
+
+    // Seed Student Marks
+    const marksCol = db.collection('marks');
+    const marksCount = await marksCol.countDocuments();
+    if (marksCount === 0) {
+      await marksCol.insertMany([
+        {
+          studentId: 'CSE-2024-042',
+          studentName: 'Rahim Chowdhury',
+          studentEmail: 'alex.rivera@student.univ.edu',
+          courseCode: 'CSE-3101',
+          courseTitle: 'Database Management Systems',
+          section: 'Section A',
+          semester: 'Spring 2026',
+          ct1: 13,
+          ct2: 14,
+          mid: 22,
+          final: 34,
+          assignment: 9,
+          attendence: 9,
+          totalMarks: 100,
+          letterGrade: 'A+',
+          gpa: 4.00,
+          published: true,
+          publishedBy: 'Dr. Sarah Abedin',
+          remarks: 'Excellent performance throughout the semester.',
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          studentId: 'CSE-2024-042',
+          studentName: 'Rahim Chowdhury',
+          studentEmail: 'alex.rivera@student.univ.edu',
+          courseCode: 'CN',
+          courseTitle: 'Computer Networks',
+          section: 'Section 9A',
+          semester: '9th Semester',
+          ct1: 12,
+          ct2: 13,
+          mid: 20,
+          final: 30,
+          assignment: 8,
+          attendence: 9,
+          totalMarks: 92,
+          letterGrade: 'A+',
+          gpa: 4.00,
+          published: true,
+          publishedBy: 'Dr. Sarah Abedin',
+          remarks: 'Strong lab work and final exam scores.',
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          studentId: 'CSE-2024-089',
+          studentName: 'Nusrat Jahan',
+          studentEmail: 'nusrat.jahan@student.univ.edu',
+          courseCode: 'CSE-3101',
+          courseTitle: 'Database Management Systems',
+          section: 'Section B',
+          semester: 'Spring 2026',
+          ct1: 11,
+          ct2: 12,
+          mid: 19,
+          final: 28,
+          assignment: 8,
+          attendence: 8,
+          totalMarks: 86,
+          letterGrade: 'A+',
+          gpa: 4.00,
+          published: true,
+          publishedBy: 'Dr. Sarah Abedin',
+          remarks: 'Good progress.',
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          studentId: 'CSE-2024-104',
+          studentName: 'Anika Rahman',
+          studentEmail: 'anika.rahman@student.univ.edu',
+          courseCode: 'CSE-3101',
+          courseTitle: 'Database Management Systems',
+          section: 'Section A',
+          semester: 'Spring 2026',
+          ct1: 10,
+          ct2: 11,
+          mid: 18,
+          final: 26,
+          assignment: 7,
+          attendence: 9,
+          totalMarks: 81,
+          letterGrade: 'A+',
+          gpa: 4.00,
+          published: false,
+          publishedBy: 'Dr. Sarah Abedin',
+          remarks: 'Draft marks entry.',
+          createdAt: new Date(),
+          updatedAt: new Date()
+        }
+      ]);
+      console.log('[MongoDB Native Seed] Sample student marks records created.');
     }
   } catch (err) {
 

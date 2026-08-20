@@ -452,4 +452,57 @@ export async function deleteFeedback(feedbackId) {
   return await safeFetchJson(`${apiBase}/feedback/${feedbackId}`, { method: 'DELETE' }, 'Failed to delete feedback entry');
 }
 
+// Marks / Gradebook API Services
+export async function fetchMarks(params = {}) {
+  try {
+    const apiBase = getApiBase();
+    const query = new URLSearchParams();
+    if (params.section && params.section !== 'All') query.append('section', params.section);
+    if (params.courseCode && params.courseCode !== 'All') query.append('courseCode', params.courseCode);
+    if (params.studentId) query.append('studentId', params.studentId);
+    if (params.published !== undefined && params.published !== '') query.append('published', params.published);
+
+    const queryString = query.toString() ? `?${query.toString()}` : '';
+    const data = await safeFetchJson(`${apiBase}/marks${queryString}`, { cache: 'no-store' }, 'Failed to fetch marks');
+    return data.marks || [];
+  } catch (err) {
+    console.warn('[API Client] Marks fetch error:', err.message);
+    return [];
+  }
+}
+
+export async function fetchStudentMarks(studentId) {
+  try {
+    const apiBase = getApiBase();
+    const data = await safeFetchJson(`${apiBase}/marks/student/${studentId}`, { cache: 'no-store' }, 'Failed to fetch student marks');
+    return data.marks || [];
+  } catch (err) {
+    console.warn('[API Client] Student marks fetch error:', err.message);
+    return [];
+  }
+}
+
+export async function saveMarks(marksData) {
+  const apiBase = getApiBase();
+  return await safeFetchJson(`${apiBase}/marks`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(marksData),
+  }, 'Failed to save marks');
+}
+
+export async function bulkPublishMarks(publishData) {
+  const apiBase = getApiBase();
+  return await safeFetchJson(`${apiBase}/marks/bulk-publish`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(publishData),
+  }, 'Failed to update publication status');
+}
+
+export async function deleteMarkRecord(markId) {
+  const apiBase = getApiBase();
+  return await safeFetchJson(`${apiBase}/marks/${markId}`, { method: 'DELETE' }, 'Failed to delete mark entry');
+}
+
 

@@ -24,7 +24,8 @@ import {
   ClipboardList,
   FolderOpen,
   MessageSquare,
-  Star
+  Star,
+  Award
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { fetchNotices } from '../lib/api';
@@ -80,19 +81,19 @@ export default function Navbar({ onToggleSidebar, isSidebarCollapsed }) {
     if (user.role === 'admin') {
       return [
         { name: 'Dashboard', href: '/', icon: LayoutDashboard },
+        { name: 'Marks & Grades', href: '/marks', icon: Award },
         { name: 'Admin Center', href: '/admin', icon: Crown },
         { name: 'Notices', href: '/notices', icon: Bell, hasBadge: true },
         { name: 'Routine', href: '/routine', icon: CalendarDays },
-        { name: 'Q&A Forum', href: '/forum', icon: MessageSquare },
       ];
     }
 
     if (user.role === 'faculty') {
       return [
         { name: 'Dashboard', href: '/', icon: LayoutDashboard },
+        { name: 'Publish Marks', href: '/marks', icon: Award },
         { name: 'Routine', href: '/routine', icon: CalendarDays },
         { name: 'Feedback', href: '/feedback', icon: Star },
-        { name: 'Student Directory', href: '/admin', icon: Users },
         { name: 'Notices', href: '/notices', icon: Bell, hasBadge: true },
       ];
     }
@@ -100,21 +101,20 @@ export default function Navbar({ onToggleSidebar, isSidebarCollapsed }) {
     if (user.isCR) {
       return [
         { name: 'Dashboard', href: '/', icon: LayoutDashboard },
+        { name: 'Marks & Grades', href: '/marks', icon: Award },
         { name: 'Routine', href: '/routine', icon: CalendarDays },
         { name: 'Assignments', href: '/assignments', icon: ClipboardList },
         { name: 'Notices', href: '/notices', icon: Bell, hasBadge: true },
-        { name: 'Q&A Forum', href: '/forum', icon: MessageSquare },
-        { name: 'Resources', href: '/resources', icon: FolderOpen },
       ];
     }
 
     // Default Student role
     return [
       { name: 'Dashboard', href: '/', icon: LayoutDashboard },
+      { name: 'My Marks', href: '/marks', icon: Award },
       { name: 'Routine', href: '/routine', icon: CalendarDays },
       { name: 'Attendance', href: '/attendance', icon: CheckCircle2 },
       { name: 'Assignments', href: '/assignments', icon: ClipboardList },
-      { name: 'Resources', href: '/resources', icon: FolderOpen },
       { name: 'Notices', href: '/notices', icon: Bell, hasBadge: true },
     ];
   };
