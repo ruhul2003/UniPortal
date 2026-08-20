@@ -81,7 +81,7 @@ export default function Navbar({ onToggleSidebar, isSidebarCollapsed }) {
     if (user.role === 'admin') {
       return [
         { name: 'Dashboard', href: '/', icon: LayoutDashboard },
-        { name: 'Marks & Grades', href: '/marks', icon: Award },
+        { name: 'Attendance & Marks', href: '/marks', icon: Award },
         { name: 'Admin Center', href: '/admin', icon: Crown },
         { name: 'Notices', href: '/notices', icon: Bell, hasBadge: true },
         { name: 'Routine', href: '/routine', icon: CalendarDays },
@@ -91,7 +91,7 @@ export default function Navbar({ onToggleSidebar, isSidebarCollapsed }) {
     if (user.role === 'faculty') {
       return [
         { name: 'Dashboard', href: '/', icon: LayoutDashboard },
-        { name: 'Publish Marks', href: '/marks', icon: Award },
+        { name: 'Attendance & Marks', href: '/marks', icon: Award },
         { name: 'Routine', href: '/routine', icon: CalendarDays },
         { name: 'Feedback', href: '/feedback', icon: Star },
         { name: 'Notices', href: '/notices', icon: Bell, hasBadge: true },
@@ -101,7 +101,7 @@ export default function Navbar({ onToggleSidebar, isSidebarCollapsed }) {
     if (user.isCR) {
       return [
         { name: 'Dashboard', href: '/', icon: LayoutDashboard },
-        { name: 'Marks & Grades', href: '/marks', icon: Award },
+        { name: 'Attendance & Marks', href: '/marks', icon: Award },
         { name: 'Routine', href: '/routine', icon: CalendarDays },
         { name: 'Assignments', href: '/assignments', icon: ClipboardList },
         { name: 'Notices', href: '/notices', icon: Bell, hasBadge: true },
@@ -111,9 +111,8 @@ export default function Navbar({ onToggleSidebar, isSidebarCollapsed }) {
     // Default Student role
     return [
       { name: 'Dashboard', href: '/', icon: LayoutDashboard },
-      { name: 'My Marks', href: '/marks', icon: Award },
+      { name: 'Attendance & Marks', href: '/marks', icon: Award },
       { name: 'Routine', href: '/routine', icon: CalendarDays },
-      { name: 'Attendance', href: '/attendance', icon: CheckCircle2 },
       { name: 'Assignments', href: '/assignments', icon: ClipboardList },
       { name: 'Notices', href: '/notices', icon: Bell, hasBadge: true },
     ];

@@ -1,9 +1,11 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { useAuth } from '../../context/AuthContext';
 import { fetchMarks, fetchStudentMarks, saveMarks, bulkPublishMarks, deleteMarkRecord } from '../../lib/api';
 import MarksFormModal from '../../components/MarksFormModal';
+import AttendancePage from '../attendance/page';
 import {
   Award,
   BookOpen,
@@ -22,12 +24,17 @@ import {
   FileSpreadsheet,
   BarChart3,
   Layers,
-  ChevronRight
+  ChevronRight,
+  Calendar
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-export default function MarksPage() {
+function MarksPageContent() {
   const { user } = useAuth();
+  const searchParams = useSearchParams();
+  const initialTab = searchParams.get('tab') === 'attendance' ? 'attendance' : 'marks';
+  const [activeSectionTab, setActiveSectionTab] = useState(initialTab);
+
   const isFacultyOrAdmin = user?.role === 'faculty' || user?.role === 'admin';
 
   // Filters state
@@ -178,6 +185,41 @@ export default function MarksPage() {
         <div className="absolute -top-24 -right-24 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none" />
       </div>
+
+      {/* Unified Section Navigation Tabs (Attendance & Marks) */}
+      <div className="flex items-center gap-3 p-1.5 rounded-2xl bg-slate-200/80 dark:bg-slate-800/80 w-fit">
+        <button
+          onClick={() => setActiveSectionTab('marks')}
+          className={`flex items-center gap-2.5 px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all ${
+            activeSectionTab === 'marks'
+              ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-md'
+              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+          }`}
+        >
+          <Award className="w-4 h-4" />
+          <span>Course Marks & Gradebook</span>
+        </button>
+
+        <button
+          onClick={() => setActiveSectionTab('attendance')}
+          className={`flex items-center gap-2.5 px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all ${
+            activeSectionTab === 'attendance'
+              ? 'bg-white dark:bg-slate-900 text-teal-600 dark:text-teal-400 shadow-md'
+              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+          }`}
+        >
+          <CheckCircle2 className="w-4 h-4" />
+          <span>Daily Class Attendance Tracker</span>
+        </button>
+      </div>
+
+      {/* Render Attendance Tab content if selected */}
+      {activeSectionTab === 'attendance' ? (
+        <div className="rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden bg-white dark:bg-slate-900 p-2">
+          <AttendancePage />
+        </div>
+      ) : (
+        <>
 
       {/* Notifications */}
       {error && (
@@ -633,6 +675,8 @@ export default function MarksPage() {
           )}
         </div>
       )}
+      </>
+      )}
 
       {/* Marks Input/Edit Modal */}
       <MarksFormModal
@@ -646,5 +690,13 @@ export default function MarksPage() {
         isFaculty={isFacultyOrAdmin}
       />
     </div>
+  );
+}
+
+export default function MarksPage() {
+  return (
+    <Suspense fallback={<div className="p-12 text-center text-slate-500">Loading Attendance & Marks...</div>}>
+      <MarksPageContent />
+    </Suspense>
   );
 }

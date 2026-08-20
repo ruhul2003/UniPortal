@@ -36,8 +36,7 @@ export default function Sidebar({ isOpen, onClose, isCollapsed, onToggleCollapse
   ];
 
   const academicsGroup = [
-    { name: 'Marks & Gradebook', href: '/marks', icon: Award },
-    { name: 'Attendance Tracker', href: '/attendance', icon: CheckCircle2 },
+    { name: 'Attendance & Marks', href: '/marks', icon: Award },
     { name: 'Assignments & Tasks', href: '/assignments', icon: ClipboardList },
     { name: 'Resource Locker', href: '/resources', icon: FolderOpen },
   ];
