@@ -153,6 +153,16 @@ export default function AttendancePage() {
     setStudentRoster(updated);
   };
 
+  const toggleStudentCheckbox = (index, isChecked) => {
+    const updated = [...studentRoster];
+    updated[index].status = isChecked ? 'Present' : 'Absent';
+    setStudentRoster(updated);
+  };
+
+  const setAllStudentStatus = (status) => {
+    setStudentRoster(prev => prev.map(s => ({ ...s, status })));
+  };
+
   const handleSubmitAttendance = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -561,6 +571,112 @@ export default function AttendancePage() {
           </div>
         )}
 
+        {/* Tab 2: Students Breakdown */}
+        {activeTab === 'students' && (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between flex-wrap gap-4 bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
+              <div className="relative flex-1 max-w-md">
+                <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                <input 
+                  type="text"
+                  placeholder="Search student name or ID..."
+                  value={studentSearch}
+                  onChange={(e) => setStudentSearch(e.target.value)}
+                  className="w-full pl-9 pr-4 py-2 rounded-xl text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-emerald-500"
+                />
+              </div>
+
+              <div className="text-xs font-bold text-slate-500">
+                Showing {filteredStudentSummaries.length} Students in {activeSection}
+              </div>
+            </div>
+
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-xs">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs border-collapse">
+                  <thead>
+                    <tr className="bg-slate-50 dark:bg-slate-800/60 text-slate-400 uppercase tracking-wider font-bold border-b border-slate-100 dark:border-slate-800">
+                      <th className="py-3.5 px-4">Student</th>
+                      <th className="py-3.5 px-4">Section</th>
+                      <th className="py-3.5 px-4 text-center">Classes</th>
+                      <th className="py-3.5 px-4 text-center">Present</th>
+                      <th className="py-3.5 px-4 text-center">Absent</th>
+                      <th className="py-3.5 px-4 text-center">Attendance %</th>
+                      <th className="py-3.5 px-4 text-center">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800 font-medium">
+                    {filteredStudentSummaries.map((st) => {
+                      const isGood = st.percentage >= 75;
+                      return (
+                        <tr key={st.studentId} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40">
+                          <td className="py-3.5 px-4">
+                            <div className="font-bold text-slate-900 dark:text-white">{st.studentName}</div>
+                            <div className="text-[10px] text-slate-400 font-mono">{st.studentId}</div>
+                          </td>
+                          <td className="py-3.5 px-4 font-semibold text-slate-700 dark:text-slate-300">{st.section}</td>
+                          <td className="py-3.5 px-4 text-center font-bold">{st.totalClasses}</td>
+                          <td className="py-3.5 px-4 text-center font-bold text-emerald-600">{st.present}</td>
+                          <td className="py-3.5 px-4 text-center font-bold text-rose-500">{st.absent}</td>
+                          <td className="py-3.5 px-4 text-center">
+                            <span className={`font-black text-sm ${isGood ? 'text-emerald-600' : 'text-amber-600'}`}>
+                              {st.percentage}%
+                            </span>
+                          </td>
+                          <td className="py-3.5 px-4 text-center">
+                            <span className={`px-2.5 py-1 rounded-full text-[11px] font-extrabold ${
+                              isGood 
+                                ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/60' 
+                                : 'bg-rose-50 text-rose-600 dark:bg-rose-950/60'
+                            }`}>
+                              {isGood ? 'Regular' : 'At Risk'}
+                            </span>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Tab 3: Register Logs */}
+        {activeTab === 'sessions' && (
+          <div className="space-y-4">
+            {sessions.length === 0 ? (
+              <div className="p-12 text-center bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl space-y-2">
+                <Calendar className="w-12 h-12 text-slate-300 mx-auto" />
+                <h4 className="text-base font-bold text-slate-800 dark:text-slate-200">No Attendance Sessions Logged Yet</h4>
+                <p className="text-xs text-slate-500">Click "Take Class Attendance" above to record a lecture register.</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {sessions.map((sess) => (
+                  <div key={sess._id} className="p-5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-xs space-y-3">
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <span className="text-xs font-bold text-emerald-600 uppercase tracking-wider">{sess.courseCode}</span>
+                        <h4 className="text-sm font-bold text-slate-900 dark:text-white">{sess.courseTitle}</h4>
+                        <span className="text-[11px] text-slate-400 block">{sess.date} • {sess.timeSlot}</span>
+                      </div>
+                      <span className="px-3 py-1 rounded-xl bg-slate-100 dark:bg-slate-800 font-bold text-xs text-slate-600 dark:text-slate-300">
+                        {sess.section}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between text-xs font-bold pt-2 border-t border-slate-100 dark:border-slate-800">
+                      <span className="text-slate-500">Marked by: {sess.markedBy}</span>
+                      <span className="text-emerald-600">{sess.records?.filter(r => r.status === 'Present').length || 0} / {sess.records?.length || 0} Present</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
         {/* Mark Attendance Modal */}
         <AnimatePresence>
           {showMarkModal && (
@@ -644,60 +760,70 @@ export default function AttendancePage() {
                     </div>
                   </div>
 
-                  {/* Student Roster Table */}
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                        {activeSection} Student Roster ({studentRoster.length})
-                      </h4>
-                      <span className="text-[11px] text-slate-400">Click badges to toggle status</span>
+                  {/* Student Roster Checkbox List */}
+                  <div className="space-y-3">
+                    <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-800 pb-2">
+                      <div>
+                        <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                          {activeSection} Student Roster ({studentRoster.length})
+                        </h4>
+                        <p className="text-[11px] text-slate-400">Check box for Present students. Unchecked boxes count as Absent.</p>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setAllStudentStatus('Present')}
+                          className="px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 text-[11px] font-bold hover:bg-emerald-100 transition-colors"
+                        >
+                          Check All (Present)
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setAllStudentStatus('Absent')}
+                          className="px-2.5 py-1 rounded-lg bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 text-[11px] font-bold hover:bg-rose-100 transition-colors"
+                        >
+                          Uncheck All (Absent)
+                        </button>
+                      </div>
                     </div>
 
                     <div className="divide-y divide-slate-100 dark:divide-slate-800 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
-                      {studentRoster.map((student, idx) => (
-                        <div key={student.studentId} className="p-3.5 bg-white dark:bg-slate-900 flex items-center justify-between">
-                          <div>
-                            <p className="text-xs font-bold text-slate-900 dark:text-white">{student.studentName}</p>
-                            <p className="text-[10px] text-slate-400">{student.studentId}</p>
-                          </div>
+                      {studentRoster.map((student, idx) => {
+                        const isPresent = student.status === 'Present';
+                        return (
+                          <div key={student.studentId} className="p-3.5 bg-white dark:bg-slate-900 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
+                            <label className="flex items-center gap-3.5 cursor-pointer select-none">
+                              <input
+                                type="checkbox"
+                                checked={isPresent}
+                                onChange={(e) => toggleStudentCheckbox(idx, e.target.checked)}
+                                className="w-5 h-5 accent-emerald-600 rounded cursor-pointer transition-transform active:scale-95"
+                              />
+                              <div>
+                                <p className={`text-xs font-bold transition-colors ${isPresent ? 'text-slate-900 dark:text-white' : 'text-slate-500 line-through'}`}>
+                                  {student.studentName}
+                                </p>
+                                <p className="text-[10px] text-slate-400 font-mono">{student.studentId}</p>
+                              </div>
+                            </label>
 
-                          <div className="flex items-center gap-1.5">
-                            <button
-                              type="button"
-                              onClick={() => toggleStudentStatus(idx, 'Present')}
-                              className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${
-                                student.status === 'Present' 
-                                  ? 'bg-emerald-500 text-white shadow-xs' 
-                                  : 'bg-slate-100 dark:bg-slate-800 text-slate-500 hover:bg-emerald-50'
-                              }`}
-                            >
-                              Present
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => toggleStudentStatus(idx, 'Absent')}
-                              className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${
-                                student.status === 'Absent' 
-                                  ? 'bg-rose-500 text-white shadow-xs' 
-                                  : 'bg-slate-100 dark:bg-slate-800 text-slate-500 hover:bg-rose-50'
-                              }`}
-                            >
-                              Absent
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => toggleStudentStatus(idx, 'Late')}
-                              className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${
-                                student.status === 'Late' 
-                                  ? 'bg-amber-500 text-white shadow-xs' 
-                                  : 'bg-slate-100 dark:bg-slate-800 text-slate-500 hover:bg-amber-50'
-                              }`}
-                            >
-                              Late
-                            </button>
+                            <div>
+                              {isPresent ? (
+                                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold text-xs">
+                                  <CheckCircle2 className="w-3.5 h-3.5" />
+                                  Present
+                                </span>
+                              ) : (
+                                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400 font-bold text-xs">
+                                  <XCircle className="w-3.5 h-3.5" />
+                                  Absent
+                                </span>
+                              )}
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   </div>
 
@@ -727,4 +853,3 @@ export default function AttendancePage() {
     </div>
   );
 }
-
