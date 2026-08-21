@@ -505,4 +505,62 @@ export async function deleteMarkRecord(markId) {
   return await safeFetchJson(`${apiBase}/marks/${markId}`, { method: 'DELETE' }, 'Failed to delete mark entry');
 }
 
+// ==================== EXAMS & ADMIT CARD API ====================
+export async function fetchExams(params = {}) {
+  try {
+    const apiBase = getApiBase();
+    const query = new URLSearchParams();
+    if (params.section && params.section !== 'All') query.append('section', params.section);
+    if (params.examType && params.examType !== 'All') query.append('examType', params.examType);
+    if (params.semester && params.semester !== 'All') query.append('semester', params.semester);
+
+    const queryString = query.toString() ? `?${query.toString()}` : '';
+    const data = await safeFetchJson(`${apiBase}/exams${queryString}`, { cache: 'no-store' }, 'Failed to fetch exam schedule');
+    return data.exams || [];
+  } catch (err) {
+    console.warn('[API Client] Exams fetch error:', err.message);
+    return [];
+  }
+}
+
+export async function fetchAdmitCard(studentId = '', email = '') {
+  try {
+    const apiBase = getApiBase();
+    const query = new URLSearchParams();
+    if (studentId) query.append('studentId', studentId);
+    if (email) query.append('email', email);
+
+    const queryString = query.toString() ? `?${query.toString()}` : '';
+    const data = await safeFetchJson(`${apiBase}/exams/admit-card${queryString}`, { cache: 'no-store' }, 'Failed to fetch admit card');
+    return data.admitCard || null;
+  } catch (err) {
+    console.warn('[API Client] Admit card fetch error:', err.message);
+    return null;
+  }
+}
+
+export async function createExam(examData) {
+  const apiBase = getApiBase();
+  return await safeFetchJson(`${apiBase}/exams`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(examData),
+  }, 'Failed to create exam schedule');
+}
+
+export async function updateExam(id, examData) {
+  const apiBase = getApiBase();
+  return await safeFetchJson(`${apiBase}/exams/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(examData),
+  }, 'Failed to update exam');
+}
+
+export async function deleteExam(id) {
+  const apiBase = getApiBase();
+  return await safeFetchJson(`${apiBase}/exams/${id}`, { method: 'DELETE' }, 'Failed to delete exam');
+}
+
+
 

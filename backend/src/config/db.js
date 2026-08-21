@@ -31,6 +31,7 @@ export const getAnnouncementsCollection = () => db?.collection('announcements');
 export const getSectionRequestsCollection = () => db?.collection('section_requests');
 export const getFeedbackCollection = () => db?.collection('feedback');
 export const getMarksCollection = () => db?.collection('marks');
+export const getExamsCollection = () => db?.collection('exams');
 
 async function seedInitialData() {
   if (!db) return;
@@ -548,6 +549,87 @@ async function seedInitialData() {
         }
       ]);
       console.log('[MongoDB Native Seed] Sample student marks records created.');
+    }
+
+    // Seed Exam Schedule
+    const examsCol = db.collection('exams');
+    const examsCount = await examsCol.countDocuments();
+    if (examsCount === 0) {
+      await examsCol.insertMany([
+        {
+          courseCode: 'CN',
+          courseTitle: 'Computer Networks',
+          examType: 'Midterm Exam',
+          semester: 'Spring 2026',
+          section: 'Section 9A',
+          department: 'Computer Science & Engineering',
+          examDate: '2026-09-05',
+          startTime: '10:00 AM',
+          endTime: '12:00 PM',
+          room: '413',
+          building: 'Academic Building 1',
+          invigilator: 'Dr. Sarah Abedin',
+          instructions: 'Bring your official Student ID card and non-programmable calculator. Mobile phones prohibited.',
+          publishedBy: 'Dr. Sarah Abedin',
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          courseCode: 'SD3',
+          courseTitle: 'Software Development 3',
+          examType: 'Midterm Exam',
+          semester: 'Spring 2026',
+          section: 'Section 9A',
+          department: 'Computer Science & Engineering',
+          examDate: '2026-09-07',
+          startTime: '02:00 PM',
+          endTime: '04:00 PM',
+          room: '407',
+          building: 'Academic Building 1',
+          invigilator: 'Prof. Alan Vance',
+          instructions: 'Practical lab exam environment setup will start 15 minutes before the exam time.',
+          publishedBy: 'Dr. Sarah Abedin',
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          courseCode: 'CSE-3101',
+          courseTitle: 'Database Management Systems',
+          examType: 'Midterm Exam',
+          semester: 'Spring 2026',
+          section: 'Section A',
+          department: 'Computer Science & Engineering',
+          examDate: '2026-09-09',
+          startTime: '10:00 AM',
+          endTime: '12:00 PM',
+          room: '302',
+          building: 'Main Building',
+          invigilator: 'Dr. Sarah Abedin',
+          instructions: 'Answer any 4 out of 5 questions. Direct ER-diagram drawing tools allowed.',
+          publishedBy: 'Dr. Sarah Abedin',
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          courseCode: 'CGMSD',
+          courseTitle: 'Computer Graphics & Multimedia System Design',
+          examType: 'Midterm Exam',
+          semester: 'Spring 2026',
+          section: 'Section 9A',
+          department: 'Computer Science & Engineering',
+          examDate: '2026-09-12',
+          startTime: '11:30 AM',
+          endTime: '01:30 PM',
+          room: '418',
+          building: 'Academic Building 1',
+          invigilator: 'Dr. Marcus Thorne',
+          instructions: 'Calculators and graphics cheat sheets provided in hall.',
+          publishedBy: 'Dr. Marcus Thorne',
+          createdAt: new Date(),
+          updatedAt: new Date()
+        }
+      ]);
+      console.log('[MongoDB Native Seed] Sample exam schedule records created.');
     }
   } catch (err) {
 

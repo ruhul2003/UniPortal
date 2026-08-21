@@ -14,6 +14,7 @@ import resourcesRouter from './routes/resources.js';
 import forumRouter from './routes/forum.js';
 import feedbackRouter from './routes/feedback.js';
 import marksRouter from './routes/marks.js';
+import examsRouter from './routes/exams.js';
 
 dotenv.config();
 
@@ -68,6 +69,7 @@ app.use('/api/resources', resourcesRouter);
 app.use('/api/forum', forumRouter);
 app.use('/api/feedback', feedbackRouter);
 app.use('/api/marks', marksRouter);
+app.use('/api/exams', examsRouter);
 
 // Root welcome endpoint
 app.get('/', (req, res) => {
