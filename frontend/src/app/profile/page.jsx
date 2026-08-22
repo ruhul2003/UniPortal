@@ -26,16 +26,6 @@ import { useAuth } from '../../context/AuthContext';
 import { updateUserProfile, fetchSectionRequests, createSectionRequest, cancelSectionRequest } from '../../lib/api';
 import { X } from 'lucide-react';
 
-// Curated avatar presets
-const PRESET_AVATARS = [
-  'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=150&auto=format&fit=crop&q=80'
-];
-
 export default function ProfilePage() {
   const { user, updateUser } = useAuth();
 
@@ -57,6 +47,33 @@ export default function ProfilePage() {
   const [saving, setSaving] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      setErrorMsg('Please select a valid image file (JPG, PNG, WEBP).');
+      return;
+    }
+
+    const MAX_SIZE_MB = 5;
+    const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
+    if (file.size > MAX_SIZE_BYTES) {
+      const sizeInMB = (file.size / (1024 * 1024)).toFixed(2);
+      setErrorMsg(`File size (${sizeInMB} MB) exceeds the 5 MB limit. Faculty must upload a real photo under 5 MB.`);
+      return;
+    }
+
+    setErrorMsg('');
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setAvatar(reader.result);
+      setSuccessMsg('Real photo loaded successfully! Click "Save Profile Changes" to save.');
+      setTimeout(() => setSuccessMsg(''), 4000);
+    };
+    reader.readAsDataURL(file);
+  };
 
   useEffect(() => {
     if (user) {
@@ -277,55 +294,68 @@ export default function ProfilePage() {
 
         <form onSubmit={handleSave} className="space-y-6">
           
-          {/* Section 1: Avatar Image Picker */}
+          {/* Section 1: Real Profile Image File Upload (< 5 MB) */}
           <div className="space-y-3">
             <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
               <Camera className="w-4 h-4 text-blue-500" />
-              Profile Avatar Image
+              Profile Avatar Image (Real Image File &lt; 5 MB)
             </label>
             
-            {/* Preset Avatars */}
-            <div className="flex flex-wrap items-center gap-3 pt-1">
-              {PRESET_AVATARS.map((url, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  onClick={() => setAvatar(url)}
-                  className={`w-12 h-12 rounded-2xl border-2 overflow-hidden transition-all relative ${
-                    avatar === url 
-                      ? 'border-blue-600 ring-2 ring-blue-500/20 scale-105 shadow-sm' 
-                      : 'border-slate-200 dark:border-slate-700 hover:border-slate-400'
-                  }`}
-                >
-                  <img src={url} alt={`Avatar ${i+1}`} className="w-full h-full object-cover" />
-                </button>
-              ))}
+            <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border-2 border-dashed border-slate-200 dark:border-slate-700 flex flex-col sm:flex-row items-center gap-5 transition-colors hover:border-blue-500/50">
+              {/* Preview Thumbnail */}
+              <div className="relative shrink-0">
+                <div className="w-20 h-20 rounded-2xl bg-slate-200 dark:bg-slate-700 border-2 border-slate-300 dark:border-slate-600 overflow-hidden flex items-center justify-center text-xl font-black text-slate-500 shadow-sm">
+                  {avatar ? (
+                    <img src={avatar} alt="Profile Preview" className="w-full h-full object-cover" />
+                  ) : (
+                    <span>{name ? name.charAt(0) : 'U'}</span>
+                  )}
+                </div>
+                {avatar && (
+                  <button
+                    type="button"
+                    onClick={() => setAvatar('')}
+                    className="absolute -top-2 -right-2 p-1 rounded-full bg-rose-600 text-white shadow-md hover:bg-rose-700 transition-colors"
+                    title="Remove Photo"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                )}
+              </div>
 
-              <button
-                type="button"
-                onClick={() => setAvatar('')}
-                className={`h-12 px-3 rounded-2xl border text-xs font-semibold transition-all ${
-                  !avatar 
-                    ? 'border-blue-600 bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400' 
-                    : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300'
-                }`}
-              >
-                Initials Circle
-              </button>
-            </div>
+              {/* Upload Action */}
+              <div className="space-y-2 text-center sm:text-left flex-1">
+                <div>
+                  <h4 className="text-xs font-extrabold text-slate-900 dark:text-white">
+                    {user.role === 'faculty' ? 'Faculty Official Real Photo Upload' : 'Upload Real Profile Photo'}
+                  </h4>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                    Faculty must upload a real photo. Accepted formats: JPG, PNG, WEBP. <strong className="text-blue-600 dark:text-blue-400 font-extrabold">Maximum size: 5 MB</strong>.
+                  </p>
+                </div>
 
-            {/* Custom Image URL Input */}
-            <div className="pt-2">
-              <label className="block text-[11px] text-slate-400 dark:text-slate-500 mb-1">Or enter Custom Image URL</label>
-              <div className="relative">
-                <ImageIcon className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                <input
-                  type="url"
-                  placeholder="https://example.com/my-photo.jpg"
-                  value={avatar}
-                  onChange={(e) => setAvatar(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800/50 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-                />
+                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 pt-1">
+                  <label className="cursor-pointer px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-md flex items-center gap-2 transition-all active:scale-95">
+                    <Camera className="w-4 h-4" />
+                    <span>Upload Real Image (&lt; 5 MB)</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      className="hidden"
+                    />
+                  </label>
+
+                  {avatar && (
+                    <button
+                      type="button"
+                      onClick={() => setAvatar('')}
+                      className="px-3 py-2 rounded-xl bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold hover:bg-slate-300 transition-colors"
+                    >
+                      Clear Image
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           </div>
