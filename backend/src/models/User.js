@@ -19,6 +19,7 @@ const userSchema = new mongoose.Schema(
     phone: { type: String, default: '' }, // Phone number e.g. +880 1711-234567
     isCR: { type: Boolean, default: false }, // Class Representative flag
     avatar: { type: String, default: '' },
+    dueAmount: { type: Number, default: 28000 }, // Overdue payment in BDT / Taka
   },
   { timestamps: true }
 );

@@ -562,5 +562,44 @@ export async function deleteExam(id) {
   return await safeFetchJson(`${apiBase}/exams/${id}`, { method: 'DELETE' }, 'Failed to delete exam');
 }
 
+// ==================== ONE-DAY PERMIT API ====================
+export async function fetchPermitRequests(params = {}) {
+  try {
+    const apiBase = getApiBase();
+    const query = new URLSearchParams();
+    if (params.studentId) query.append('studentId', params.studentId);
+    if (params.facultyId) query.append('facultyId', params.facultyId);
+    if (params.email) query.append('email', params.email);
+    if (params.role) query.append('role', params.role);
 
+    const queryString = query.toString() ? `?${query.toString()}` : '';
+    const data = await safeFetchJson(`${apiBase}/permits${queryString}`, { cache: 'no-store' }, 'Failed to fetch permit requests');
+    return data.permits || [];
+  } catch (err) {
+    console.warn('[API Client] Permit requests fetch error:', err.message);
+    return [];
+  }
+}
 
+export async function createPermitRequest(permitData) {
+  const apiBase = getApiBase();
+  return await safeFetchJson(`${apiBase}/permits`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(permitData),
+  }, 'Failed to submit permit application');
+}
+
+export async function updatePermitStatus(permitId, status, facultyComment = '') {
+  const apiBase = getApiBase();
+  return await safeFetchJson(`${apiBase}/permits/${permitId}/status`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ status, facultyComment }),
+  }, 'Failed to update permit status');
+}
+
+export async function deletePermitRequest(permitId) {
+  const apiBase = getApiBase();
+  return await safeFetchJson(`${apiBase}/permits/${permitId}`, { method: 'DELETE' }, 'Failed to delete permit request');
+}

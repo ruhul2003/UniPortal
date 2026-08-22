@@ -23,7 +23,8 @@ import {
   User,
   LogOut,
   Award,
-  FileText
+  FileText,
+  BadgeCheck
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -39,6 +40,7 @@ export default function Sidebar({ isOpen, onClose, isCollapsed, onToggleCollapse
   const academicsGroup = [
     { name: 'Attendance & Marks', href: '/marks', icon: Award },
     { name: 'Exam & Admit Card', href: '/exams', icon: FileText },
+    { name: 'One-Day Permits', href: '/permits', icon: BadgeCheck },
     { name: 'Assignments & Tasks', href: '/assignments', icon: ClipboardList },
     { name: 'Resource Locker', href: '/resources', icon: FolderOpen },
   ];
