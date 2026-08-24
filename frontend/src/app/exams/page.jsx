@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import AppLayout from '../../components/AppLayout';
 import { useAuth } from '../../context/AuthContext';
+import Link from 'next/link';
 import { 
   FileCheck2, 
   Calendar, 
@@ -21,12 +22,15 @@ import {
   Trash2, 
   Edit3, 
   CheckCircle2,
-  AlertTriangle
+  AlertTriangle,
+  ShieldCheck,
+  FolderOpen
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { fetchExams, fetchAdmitCard, deleteExam } from '../../lib/api';
 import AdmitCardModal from '../../components/AdmitCardModal';
 import AddExamModal from '../../components/AddExamModal';
+import UploadQuestionModal from '../../components/UploadQuestionModal';
 
 export default function ExamsPage() {
   const { user } = useAuth();
@@ -40,6 +44,7 @@ export default function ExamsPage() {
   const [isAdmitCardOpen, setIsAdmitCardOpen] = useState(false);
   const [admitCardData, setAdmitCardData] = useState(null);
   const [isAddExamOpen, setIsAddExamOpen] = useState(false);
+  const [isUploadQuestionOpen, setIsUploadQuestionOpen] = useState(false);
 
   // Countdown timer state
   const [nextExam, setNextExam] = useState(null);
@@ -194,6 +199,16 @@ export default function ExamsPage() {
 
                 {isFacultyOrAdmin && (
                   <button
+                    onClick={() => setIsUploadQuestionOpen(true)}
+                    className="px-5 py-3 rounded-2xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs transition-all shadow-md flex items-center gap-2 active:scale-95"
+                  >
+                    <ShieldCheck className="w-4 h-4 text-slate-950" />
+                    <span>Upload Past CT / Mid / Final Paper</span>
+                  </button>
+                )}
+
+                {isFacultyOrAdmin && (
+                  <button
                     onClick={() => setIsAddExamOpen(true)}
                     className="px-5 py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-extrabold text-xs border border-white/20 flex items-center gap-2 transition-all active:scale-95"
                   >
@@ -201,6 +216,14 @@ export default function ExamsPage() {
                     <span>Schedule New Exam</span>
                   </button>
                 )}
+
+                <Link
+                  href="/resources"
+                  className="px-5 py-3 rounded-2xl bg-slate-800/80 hover:bg-slate-800 text-slate-200 font-bold text-xs border border-slate-700/80 flex items-center gap-2 transition-all"
+                >
+                  <FolderOpen className="w-4 h-4 text-purple-400" />
+                  <span>Browse Question Bank</span>
+                </Link>
               </div>
             </div>
 
@@ -457,6 +480,12 @@ export default function ExamsPage() {
         isOpen={isAddExamOpen}
         onClose={() => setIsAddExamOpen(false)}
         onExamAdded={handleExamAdded}
+        currentUser={user}
+      />
+
+      <UploadQuestionModal
+        isOpen={isUploadQuestionOpen}
+        onClose={() => setIsUploadQuestionOpen(false)}
         currentUser={user}
       />
     </AppLayout>

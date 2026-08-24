@@ -15,11 +15,14 @@ router.get('/', async (req, res) => {
     const col = getCol();
     if (!col) return res.json({ success: true, count: 0, resources: [] });
 
-    const { category, courseCode, semester, search } = req.query;
+    const { category, courseCode, semester, search, examType } = req.query;
     let query = {};
 
     if (category && category !== 'All') {
       query.category = category;
+    }
+    if (examType && examType !== 'All') {
+      query.examType = examType;
     }
     if (courseCode) {
       query.courseCode = courseCode;
@@ -32,7 +35,8 @@ router.get('/', async (req, res) => {
         { title: { $regex: search, $options: 'i' } },
         { courseCode: { $regex: search, $options: 'i' } },
         { courseTitle: { $regex: search, $options: 'i' } },
-        { description: { $regex: search, $options: 'i' } }
+        { description: { $regex: search, $options: 'i' } },
+        { examType: { $regex: search, $options: 'i' } }
       ];
     }
 
@@ -50,11 +54,14 @@ router.post('/', async (req, res) => {
     const col = getCol();
     if (!col) return res.status(503).json({ success: false, error: 'Database unavailable' });
 
-    const { title, courseCode, courseTitle, semester, category, fileUrl, description, uploadedBy, uploadedByRole } = req.body;
+    const { title, courseCode, courseTitle, semester, category, examType, fileUrl, solutionUrl, description, uploadedBy, uploadedByRole, isOfficial } = req.body;
 
     if (!title || !courseCode || !fileUrl || !uploadedBy) {
       return res.status(400).json({ success: false, error: 'Title, Course Code, File URL, and Uploader name are required' });
     }
+
+    const role = uploadedByRole || 'student';
+    const officialStatus = isOfficial !== undefined ? isOfficial : (role === 'faculty' || role === 'admin');
 
     const newDoc = {
       title: title.trim(),
@@ -62,10 +69,13 @@ router.post('/', async (req, res) => {
       courseTitle: (courseTitle || courseCode).trim(),
       semester: semester || 'Spring 2026',
       category: category || 'Class Notes',
+      examType: examType ? examType.trim() : '',
       fileUrl: fileUrl.trim(),
+      solutionUrl: solutionUrl ? solutionUrl.trim() : '',
       description: description || '',
       uploadedBy: uploadedBy.trim(),
-      uploadedByRole: uploadedByRole || 'student',
+      uploadedByRole: role,
+      isOfficial: officialStatus,
       upvotes: [],
       downloadsCount: 0,
       createdAt: new Date(),
