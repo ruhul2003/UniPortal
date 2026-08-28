@@ -3,7 +3,7 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useAuth } from '../../context/AuthContext';
-import { fetchMarks, fetchStudentMarks, saveMarks, bulkPublishMarks, deleteMarkRecord } from '../../lib/api';
+import { fetchMarks, fetchStudentMarks, saveMarks, bulkPublishMarks, updateCTRule, deleteMarkRecord } from '../../lib/api';
 import MarksFormModal from '../../components/MarksFormModal';
 import AttendancePage from '../attendance/page';
 import {
@@ -25,7 +25,8 @@ import {
   BarChart3,
   Layers,
   ChevronRight,
-  Calendar
+  Calendar,
+  Calculator
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -40,6 +41,7 @@ function MarksPageContent() {
   // Filters state
   const [selectedSection, setSelectedSection] = useState('Section A');
   const [selectedCourse, setSelectedCourse] = useState('All');
+  const [selectedCTRule, setSelectedCTRule] = useState('best');
   const [searchQuery, setSearchQuery] = useState('');
 
   // Data state
@@ -96,6 +98,26 @@ function MarksPageContent() {
       loadData();
     } catch (err) {
       setError(err.message || 'Failed to update publication status');
+    }
+  };
+
+  // Bulk CT calculation rule update
+  const handleApplyCTRule = async (newRule) => {
+    setSelectedCTRule(newRule);
+    try {
+      setError('');
+      setSuccessMessage('');
+      const res = await updateCTRule({
+        courseCode: selectedCourse,
+        section: selectedSection,
+        ctRule: newRule
+      });
+      const ruleLabel = newRule === 'best' ? 'Best CT Score' : newRule === 'average' ? 'Average of CTs' : 'Sum of CTs';
+      setSuccessMessage(`CT calculation strategy updated to '${ruleLabel}' for all matching records (${res.modifiedCount || 0} updated)!`);
+      setTimeout(() => setSuccessMessage(''), 4000);
+      loadData();
+    } catch (err) {
+      setError(err.message || 'Failed to update CT calculation strategy');
     }
   };
 
@@ -344,6 +366,22 @@ function MarksPageContent() {
                     className="pl-9 pr-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 text-xs font-semibold outline-none focus:ring-2 focus:ring-indigo-500"
                   />
                 </div>
+
+                {/* CT Calculation Strategy Selector */}
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800/80">
+                  <Calculator className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                  <span className="text-xs font-bold text-indigo-900 dark:text-indigo-200">CT Strategy:</span>
+                  <select
+                    value={selectedCTRule}
+                    onChange={(e) => handleApplyCTRule(e.target.value)}
+                    className="px-2 py-1 rounded-lg border border-indigo-300 dark:border-indigo-700 bg-white dark:bg-slate-800 text-indigo-950 dark:text-white text-xs font-bold outline-none cursor-pointer focus:ring-2 focus:ring-indigo-500"
+                    title="Change CT Calculation Strategy for this Section/Course"
+                  >
+                    <option value="best">⚡ Best CT Score (Max)</option>
+                    <option value="average">📊 Average of CTs</option>
+                    <option value="sum">➕ Sum of CTs</option>
+                  </select>
+                </div>
               </div>
 
               {/* Right Action buttons */}
@@ -386,7 +424,7 @@ function MarksPageContent() {
                   Student Marks Sheet ({filteredMarks.length})
                 </h3>
                 <p className="text-xs text-slate-500 dark:text-slate-400">
-                  Showing scores for CT1 (15), CT2 (15), Mid (25), Final (40), Assignment (10), Attendance (10)
+                  Showing scores for CT1 (15), CT2 (15), CT Contribution (Best / Average / Sum), Mid (25), Final (40), Assignment (10), Attendance (10)
                 </p>
               </div>
 
@@ -418,6 +456,7 @@ function MarksPageContent() {
                       <th className="py-3.5 px-4">Course</th>
                       <th className="py-3.5 px-3 text-center">CT 1 <span className="text-[10px] font-normal text-slate-400">(15)</span></th>
                       <th className="py-3.5 px-3 text-center">CT 2 <span className="text-[10px] font-normal text-slate-400">(15)</span></th>
+                      <th className="py-3.5 px-3 text-center">CT Mark <span className="text-[10px] font-normal text-slate-400">(Calculated)</span></th>
                       <th className="py-3.5 px-3 text-center">Mid <span className="text-[10px] font-normal text-slate-400">(25)</span></th>
                       <th className="py-3.5 px-3 text-center">Final <span className="text-[10px] font-normal text-slate-400">(40)</span></th>
                       <th className="py-3.5 px-3 text-center">Assign <span className="text-[10px] font-normal text-slate-400">(10)</span></th>
@@ -429,7 +468,18 @@ function MarksPageContent() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60 text-slate-700 dark:text-slate-300 font-medium">
-                    {filteredMarks.map((row) => (
+                    {filteredMarks.map((row) => {
+                      const effCT = row.effectiveCT !== undefined
+                        ? row.effectiveCT
+                        : row.ctRule === 'average'
+                          ? ((row.ct1 || 0) + (row.ct2 || 0)) / 2
+                          : row.ctRule === 'sum'
+                            ? (row.ct1 || 0) + (row.ct2 || 0)
+                            : Math.max(row.ct1 || 0, row.ct2 || 0);
+
+                      const ruleName = row.ctRule === 'average' ? 'Avg' : row.ctRule === 'sum' ? 'Sum' : 'Best';
+
+                      return (
                       <tr key={row._id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors">
                         <td className="py-3.5 px-4">
                           <div className="font-bold text-slate-900 dark:text-white">{row.studentName || 'Student'}</div>
@@ -446,6 +496,13 @@ function MarksPageContent() {
 
                         <td className="py-3.5 px-3 text-center font-semibold text-indigo-600 dark:text-indigo-400">
                           {row.ct2 ?? 0}
+                        </td>
+
+                        <td className="py-3.5 px-3 text-center">
+                          <span className="font-black text-indigo-600 dark:text-indigo-400 block">{effCT}</span>
+                          <span className="text-[9px] px-1.5 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-300 font-bold uppercase">
+                            {ruleName}
+                          </span>
                         </td>
 
                         <td className="py-3.5 px-3 text-center font-semibold text-purple-600 dark:text-purple-400">
@@ -514,7 +571,8 @@ function MarksPageContent() {
                           </div>
                         </td>
                       </tr>
-                    ))}
+                    );
+                    })}
                   </tbody>
                 </table>
               </div>
@@ -660,6 +718,18 @@ function MarksPageContent() {
                         <span className="text-sm font-black text-amber-600 dark:text-amber-400">{course.attendence ?? 0}</span>
                         <span className="text-[9px] text-slate-400 block">/ 10</span>
                       </div>
+                    </div>
+
+                    {/* CT Calculation Strategy Badge for Students */}
+                    <div className="mt-3 p-2.5 rounded-xl bg-indigo-50/60 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-800/60 flex items-center justify-between text-xs">
+                      <span className="font-semibold text-indigo-700 dark:text-indigo-300 flex items-center gap-1.5">
+                        <Calculator className="w-3.5 h-3.5 text-indigo-500" />
+                        CT Calculation Strategy:
+                      </span>
+                      <span className="font-bold text-indigo-900 dark:text-indigo-200">
+                        {course.ctRule === 'average' ? 'Average of CTs' : course.ctRule === 'sum' ? 'Sum of CTs' : 'Best CT Score'} 
+                        ({course.effectiveCT !== undefined ? `${course.effectiveCT} marks` : `${course.ctRule === 'average' ? ((course.ct1||0)+(course.ct2||0))/2 : course.ctRule === 'sum' ? (course.ct1||0)+(course.ct2||0) : Math.max(course.ct1||0, course.ct2||0)} marks`})
+                      </span>
                     </div>
                   </div>
 

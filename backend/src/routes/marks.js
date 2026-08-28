@@ -10,7 +10,7 @@ function getCol() {
 }
 
 // Helper to calculate total, grade, and gpa
-export function calculateGradeAndGPA(ct1 = 0, ct2 = 0, mid = 0, final = 0, assignment = 0, attendence = 0) {
+export function calculateGradeAndGPA(ct1 = 0, ct2 = 0, mid = 0, final = 0, assignment = 0, attendence = 0, ctRule = 'best') {
   const c1 = Number(ct1) || 0;
   const c2 = Number(ct2) || 0;
   const m = Number(mid) || 0;
@@ -18,7 +18,17 @@ export function calculateGradeAndGPA(ct1 = 0, ct2 = 0, mid = 0, final = 0, assig
   const a = Number(assignment) || 0;
   const att = Number(attendence) || 0;
 
-  const total = Math.min(100, Math.max(0, c1 + c2 + m + f + a + att));
+  let effectiveCT = 0;
+  if (ctRule === 'best') {
+    effectiveCT = Math.max(c1, c2);
+  } else if (ctRule === 'average') {
+    effectiveCT = (c1 + c2) / 2;
+  } else {
+    // 'sum' or default
+    effectiveCT = c1 + c2;
+  }
+
+  const total = Math.min(100, Math.max(0, Math.round((effectiveCT + m + f + a + att) * 100) / 100));
 
   let letterGrade = 'F';
   let gpa = 0.00;
@@ -34,7 +44,7 @@ export function calculateGradeAndGPA(ct1 = 0, ct2 = 0, mid = 0, final = 0, assig
   else if (total >= 40) { letterGrade = 'D'; gpa = 2.00; }
   else { letterGrade = 'F'; gpa = 0.00; }
 
-  return { total, letterGrade, gpa };
+  return { total, letterGrade, gpa, effectiveCT };
 }
 
 // GET /api/marks - Fetch marks list filtered by section, courseCode, studentId, or published
@@ -103,6 +113,7 @@ router.post('/', async (req, res) => {
         final = 0,
         assignment = 0,
         attendence = 0,
+        ctRule = 'best',
         published = false,
         publishedBy = 'Faculty',
         remarks = ''
@@ -112,7 +123,7 @@ router.post('/', async (req, res) => {
         continue;
       }
 
-      const { total, letterGrade, gpa } = calculateGradeAndGPA(ct1, ct2, mid, final, assignment, attendence);
+      const { total, letterGrade, gpa, effectiveCT } = calculateGradeAndGPA(ct1, ct2, mid, final, assignment, attendence, ctRule);
 
       const docToSave = {
         studentId: studentId.trim(),
@@ -128,6 +139,8 @@ router.post('/', async (req, res) => {
         final: Number(final) || 0,
         assignment: Number(assignment) || 0,
         attendence: Number(attendence) || 0,
+        ctRule: ctRule || 'best',
+        effectiveCT,
         totalMarks: total,
         letterGrade,
         gpa,
@@ -158,6 +171,52 @@ router.post('/', async (req, res) => {
   } catch (error) {
     console.error('Error saving marks:', error);
     res.status(500).json({ success: false, error: 'Failed to save marks' });
+  }
+});
+
+// POST /api/marks/update-rule - Bulk update CT calculation rule for section/course
+router.post('/update-rule', async (req, res) => {
+  try {
+    const col = getCol();
+    if (!col) return res.status(503).json({ success: false, error: 'Database unavailable' });
+
+    const { courseCode, section, ctRule = 'best' } = req.body;
+
+    let filter = {};
+    if (courseCode && courseCode !== 'All') filter.courseCode = courseCode;
+    if (section && section !== 'All') filter.section = section;
+
+    const records = await col.find(filter).toArray();
+    let modifiedCount = 0;
+
+    for (const doc of records) {
+      const { ct1 = 0, ct2 = 0, mid = 0, final = 0, assignment = 0, attendence = 0 } = doc;
+      const { total, letterGrade, gpa, effectiveCT } = calculateGradeAndGPA(ct1, ct2, mid, final, assignment, attendence, ctRule);
+
+      await col.updateOne(
+        { _id: doc._id },
+        {
+          $set: {
+            ctRule,
+            effectiveCT,
+            totalMarks: total,
+            letterGrade,
+            gpa,
+            updatedAt: new Date()
+          }
+        }
+      );
+      modifiedCount++;
+    }
+
+    res.json({
+      success: true,
+      message: `CT Rule updated to '${ctRule}' for ${modifiedCount} student records`,
+      modifiedCount
+    });
+  } catch (error) {
+    console.error('Error updating CT rule:', error);
+    res.status(500).json({ success: false, error: 'Failed to update CT calculation rule' });
   }
 });
 
@@ -206,8 +265,8 @@ router.put('/:id', async (req, res) => {
       return res.status(400).json({ success: false, error: 'Invalid ID format' });
     }
 
-    const { ct1 = 0, ct2 = 0, mid = 0, final = 0, assignment = 0, attendence = 0, published, remarks } = req.body;
-    const { total, letterGrade, gpa } = calculateGradeAndGPA(ct1, ct2, mid, final, assignment, attendence);
+    const { ct1 = 0, ct2 = 0, mid = 0, final = 0, assignment = 0, attendence = 0, ctRule = 'best', published, remarks } = req.body;
+    const { total, letterGrade, gpa, effectiveCT } = calculateGradeAndGPA(ct1, ct2, mid, final, assignment, attendence, ctRule);
 
     const updateFields = {
       ct1: Number(ct1) || 0,
@@ -216,6 +275,8 @@ router.put('/:id', async (req, res) => {
       final: Number(final) || 0,
       assignment: Number(assignment) || 0,
       attendence: Number(attendence) || 0,
+      ctRule: ctRule || 'best',
+      effectiveCT,
       totalMarks: total,
       letterGrade,
       gpa,

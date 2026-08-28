@@ -20,6 +20,7 @@ export default function MarksFormModal({ isOpen, onClose, initialData, onSave, i
     final: 0,
     assignment: 0,
     attendence: 0,
+    ctRule: 'best',
     published: false,
     remarks: ''
   });
@@ -44,6 +45,7 @@ export default function MarksFormModal({ isOpen, onClose, initialData, onSave, i
         final: initialData.final !== undefined ? initialData.final : 0,
         assignment: initialData.assignment !== undefined ? initialData.assignment : 0,
         attendence: initialData.attendence !== undefined ? initialData.attendence : 0,
+        ctRule: initialData.ctRule || 'best',
         published: initialData.published !== undefined ? initialData.published : false,
         remarks: initialData.remarks || ''
       });
@@ -63,6 +65,7 @@ export default function MarksFormModal({ isOpen, onClose, initialData, onSave, i
         final: 0,
         assignment: 0,
         attendence: 0,
+        ctRule: 'best',
         published: false,
         remarks: ''
       });
@@ -78,8 +81,18 @@ export default function MarksFormModal({ isOpen, onClose, initialData, onSave, i
     const f = Number(formData.final) || 0;
     const a = Number(formData.assignment) || 0;
     const att = Number(formData.attendence) || 0;
+    const rule = formData.ctRule || 'best';
 
-    const total = Math.min(100, Math.max(0, c1 + c2 + m + f + a + att));
+    let effectiveCT = 0;
+    if (rule === 'best') {
+      effectiveCT = Math.max(c1, c2);
+    } else if (rule === 'average') {
+      effectiveCT = (c1 + c2) / 2;
+    } else {
+      effectiveCT = c1 + c2;
+    }
+
+    const total = Math.min(100, Math.max(0, Math.round((effectiveCT + m + f + a + att) * 100) / 100));
 
     let letterGrade = 'F';
     let gpa = 0.00;
@@ -95,10 +108,10 @@ export default function MarksFormModal({ isOpen, onClose, initialData, onSave, i
     else if (total >= 40) { letterGrade = 'D'; gpa = 2.00; }
     else { letterGrade = 'F'; gpa = 0.00; }
 
-    return { total, letterGrade, gpa };
+    return { total, letterGrade, gpa, effectiveCT };
   };
 
-  const { total, letterGrade, gpa } = computeStats();
+  const { total, letterGrade, gpa, effectiveCT } = computeStats();
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -131,6 +144,7 @@ export default function MarksFormModal({ isOpen, onClose, initialData, onSave, i
         final: Number(formData.final) || 0,
         assignment: Number(formData.assignment) || 0,
         attendence: Number(formData.attendence) || 0,
+        ctRule: formData.ctRule || 'best',
         published: forcePublish !== null ? forcePublish : formData.published
       };
 
@@ -252,10 +266,27 @@ export default function MarksFormModal({ isOpen, onClose, initialData, onSave, i
 
             {/* Marks Input Grid: CT1, CT2, Mid, Final, Assignment, Attendance */}
             <div>
-              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-3 flex items-center gap-2">
-                <Calculator className="w-4 h-4 text-indigo-500" />
-                Assessment Component Scores
-              </h4>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-2">
+                  <Calculator className="w-4 h-4 text-indigo-500" />
+                  Assessment Component Scores
+                </h4>
+
+                {/* CT Calculation Rule Selector */}
+                <div className="flex items-center gap-2 bg-indigo-50 dark:bg-indigo-950/40 px-3 py-1.5 rounded-xl border border-indigo-200 dark:border-indigo-800/60">
+                  <span className="text-[11px] font-bold text-indigo-700 dark:text-indigo-300">CT Rule:</span>
+                  <select
+                    name="ctRule"
+                    value={formData.ctRule}
+                    onChange={handleChange}
+                    className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-xs font-bold px-2 py-1 rounded-lg border border-indigo-200 dark:border-indigo-700 outline-none cursor-pointer focus:ring-1 focus:ring-indigo-500"
+                  >
+                    <option value="best">Best CT (Highest score)</option>
+                    <option value="average">Average of CTs ((CT1 + CT2) / 2)</option>
+                    <option value="sum">Sum of CTs (CT1 + CT2)</option>
+                  </select>
+                </div>
+              </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80">
                 {/* CT1 */}
@@ -363,13 +394,16 @@ export default function MarksFormModal({ isOpen, onClose, initialData, onSave, i
             </div>
 
             {/* Total / Grade Preview Card */}
-            <div className="p-4 rounded-2xl bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-blue-500/10 border border-indigo-500/20 flex items-center justify-between">
+            <div className="p-4 rounded-2xl bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-blue-500/10 border border-indigo-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
                 <span className="text-xs uppercase font-bold tracking-wider text-slate-500 dark:text-slate-400 block">
                   Calculated Total Marks
                 </span>
                 <span className="text-2xl font-black text-slate-900 dark:text-white">
                   {total} <span className="text-sm font-semibold text-slate-500">/ 100</span>
+                </span>
+                <span className="text-[11px] font-semibold text-indigo-600 dark:text-indigo-400 block mt-0.5">
+                  CT Contribution: {effectiveCT} marks ({formData.ctRule === 'best' ? 'Best CT' : formData.ctRule === 'average' ? 'Average' : 'Sum'})
                 </span>
               </div>
 

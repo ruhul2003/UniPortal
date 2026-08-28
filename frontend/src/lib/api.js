@@ -500,6 +500,15 @@ export async function bulkPublishMarks(publishData) {
   }, 'Failed to update publication status');
 }
 
+export async function updateCTRule(ruleData) {
+  const apiBase = getApiBase();
+  return await safeFetchJson(`${apiBase}/marks/update-rule`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(ruleData),
+  }, 'Failed to update CT calculation rule');
+}
+
 export async function deleteMarkRecord(markId) {
   const apiBase = getApiBase();
   return await safeFetchJson(`${apiBase}/marks/${markId}`, { method: 'DELETE' }, 'Failed to delete mark entry');
