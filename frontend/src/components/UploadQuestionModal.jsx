@@ -158,6 +158,7 @@ export default function UploadQuestionModal({ isOpen, onClose, onQuestionUploade
 
             <button
               onClick={onClose}
+              aria-label="Close question paper upload modal"
               className="p-2 rounded-xl text-slate-300 hover:text-white hover:bg-white/10 transition-colors z-10"
             >
               <X className="w-5 h-5" />
