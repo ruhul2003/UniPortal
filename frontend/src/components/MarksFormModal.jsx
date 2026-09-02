@@ -394,7 +394,7 @@ export default function MarksFormModal({ isOpen, onClose, initialData, onSave, i
             </div>
 
             {/* Total / Grade Preview Card */}
-            <div className="p-4 rounded-2xl bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-blue-500/10 border border-indigo-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="p-4 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
                 <span className="text-xs uppercase font-bold tracking-wider text-slate-500 dark:text-slate-400 block">
                   Calculated Total Marks

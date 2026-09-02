@@ -66,7 +66,7 @@ export default function InitialLoader({ onComplete, isFinished = false, minDurat
       }`}
     >
       {/* Dynamic Ambient Background Glows */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-tr from-blue-600/20 via-indigo-600/15 to-cyan-500/20 blur-[130px] rounded-full pointer-events-none animate-pulse-glow" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-600/20 blur-[130px] rounded-full pointer-events-none animate-pulse-glow" />
       <div className="absolute top-1/4 right-1/4 w-[350px] h-[350px] bg-indigo-500/10 blur-[100px] rounded-full pointer-events-none animate-float" />
       
       {/* Background Dot Grid */}
@@ -82,7 +82,7 @@ export default function InitialLoader({ onComplete, isFinished = false, minDurat
           <div className="absolute w-28 h-28 rounded-full border border-indigo-500/20 animate-ping opacity-40" style={{ animationDuration: '3s' }} />
           
           {/* Central Logo Box */}
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-500 p-0.5 shadow-2xl shadow-blue-500/30">
+          <div className="w-16 h-16 rounded-2xl bg-blue-600 p-0.5 shadow-2xl shadow-blue-500/30">
             <div className="w-full h-full bg-slate-900 rounded-[14px] flex items-center justify-center">
               <svg
                 className="w-9 h-9 text-blue-400 animate-pulse"
@@ -116,7 +116,7 @@ export default function InitialLoader({ onComplete, isFinished = false, minDurat
 
         {/* Brand Name & Subtitle */}
         <h1 className="text-3xl font-extrabold tracking-tight text-white mb-1">
-          Uni<span className="bg-gradient-to-r from-blue-400 via-indigo-300 to-cyan-400 bg-clip-text text-transparent">Portal</span>
+          Uni<span className="text-blue-400">Portal</span>
         </h1>
         <p className="text-xs tracking-widest text-slate-400 uppercase font-medium mb-8">
           Academic Management System
@@ -126,11 +126,11 @@ export default function InitialLoader({ onComplete, isFinished = false, minDurat
         <div className="w-full bg-slate-800/80 backdrop-blur-md border border-slate-700/50 rounded-full h-2.5 p-0.5 mb-4 shadow-inner relative overflow-hidden">
           {/* Animated Fill Bar */}
           <div
-            className="h-full bg-gradient-to-r from-blue-500 via-indigo-500 to-cyan-400 rounded-full transition-all duration-200 ease-out relative overflow-hidden"
+            className="h-full bg-blue-500 rounded-full transition-all duration-200 ease-out relative overflow-hidden"
             style={{ width: `${progress}%` }}
           >
             {/* Shimmer Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent animate-shimmer" />
+            <div className="absolute inset-0 bg-white/20 animate-shimmer" />
           </div>
         </div>
 

@@ -93,7 +93,7 @@ export default function AdmitCardModal({ isOpen, onClose, admitCardData, user })
             className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-6 print:p-6 print:overflow-visible text-slate-900 dark:text-slate-100"
           >
             {/* Header / Seal Banner */}
-            <div className="relative p-6 rounded-2xl bg-gradient-to-r from-slate-900 via-blue-950 to-indigo-950 text-white overflow-hidden shadow-lg border border-slate-800 print:bg-none print:text-black print:border-b-2 print:border-slate-900 print:p-0 print:pb-4">
+            <div className="relative p-6 rounded-2xl bg-slate-900 text-white overflow-hidden shadow-lg border border-slate-800 print:bg-none print:text-black print:border-b-2 print:border-slate-900 print:p-0 print:pb-4">
               <div className="flex flex-col sm:flex-row items-center justify-between gap-4 relative z-10">
                 <div className="flex items-center gap-4 text-center sm:text-left">
                   <div className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center text-blue-400 border border-white/20 shrink-0 print:border-black print:text-black">
@@ -124,7 +124,7 @@ export default function AdmitCardModal({ isOpen, onClose, admitCardData, user })
             {/* Student Info & Credentials */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 print:bg-white print:border-black">
               <div className="flex items-center justify-center md:justify-start gap-4 md:col-span-3">
-                <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 text-white font-black text-2xl flex items-center justify-center shadow-md overflow-hidden shrink-0 border-2 border-white dark:border-slate-800">
+                <div className="w-20 h-20 rounded-2xl bg-blue-600 text-white font-black text-2xl flex items-center justify-center shadow-md overflow-hidden shrink-0 border-2 border-white dark:border-slate-800">
                   {avatar ? (
                     <img src={avatar} alt={studentName} className="w-full h-full object-cover" />
                   ) : (

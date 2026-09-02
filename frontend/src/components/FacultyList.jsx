@@ -119,7 +119,7 @@ export default function FacultyList() {
   return (
     <section className="space-y-8 py-4">
       {/* Header Banner */}
-      <div className="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 rounded-3xl p-6 sm:p-10 text-white shadow-2xl relative overflow-hidden">
+      <div className="bg-slate-900 rounded-3xl p-6 sm:p-10 text-white shadow-2xl relative overflow-hidden">
         <div className="absolute right-0 top-0 translate-x-12 -translate-y-12 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="relative z-10 space-y-3 max-w-2xl">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 text-xs font-bold uppercase tracking-wider">
@@ -340,7 +340,7 @@ function FacultyCard({ faculty, onFeedbackClick }) {
       className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-100 dark:border-slate-800 shadow-xl flex flex-col justify-between relative overflow-hidden group hover:border-blue-200 dark:hover:border-blue-900/60 transition-all"
     >
       {/* Background Subtle Accent */}
-      <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-blue-500/5 to-indigo-500/10 rounded-bl-full pointer-events-none group-hover:scale-110 transition-transform" />
+      <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-bl-full pointer-events-none group-hover:scale-110 transition-transform" />
 
       <div>
         {/* Top Avatar & Acronym Badge */}
@@ -354,7 +354,7 @@ function FacultyCard({ faculty, onFeedbackClick }) {
                   className="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300"
                 />
               ) : (
-                <div className="w-full h-full rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-white font-extrabold text-xl">
+                <div className="w-full h-full rounded-xl bg-blue-600 flex items-center justify-center text-white font-extrabold text-xl">
                   {faculty.name ? faculty.name.charAt(0) : 'F'}
                 </div>
               )}

@@ -222,7 +222,7 @@ export default function PermitsPage() {
     <AppLayout title="One-Day Academic Permit System">
       <div className="max-w-7xl mx-auto space-y-8 pb-12">
         {/* Top Hero Banner */}
-        <div className="relative rounded-3xl bg-gradient-to-r from-emerald-950 via-teal-950 to-slate-900 p-6 sm:p-8 text-white overflow-hidden shadow-2xl border border-emerald-900/60">
+        <div className="relative rounded-3xl bg-emerald-950 p-6 sm:p-8 text-white overflow-hidden shadow-2xl border border-emerald-900/60">
           <div className="absolute -right-10 -bottom-10 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
 
           <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
@@ -244,7 +244,7 @@ export default function PermitsPage() {
                   {isEligible ? (
                     <button
                       onClick={() => setIsApplyModalOpen(true)}
-                      className="px-5 py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-extrabold text-xs shadow-lg shadow-emerald-500/25 flex items-center gap-2.5 transition-all active:scale-95"
+                      className="px-5 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-lg shadow-emerald-500/25 flex items-center gap-2.5 transition-all active:scale-95"
                     >
                       <Plus className="w-4 h-4" />
                       <span>Apply for One-Day Permit</span>
@@ -413,7 +413,7 @@ export default function PermitsPage() {
                     {/* Applicant & Faculty info */}
                     <div className="space-y-2">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-600 to-teal-700 text-white font-extrabold flex items-center justify-center text-sm shadow-sm shrink-0">
+                        <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white font-extrabold flex items-center justify-center text-sm shadow-sm shrink-0">
                           {permit.studentName ? permit.studentName.charAt(0) : 'S'}
                         </div>
                         <div>
@@ -463,7 +463,7 @@ export default function PermitsPage() {
                     {permit.status === 'Approved' ? (
                       <button
                         onClick={() => handleViewSlip(permit)}
-                        className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-extrabold text-xs shadow-md shadow-emerald-500/20 flex items-center justify-center gap-2 transition-all active:scale-95"
+                        className="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-md shadow-emerald-500/20 flex items-center justify-center gap-2 transition-all active:scale-95"
                       >
                         <Printer className="w-3.5 h-3.5" />
                         <span>Download Permission Slip (PDF)</span>
@@ -528,7 +528,7 @@ export default function PermitsPage() {
               exit={{ opacity: 0, scale: 0.95 }}
               className="w-full max-w-lg bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden"
             >
-              <div className="p-6 bg-gradient-to-r from-emerald-950 to-teal-900 text-white flex items-center justify-between">
+              <div className="p-6 bg-emerald-950 text-white flex items-center justify-between">
                 <div>
                   <h3 className="font-black text-lg">Apply for One-Day Academic Permit</h3>
                   <p className="text-xs text-emerald-200">Special entry permit for tuition dues &gt; ৳25,000 Taka</p>

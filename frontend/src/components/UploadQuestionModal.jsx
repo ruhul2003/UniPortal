@@ -133,7 +133,7 @@ export default function UploadQuestionModal({ isOpen, onClose, onQuestionUploade
           className="w-full max-w-2xl bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden my-8"
         >
           {/* Modal Header */}
-          <div className="p-6 bg-gradient-to-r from-indigo-900 via-purple-900 to-slate-900 text-white flex items-center justify-between relative overflow-hidden">
+          <div className="p-6 bg-indigo-900 text-white flex items-center justify-between relative overflow-hidden">
             <div className="absolute -right-6 -bottom-6 w-36 h-36 bg-purple-500/20 rounded-full blur-2xl pointer-events-none" />
 
             <div className="flex items-center gap-3 z-10">
@@ -344,7 +344,7 @@ export default function UploadQuestionModal({ isOpen, onClose, onQuestionUploade
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-6 py-2.5 rounded-2xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white text-xs font-extrabold shadow-lg shadow-purple-500/25 transition-all flex items-center gap-2"
+                  className="px-6 py-2.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-extrabold shadow-lg shadow-purple-500/25 transition-all flex items-center gap-2"
                 >
                   <Upload className="w-4 h-4" />
                   <span>{isSubmitting ? 'Publishing...' : 'Publish Question Paper'}</span>

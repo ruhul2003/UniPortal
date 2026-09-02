@@ -183,7 +183,7 @@ export default function ForumPage() {
       <div className="max-w-7xl mx-auto space-y-8">
         
         {/* Header Banner */}
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-teal-600 via-emerald-600 to-cyan-700 p-6 sm:p-10 text-white shadow-xl">
+        <div className="relative overflow-hidden rounded-3xl bg-teal-700 p-6 sm:p-10 text-white shadow-xl">
           <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-bold uppercase tracking-wider mb-3">

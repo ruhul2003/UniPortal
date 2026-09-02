@@ -206,7 +206,7 @@ export default function Sidebar({ isOpen, onClose, isCollapsed, onToggleCollapse
           <div className="p-3 border-t border-slate-100 dark:border-slate-800/80 shrink-0">
             <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-700/60 flex items-center justify-between">
               <div className="flex items-center gap-2.5 overflow-hidden">
-                <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white font-extrabold flex items-center justify-center text-xs shrink-0 shadow-sm">
+                <div className="w-8 h-8 rounded-xl bg-blue-600 text-white font-extrabold flex items-center justify-center text-xs shrink-0 shadow-sm">
                   {user.avatar ? (
                     <img src={user.avatar} alt={user.name} className="w-full h-full object-cover rounded-xl" />
                   ) : (

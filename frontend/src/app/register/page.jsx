@@ -86,7 +86,7 @@ export default function RegisterPage() {
       <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 rounded-3xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xl overflow-hidden transition-colors">
         
         {/* Left Hero / Brand Panel (Visible on lg screens) */}
-        <div className="lg:col-span-5 bg-gradient-to-br from-slate-900 via-slate-850 to-indigo-950 p-8 lg:p-10 text-white flex flex-col justify-between relative overflow-hidden">
+        <div className="lg:col-span-5 bg-slate-900 p-8 lg:p-10 text-white flex flex-col justify-between relative overflow-hidden">
           {/* Subtle Ambient Glow */}
           <div className="absolute -top-24 -left-24 w-72 h-72 bg-blue-600/20 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute -bottom-24 -right-24 w-72 h-72 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none" />

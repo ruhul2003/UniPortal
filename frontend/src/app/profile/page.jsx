@@ -197,7 +197,7 @@ export default function ProfilePage() {
     <div className="max-w-4xl mx-auto space-y-8">
       
       {/* Header Banner */}
-      <div className="bg-gradient-to-br from-slate-900 via-slate-850 to-blue-950 p-8 rounded-3xl text-white shadow-xl relative overflow-hidden">
+      <div className="bg-slate-900 p-8 rounded-3xl text-white shadow-xl relative overflow-hidden">
         <div className="absolute -right-20 -top-20 w-72 h-72 rounded-full bg-blue-600/20 blur-3xl pointer-events-none" />
         
         <div className="flex flex-col sm:flex-row items-center gap-6 relative z-10">
@@ -362,7 +362,7 @@ export default function ProfilePage() {
 
           {/* Section 2: Student Section Lock & Transfer Application Workflow (Only for Students) */}
           {user.role === 'student' && (
-            <div className="p-5 rounded-2xl bg-gradient-to-br from-indigo-50/80 via-blue-50/40 to-slate-50 dark:from-indigo-950/40 dark:via-blue-950/20 dark:to-slate-900 border border-indigo-100 dark:border-indigo-800/60 space-y-4 shadow-sm">
+            <div className="p-5 rounded-2xl bg-indigo-50/80 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-800/60 space-y-4 shadow-sm">
               <div className="flex items-center justify-between flex-wrap gap-2">
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-sm">

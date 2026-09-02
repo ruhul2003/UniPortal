@@ -88,7 +88,7 @@ export default function RoutineTable({ routines, onDelete, onEdit }) {
     <div className="space-y-6">
       {/* Today Banner summary */}
       {todayName && (
-        <div className="bg-gradient-to-r from-indigo-900 via-indigo-800 to-slate-900 rounded-2xl p-4 sm:p-5 text-white shadow-lg relative overflow-hidden flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="bg-indigo-900 rounded-2xl p-4 sm:p-5 text-white shadow-lg relative overflow-hidden flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="absolute -right-10 -bottom-10 w-40 h-40 bg-indigo-500/20 rounded-full blur-2xl pointer-events-none" />
           <div className="relative z-10">
             <div className="flex items-center gap-2 mb-1">
@@ -217,7 +217,7 @@ export default function RoutineTable({ routines, onDelete, onEdit }) {
                   transition={{ duration: 0.2, delay: index * 0.04 }}
                   className={`rounded-2xl p-5 transition-all duration-200 relative group flex flex-col justify-between ${
                     statusInfo.isToday
-                      ? 'bg-gradient-to-br from-indigo-50/60 via-white to-purple-50/40 dark:from-indigo-950/40 dark:via-slate-900 dark:to-purple-950/30 border-2 border-indigo-500/80 dark:border-indigo-500 shadow-md hover:shadow-indigo-500/10'
+                      ? 'bg-indigo-50/80 dark:bg-indigo-950/40 border-2 border-indigo-500/80 dark:border-indigo-500 shadow-md hover:shadow-indigo-500/10'
                       : 'bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-card hover:shadow-lg'
                   }`}
                 >

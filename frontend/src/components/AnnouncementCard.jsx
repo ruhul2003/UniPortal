@@ -27,7 +27,7 @@ export default function AnnouncementCard({ announcement, onDelete }) {
     <motion.div
       whileHover={{ y: -2 }}
       className={`bg-white rounded-2xl p-6 border ${
-        announcement.isPinned ? 'border-blue-200 bg-gradient-to-b from-blue-50/20 to-white' : 'border-slate-100'
+        announcement.isPinned ? 'border-blue-200 bg-blue-50/30 dark:bg-blue-950/20' : 'border-slate-100'
       } shadow-card hover:shadow-lg transition-all duration-200 relative group`}
     >
       <div className="flex items-start justify-between gap-3 mb-3">

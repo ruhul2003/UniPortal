@@ -28,7 +28,7 @@ export default function StudentDetailsModal({ student, isOpen, onClose, onToggle
           className="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-100 dark:border-slate-800 overflow-hidden"
         >
           {/* Header Banner */}
-          <div className="h-28 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 p-6 flex items-start justify-between relative">
+          <div className="h-28 bg-indigo-900 p-6 flex items-start justify-between relative">
             <div className="flex items-center gap-2">
               <span className="px-2.5 py-1 rounded-full bg-white/20 backdrop-blur-md text-white text-[11px] font-bold uppercase tracking-wider">
                 {student.role || 'Student'} Profile
@@ -68,7 +68,7 @@ export default function StudentDetailsModal({ student, isOpen, onClose, onToggle
                   className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all shadow-md ${
                     student.isCR
                       ? 'bg-amber-500 hover:bg-amber-600 text-white'
-                      : 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white'
+                      : 'bg-blue-600 hover:bg-blue-700 text-white'
                   }`}
                 >
                   <Crown className="w-4 h-4" />

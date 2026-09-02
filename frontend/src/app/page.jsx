@@ -205,7 +205,7 @@ export default function HomePage() {
         
         <Link 
           href="/feedback" 
-          className="p-6 rounded-3xl bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950/40 dark:to-orange-950/20 border border-amber-200/80 dark:border-amber-800/60 shadow-xs hover:shadow-md transition-all group"
+          className="p-6 rounded-3xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200/80 dark:border-amber-800/60 shadow-xs hover:shadow-md transition-all group"
         >
           <div className="w-12 h-12 rounded-2xl bg-amber-500 text-slate-950 flex items-center justify-center shadow-md shadow-amber-500/20 group-hover:scale-110 transition-transform">
             <Star className="w-6 h-6 fill-slate-950" />
@@ -222,7 +222,7 @@ export default function HomePage() {
         
         <Link 
           href="/attendance" 
-          className="p-6 rounded-3xl bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/40 dark:to-teal-950/20 border border-emerald-200/80 dark:border-emerald-800/60 shadow-xs hover:shadow-md transition-all group"
+          className="p-6 rounded-3xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/60 shadow-xs hover:shadow-md transition-all group"
         >
           <div className="w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center shadow-md shadow-emerald-500/20 group-hover:scale-110 transition-transform">
             <CheckCircle2 className="w-6 h-6" />
@@ -238,7 +238,7 @@ export default function HomePage() {
 
         <Link 
           href="/assignments" 
-          className="p-6 rounded-3xl bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/40 dark:to-indigo-950/20 border border-blue-200/80 dark:border-blue-800/60 shadow-xs hover:shadow-md transition-all group"
+          className="p-6 rounded-3xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200/80 dark:border-blue-800/60 shadow-xs hover:shadow-md transition-all group"
         >
           <div className="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-md shadow-blue-500/20 group-hover:scale-110 transition-transform">
             <ClipboardList className="w-6 h-6" />
@@ -254,7 +254,7 @@ export default function HomePage() {
 
         <Link 
           href="/resources" 
-          className="p-6 rounded-3xl bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950/40 dark:to-pink-950/20 border border-purple-200/80 dark:border-purple-800/60 shadow-xs hover:shadow-md transition-all group"
+          className="p-6 rounded-3xl bg-purple-50 dark:bg-purple-950/40 border border-purple-200/80 dark:border-purple-800/60 shadow-xs hover:shadow-md transition-all group"
         >
           <div className="w-12 h-12 rounded-2xl bg-purple-600 text-white flex items-center justify-center shadow-md shadow-purple-500/20 group-hover:scale-110 transition-transform">
             <FolderOpen className="w-6 h-6" />
@@ -270,7 +270,7 @@ export default function HomePage() {
 
         <Link 
           href="/forum" 
-          className="p-6 rounded-3xl bg-gradient-to-br from-teal-50 to-cyan-50 dark:from-teal-950/40 dark:to-cyan-950/20 border border-teal-200/80 dark:border-teal-800/60 shadow-xs hover:shadow-md transition-all group"
+          className="p-6 rounded-3xl bg-teal-50 dark:bg-teal-950/40 border border-teal-200/80 dark:border-teal-800/60 shadow-xs hover:shadow-md transition-all group"
         >
           <div className="w-12 h-12 rounded-2xl bg-teal-600 text-white flex items-center justify-center shadow-md shadow-teal-500/20 group-hover:scale-110 transition-transform">
             <MessageSquare className="w-6 h-6" />
@@ -445,7 +445,7 @@ export default function HomePage() {
           </div>
 
           {pinnedAnnouncement && (
-            <div className="bg-gradient-to-br from-blue-900 to-slate-900 rounded-3xl p-6 text-white shadow-xl relative overflow-hidden">
+            <div className="bg-slate-900 rounded-3xl p-6 text-white shadow-xl relative overflow-hidden">
               <div className="flex items-center gap-2 mb-3">
                 <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-500 text-white flex items-center gap-1">
                   <Pin className="w-3 h-3 fill-current" /> PINNED
@@ -502,7 +502,7 @@ export default function HomePage() {
       </div>
 
       {/* Quick Link Banner to Faculty Directory */}
-      <section className="bg-gradient-to-r from-indigo-900/90 via-slate-900 to-blue-900/90 rounded-3xl p-6 sm:p-8 text-white shadow-xl flex flex-col sm:flex-row items-center justify-between gap-6 border border-indigo-500/20">
+      <section className="bg-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-xl flex flex-col sm:flex-row items-center justify-between gap-6 border border-indigo-500/20">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center shrink-0 border border-white/10 text-blue-300">
             <School className="w-6 h-6" />

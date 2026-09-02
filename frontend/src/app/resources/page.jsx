@@ -220,7 +220,7 @@ export default function ResourcesPage() {
       <div className="max-w-7xl mx-auto space-y-8">
         
         {/* Header Banner */}
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-purple-700 via-indigo-700 to-blue-800 p-6 sm:p-10 text-white shadow-2xl border border-purple-500/20">
+        <div className="relative overflow-hidden rounded-3xl bg-purple-800 p-6 sm:p-10 text-white shadow-2xl border border-purple-500/20">
           <div className="absolute -right-12 -bottom-12 w-96 h-96 bg-purple-400/20 rounded-full blur-3xl pointer-events-none" />
 
           <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
@@ -349,7 +349,7 @@ export default function ResourcesPage() {
                       </div>
 
                       {isOfficial ? (
-                        <span className="px-2.5 py-1 rounded-full text-[10px] font-black bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 shadow-xs flex items-center gap-1">
+                        <span className="px-2.5 py-1 rounded-full text-[10px] font-black bg-amber-500 text-slate-950 shadow-xs flex items-center gap-1">
                           <ShieldCheck className="w-3.5 h-3.5 text-slate-950" />
                           Faculty Verified
                         </span>

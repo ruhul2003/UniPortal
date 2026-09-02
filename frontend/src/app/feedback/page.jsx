@@ -122,7 +122,7 @@ export default function FeedbackPage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
       
       {/* Header Banner */}
-      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-amber-900 via-slate-900 to-indigo-950 p-8 sm:p-10 text-white shadow-2xl border border-amber-500/20">
+      <section className="relative overflow-hidden rounded-3xl bg-slate-900 p-8 sm:p-10 text-white shadow-2xl border border-amber-500/20">
         <div className="absolute right-0 top-0 translate-x-12 -translate-y-12 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="relative z-10 space-y-3 max-w-3xl">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-400/30 text-amber-300 text-xs font-bold uppercase tracking-wider">
@@ -313,7 +313,7 @@ export default function FeedbackPage() {
                   className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 flex items-center justify-between"
                 >
                   <div className="flex items-center gap-2.5">
-                    <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-extrabold text-xs">
+                    <div className="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-extrabold text-xs">
                       {fac.name ? fac.name.charAt(0) : 'F'}
                     </div>
                     <div>

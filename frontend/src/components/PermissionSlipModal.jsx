@@ -102,7 +102,7 @@ export default function PermissionSlipModal({ isOpen, onClose, permitData }) {
             className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-6 print:p-0 print:overflow-visible text-slate-900 dark:text-slate-100"
           >
             {/* Header / University Seal */}
-            <div className="relative p-6 rounded-2xl bg-gradient-to-r from-emerald-950 via-teal-900 to-slate-900 text-white overflow-hidden shadow-lg border border-emerald-800 print:bg-none print:text-black print:border-b-2 print:border-slate-900 print:p-0 print:pb-4">
+            <div className="relative p-6 rounded-2xl bg-emerald-950 text-white overflow-hidden shadow-lg border border-emerald-800 print:bg-none print:text-black print:border-b-2 print:border-slate-900 print:p-0 print:pb-4">
               <div className="flex flex-col sm:flex-row items-center justify-between gap-4 relative z-10">
                 <div className="flex items-center gap-4 text-center sm:text-left">
                   <div className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center text-emerald-400 border border-white/20 shrink-0 print:border-black print:text-black">

@@ -171,7 +171,7 @@ export default function ExamsPage() {
     <AppLayout title="Exam Center & Hall Ticket Pass">
       <div className="max-w-7xl mx-auto space-y-8 pb-12">
         {/* Top Hero Banner */}
-        <div className="relative rounded-3xl bg-gradient-to-r from-slate-900 via-indigo-950 to-blue-900 p-6 sm:p-8 text-white overflow-hidden shadow-2xl border border-slate-800">
+        <div className="relative rounded-3xl bg-slate-900 p-6 sm:p-8 text-white overflow-hidden shadow-2xl border border-slate-800">
           <div className="absolute -right-10 -bottom-10 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
 
           <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
@@ -191,7 +191,7 @@ export default function ExamsPage() {
               <div className="pt-2 flex flex-wrap items-center gap-3">
                 <button
                   onClick={handleOpenAdmitCard}
-                  className="px-5 py-3 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-extrabold text-xs shadow-lg shadow-blue-500/25 flex items-center gap-2.5 transition-all active:scale-95"
+                  className="px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow-lg shadow-blue-500/25 flex items-center gap-2.5 transition-all active:scale-95"
                 >
                   <QrCode className="w-4 h-4" />
                   <span>View My Digital Admit Card</span>

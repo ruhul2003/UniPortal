@@ -226,7 +226,7 @@ export default function AdminPage() {
     <div className="space-y-8">
       
       {/* Top Banner */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-br from-slate-900 via-slate-850 to-purple-950 p-6 sm:p-8 rounded-3xl text-white shadow-xl relative overflow-hidden">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-900 p-6 sm:p-8 rounded-3xl text-white shadow-xl relative overflow-hidden">
         <div className="space-y-2 relative z-10">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/20 border border-purple-400/30 text-purple-300 text-xs font-bold">
             <Crown className="w-3.5 h-3.5 text-purple-400" />

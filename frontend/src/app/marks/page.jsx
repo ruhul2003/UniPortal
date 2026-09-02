@@ -170,7 +170,7 @@ function MarksPageContent() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       {/* Top Banner & Header */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-indigo-900 via-indigo-800 to-purple-900 text-white p-6 sm:p-10 shadow-xl">
+      <div className="relative overflow-hidden rounded-3xl bg-indigo-900 text-white p-6 sm:p-10 shadow-xl">
         <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div>
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-semibold tracking-wider text-indigo-200 mb-3">
@@ -658,7 +658,7 @@ function MarksPageContent() {
 
                       {/* Grade Badge */}
                       <div className="text-center">
-                        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-600 to-purple-600 text-white font-black text-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                        <div className="w-14 h-14 rounded-2xl bg-indigo-600 text-white font-black text-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
                           {course.letterGrade || 'A+'}
                         </div>
                         <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 mt-1 block">
@@ -675,7 +675,7 @@ function MarksPageContent() {
                       </div>
                       <div className="w-full h-3 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden p-0.5">
                         <div
-                          className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-500"
+                          className="h-full rounded-full bg-indigo-600 transition-all duration-500"
                           style={{ width: `${Math.min(100, course.totalMarks || 0)}%` }}
                         />
                       </div>

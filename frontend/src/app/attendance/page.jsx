@@ -207,7 +207,7 @@ export default function AttendancePage() {
       <div className="max-w-7xl mx-auto space-y-8">
         
         {/* Header Banner */}
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-emerald-600 via-teal-600 to-blue-700 p-6 sm:p-10 text-white shadow-xl">
+        <div className="relative overflow-hidden rounded-3xl bg-emerald-800 p-6 sm:p-10 text-white shadow-xl">
           <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div>
               <div className="flex items-center gap-2 flex-wrap mb-3">
