@@ -47,6 +47,7 @@ export default function AnnouncementCard({ announcement, onDelete }) {
             onClick={() => onDelete?.(announcement._id)}
             className="opacity-0 group-hover:opacity-100 p-1 text-slate-400 hover:text-rose-600 transition-opacity"
             title="Delete Announcement"
+            aria-label="Delete Announcement"
           >
             <Trash2 className="w-4 h-4" />
           </button>
