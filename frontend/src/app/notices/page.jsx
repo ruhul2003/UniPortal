@@ -93,6 +93,7 @@ export default function NoticesPage() {
           <input
             type="text"
             placeholder="Search notices by keyword..."
+            aria-label="Search notices by keyword"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
