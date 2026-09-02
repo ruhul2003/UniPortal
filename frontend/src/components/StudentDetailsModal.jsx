@@ -43,6 +43,7 @@ export default function StudentDetailsModal({ student, isOpen, onClose, onToggle
             
             <button
               onClick={onClose}
+              aria-label="Close student profile modal"
               className="p-1.5 rounded-full bg-black/20 hover:bg-black/40 text-white transition-colors"
             >
               <X className="w-4 h-4" />
