@@ -48,13 +48,13 @@ export default function NoticeCard({ notice, onDelete }) {
             </div>
 
             {/* Faculty Quick Action: Delete */}
-            {isFaculty && (
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   onDelete?.(notice._id);
                 }}
                 title="Faculty Delete Notice"
+                aria-label="Delete notice"
                 className="opacity-0 group-hover:opacity-100 p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-all"
               >
                 <Trash2 className="w-4 h-4" />
