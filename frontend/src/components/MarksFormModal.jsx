@@ -185,6 +185,7 @@ export default function MarksFormModal({ isOpen, onClose, initialData, onSave, i
             </div>
             <button
               onClick={onClose}
+              aria-label="Close marks form modal"
               className="p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
             >
               <X className="w-5 h-5" />
