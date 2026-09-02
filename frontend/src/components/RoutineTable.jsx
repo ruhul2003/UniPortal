@@ -136,6 +136,7 @@ export default function RoutineTable({ routines, onDelete, onEdit }) {
               <button
                 key={day}
                 onClick={() => setSelectedDay(day)}
+                aria-label={`Filter schedule by ${day}`}
                 className={`relative px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-2 ${
                   isSelected
                     ? 'bg-slate-900 dark:bg-indigo-600 text-white shadow-md'
