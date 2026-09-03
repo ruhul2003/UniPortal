@@ -127,12 +127,12 @@ export default function Navbar({ onToggleSidebar, isSidebarCollapsed }) {
           
           {/* Left Controls: Sidebar Toggle & Brand Logo */}
           <div className="flex items-center gap-3 sm:gap-4">
-            {/* Sidebar Toggle Button */}
+            {/* Mobile Sidebar Drawer Button */}
             <button
               onClick={onToggleSidebar}
-              className="p-2.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all shadow-xs flex items-center justify-center"
-              title="Toggle Sidebar Navigation"
-              aria-label="Toggle Sidebar Navigation"
+              className="lg:hidden p-2.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all shadow-xs flex items-center justify-center"
+              title="Open Sidebar Navigation"
+              aria-label="Open Sidebar Navigation"
             >
               <PanelLeft className="w-5 h-5 text-blue-600 dark:text-blue-400" />
             </button>

@@ -219,8 +219,8 @@ export default function PermitsPage() {
   });
 
   return (
-    <AppLayout title="One-Day Academic Permit System">
-      <div className="max-w-7xl mx-auto space-y-8 pb-12">
+    <div className="w-full space-y-8 pb-12">
+      <div className="max-w-7xl mx-auto space-y-8">
         {/* Top Hero Banner */}
         <div className="relative rounded-3xl bg-emerald-950 p-6 sm:p-8 text-white overflow-hidden shadow-2xl border border-emerald-900/60">
           <div className="absolute -right-10 -bottom-10 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
@@ -680,6 +680,6 @@ export default function PermitsPage() {
         onClose={() => setIsSlipModalOpen(false)}
         permitData={selectedPermitForSlip}
       />
-    </AppLayout>
+    </div>
   );
 }
