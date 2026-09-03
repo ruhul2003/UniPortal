@@ -355,12 +355,12 @@ function FacultyCard({ faculty, onFeedbackClick }) {
                   className="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300"
                 />
               ) : (
-                <div className="w-full h-full rounded-xl bg-slate-900 dark:bg-slate-800 flex items-center justify-center text-white font-extrabold text-xl border border-slate-700">
+                <div className="w-full h-full rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 flex items-center justify-center font-extrabold text-xl border border-slate-200 dark:border-slate-700">
                   {faculty.name ? faculty.name.charAt(0) : 'F'}
                 </div>
               )}
             </div>
-            <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-slate-600 border-2 border-white dark:border-slate-900" title="Active Academic Staff" />
+            <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-slate-400 border-2 border-white dark:border-slate-900" title="Active Academic Staff" />
           </div>
 
           {/* Acronym Badge */}
@@ -376,7 +376,7 @@ function FacultyCard({ faculty, onFeedbackClick }) {
 
         {/* Name & Designation */}
         <div className="space-y-1 mb-4">
-          <h3 className="text-base font-extrabold text-slate-900 dark:text-white leading-snug group-hover:text-slate-600 dark:group-hover:text-slate-300 transition-colors">
+          <h3 className="text-base font-extrabold text-slate-900 dark:text-white leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
             {faculty.name}
           </h3>
           <p className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1">
@@ -417,9 +417,9 @@ function FacultyCard({ faculty, onFeedbackClick }) {
         {onFeedbackClick && (
           <button
             onClick={onFeedbackClick}
-            className="w-full mt-3 py-2 px-3 rounded-2xl bg-slate-900 dark:bg-slate-800 hover:bg-slate-800 text-white font-extrabold text-xs border border-slate-700 transition-all flex items-center justify-center gap-1.5 shadow-sm"
+            className="w-full mt-3 py-2 px-3 rounded-2xl bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-extrabold text-xs border border-slate-200 dark:border-slate-700 transition-all flex items-center justify-center gap-1.5 shadow-2xs"
           >
-            <Star className="w-3.5 h-3.5 fill-current" />
+            <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
             Evaluate Course Teacher
           </button>
         )}

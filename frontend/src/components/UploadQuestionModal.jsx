@@ -133,23 +133,23 @@ export default function UploadQuestionModal({ isOpen, onClose, onQuestionUploade
           className="w-full max-w-2xl bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden my-8"
         >
           {/* Modal Header */}
-          <div className="p-6 bg-slate-900 text-white flex items-center justify-between relative overflow-hidden">
+          <div className="p-6 bg-slate-50 dark:bg-slate-800/90 border-b border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white flex items-center justify-between relative overflow-hidden">
 
             <div className="flex items-center gap-3 z-10">
-              <div className="w-10 h-10 rounded-2xl bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-200 shadow-sm">
+              <div className="w-10 h-10 rounded-2xl bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 flex items-center justify-center text-slate-700 dark:text-slate-200 shadow-2xs">
                 <FileText className="w-5 h-5" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h3 className="text-lg font-black tracking-tight">Upload Question Paper</h3>
+                  <h3 className="text-lg font-black tracking-tight text-slate-900 dark:text-white">Upload Question Paper</h3>
                   {currentUser?.role === 'faculty' && (
-                    <span className="px-2 py-0.5 rounded-full bg-slate-800 text-slate-200 border border-slate-700 font-bold text-[10px] flex items-center gap-1">
-                      <ShieldCheck className="w-3 h-3 text-slate-300" />
+                    <span className="px-2 py-0.5 rounded-full bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-600 font-bold text-[10px] flex items-center gap-1 shadow-2xs">
+                      <ShieldCheck className="w-3 h-3 text-slate-600 dark:text-slate-300" />
                       Official Faculty Upload
                     </span>
                   )}
                 </div>
-                <p className="text-xs text-slate-300 font-medium">
+                <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
                   Publish Class Test (CT), Midterm, and Final examination question papers & solutions.
                 </p>
               </div>
@@ -157,7 +157,7 @@ export default function UploadQuestionModal({ isOpen, onClose, onQuestionUploade
 
             <button
               onClick={onClose}
-              className="p-2 rounded-xl bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 transition-all z-10"
+              className="p-2 rounded-xl bg-white dark:bg-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-slate-600 transition-all z-10"
             >
               <X className="w-5 h-5" />
             </button>

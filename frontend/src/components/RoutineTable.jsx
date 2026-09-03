@@ -30,14 +30,14 @@ function getClassStatus(item, todayName) {
 
   if (startMin !== null && endMin !== null) {
     if (currentMinutes >= startMin && currentMinutes <= endMin) {
-      return { isToday: true, status: 'live', label: 'Live Now', badgeBg: 'bg-slate-900 dark:bg-slate-800 text-white border border-slate-700' };
+      return { isToday: true, status: 'live', label: 'Live Now', badgeBg: 'bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-700 font-bold' };
     } else if (currentMinutes < startMin) {
-      return { isToday: true, status: 'upcoming', label: 'Upcoming Today', badgeBg: 'bg-slate-800 text-slate-100 border border-slate-700' };
+      return { isToday: true, status: 'upcoming', label: 'Upcoming Today', badgeBg: 'bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700' };
     } else {
-      return { isToday: true, status: 'completed', label: 'Completed Today', badgeBg: 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400' };
+      return { isToday: true, status: 'completed', label: 'Completed Today', badgeBg: 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700' };
     }
   }
-  return { isToday: true, status: 'today', label: 'Today', badgeBg: 'bg-slate-800 text-slate-100 border border-slate-700' };
+  return { isToday: true, status: 'today', label: 'Today', badgeBg: 'bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700' };
 }
 
 export default function RoutineTable({ routines, onDelete, onEdit }) {
@@ -88,25 +88,25 @@ export default function RoutineTable({ routines, onDelete, onEdit }) {
     <div className="space-y-6">
       {/* Today Banner summary */}
       {todayName && (
-        <div className="bg-slate-900 rounded-2xl p-4 sm:p-5 text-white shadow-sm border border-slate-800 relative overflow-hidden flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="bg-slate-50 dark:bg-slate-800/90 rounded-2xl p-4 sm:p-5 text-slate-900 dark:text-white shadow-xs border border-slate-200 dark:border-slate-700 relative overflow-hidden flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="relative z-10">
             <div className="flex items-center gap-2 mb-1">
-              <span className="px-2 py-0.5 rounded-md bg-slate-800 border border-slate-700 text-slate-200 text-[11px] font-bold tracking-wide uppercase flex items-center gap-1.5">
+              <span className="px-2 py-0.5 rounded-md bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-200 text-[11px] font-bold tracking-wide uppercase flex items-center gap-1.5 shadow-2xs">
                 <span className="w-2 h-2 rounded-full bg-slate-400" />
                 Today's Schedule
               </span>
-              <span className="text-xs text-slate-300">
+              <span className="text-xs text-slate-500 dark:text-slate-300">
                 {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
               </span>
               {user?.isCR && (
-                <span className="px-2 py-0.5 rounded-md bg-slate-800 border border-slate-700 text-slate-200 text-[11px] font-bold uppercase flex items-center gap-1">
-                  <Crown className="w-3 h-3 text-slate-300" /> Class Rep (CR) Editor
+                <span className="px-2 py-0.5 rounded-md bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-200 text-[11px] font-bold uppercase flex items-center gap-1 shadow-2xs">
+                  <Crown className="w-3 h-3 text-slate-500 dark:text-slate-300" /> Class Rep (CR) Editor
                 </span>
               )}
             </div>
-            <h3 className="text-lg font-bold text-white flex items-center gap-2">
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
               <span>{todayName}</span>
-              <span className="text-sm font-medium text-slate-300">
+              <span className="text-sm font-medium text-slate-500 dark:text-slate-300">
                 ({todayClassCount} {todayClassCount === 1 ? 'class' : 'classes'})
               </span>
             </h3>

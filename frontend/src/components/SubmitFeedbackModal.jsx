@@ -338,7 +338,7 @@ export default function SubmitFeedbackModal({ isOpen, onClose, onSubmitSuccess, 
               <button
                 type="submit"
                 disabled={loading}
-                className="px-6 py-2.5 rounded-2xl bg-slate-900 dark:bg-slate-800 hover:bg-slate-800 text-white font-extrabold border border-slate-700 transition-all flex items-center gap-2 disabled:opacity-50"
+                className="px-6 py-2.5 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold transition-all flex items-center gap-2 disabled:opacity-50 shadow-xs"
               >
                 {loading ? (
                   <>

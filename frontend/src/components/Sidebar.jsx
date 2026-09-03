@@ -83,10 +83,10 @@ export default function Sidebar({ isOpen, onClose, isCollapsed, onToggleCollapse
       <aside
         className={`fixed top-0 left-0 z-50 h-full bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-r border-slate-200 dark:border-slate-800 transition-all duration-300 flex flex-col justify-between ${
           /* Desktop Width */
-          isCollapsed ? 'lg:w-20' : 'lg:w-72'
+          isCollapsed ? 'lg:w-20' : 'lg:w-80'
         } ${
           /* Mobile Drawer Positioning */
-          isOpen ? 'translate-x-0 w-72' : '-translate-x-full lg:translate-x-0'
+          isOpen ? 'translate-x-0 w-80' : '-translate-x-full lg:translate-x-0'
         }`}
       >
         {/* Top Header: Brand & Collapse Toggle */}

@@ -64,7 +64,7 @@ export default function AppLayout({ children }) {
 
       {/* Main Content Area */}
       <div className={`flex-1 flex flex-col min-w-0 transition-all duration-300 ${
-        isSidebarCollapsed ? 'lg:pl-20' : 'lg:pl-72'
+        isSidebarCollapsed ? 'lg:pl-20' : 'lg:pl-80'
       }`}>
         <Navbar 
           onToggleSidebar={handleToggleSidebar} 

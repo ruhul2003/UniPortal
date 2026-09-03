@@ -142,18 +142,18 @@ export default function HomePage() {
     <div className="space-y-10">
       
       {/* Hero Welcome Banner */}
-      <section className="relative overflow-hidden rounded-3xl bg-slate-900 text-white p-8 sm:p-12 shadow-sm border border-slate-800">
+      <section className="relative overflow-hidden rounded-3xl bg-slate-50 dark:bg-slate-900/90 text-slate-900 dark:text-white p-8 sm:p-12 border border-slate-200 dark:border-slate-800 shadow-xs">
         <div className="relative z-10 max-w-3xl space-y-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-xs font-semibold text-slate-300">
-            <Sparkles className="w-3.5 h-3.5" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300 shadow-2xs">
+            <Sparkles className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
             <span>Welcome to UniPortal • Spring Semester 2026</span>
           </div>
 
           <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">
-            Seamless Academic Governance for <span className="text-slate-100">Students</span> & <span className="text-slate-300">Faculty</span>.
+            Seamless Academic Governance for <span className="text-blue-600 dark:text-blue-400">Students</span> & <span className="text-slate-700 dark:text-slate-300">Faculty</span>.
           </h1>
 
-          <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
+          <p className="text-slate-600 dark:text-slate-300 text-sm sm:text-base leading-relaxed">
             Stay updated with real-time academic notices, track section class routines dynamically, manage attendance, and evaluate course teachers.
           </p>
 
@@ -161,37 +161,37 @@ export default function HomePage() {
           <div className="pt-4 flex flex-wrap items-center gap-4 text-xs font-semibold">
             <Link
               href="/feedback"
-              className="px-5 py-3 rounded-2xl bg-slate-800 hover:bg-slate-700 text-white font-bold transition-all flex items-center gap-2 border border-slate-700"
+              className="px-5 py-3 rounded-2xl bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold transition-all flex items-center gap-2 border border-slate-200 dark:border-slate-700 shadow-xs"
             >
-              Teacher Feedback <Star className="w-4 h-4 fill-white" />
+              Teacher Feedback <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
             </Link>
 
             <Link
               href="/attendance"
-              className="px-5 py-3 rounded-2xl bg-slate-800 hover:bg-slate-700 text-white font-bold transition-all flex items-center gap-2 border border-slate-700"
+              className="px-5 py-3 rounded-2xl bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold transition-all flex items-center gap-2 border border-slate-200 dark:border-slate-700 shadow-xs"
             >
-              Attendance Tracker <CheckCircle2 className="w-4 h-4" />
+              Attendance Tracker <CheckCircle2 className="w-4 h-4 text-slate-600 dark:text-slate-300" />
             </Link>
 
             <Link
               href="/assignments"
-              className="px-5 py-3 rounded-2xl bg-slate-800 hover:bg-slate-700 text-white font-bold transition-all flex items-center gap-2 border border-slate-700"
+              className="px-5 py-3 rounded-2xl bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold transition-all flex items-center gap-2 border border-slate-200 dark:border-slate-700 shadow-xs"
             >
-              Assignments & Tasks <ClipboardList className="w-4 h-4" />
+              Assignments & Tasks <ClipboardList className="w-4 h-4 text-slate-600 dark:text-slate-300" />
             </Link>
 
             <Link
               href="/resources"
-              className="px-5 py-3 rounded-2xl bg-slate-800 hover:bg-slate-700 text-white font-bold transition-all flex items-center gap-2 border border-slate-700"
+              className="px-5 py-3 rounded-2xl bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold transition-all flex items-center gap-2 border border-slate-200 dark:border-slate-700 shadow-xs"
             >
-              Study Resources <FolderOpen className="w-4 h-4" />
+              Study Resources <FolderOpen className="w-4 h-4 text-slate-600 dark:text-slate-300" />
             </Link>
 
             <Link
               href="/forum"
-              className="px-5 py-3 rounded-2xl bg-slate-800 hover:bg-slate-700 text-white font-bold transition-all flex items-center gap-2 border border-slate-700"
+              className="px-5 py-3 rounded-2xl bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold transition-all flex items-center gap-2 border border-slate-200 dark:border-slate-700 shadow-xs"
             >
-              Q&A Forum <MessageSquare className="w-4 h-4" />
+              Q&A Forum <MessageSquare className="w-4 h-4 text-slate-600 dark:text-slate-300" />
             </Link>
           </div>
         </div>
@@ -204,8 +204,8 @@ export default function HomePage() {
           href="/feedback" 
           className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-all group"
         >
-          <div className="w-12 h-12 rounded-2xl bg-slate-900 dark:bg-slate-800 text-white flex items-center justify-center border border-slate-700 group-hover:scale-105 transition-transform">
-            <Star className="w-6 h-6 fill-white" />
+          <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 flex items-center justify-center border border-slate-200 dark:border-slate-700 group-hover:scale-105 transition-transform">
+            <Star className="w-6 h-6 text-amber-500 fill-amber-500" />
           </div>
           <h3 className="mt-4 text-base font-bold text-slate-900 dark:text-white flex items-center justify-between">
             <span>Teacher Evaluation</span>
@@ -221,8 +221,8 @@ export default function HomePage() {
           href="/attendance" 
           className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-all group"
         >
-          <div className="w-12 h-12 rounded-2xl bg-slate-900 dark:bg-slate-800 text-white flex items-center justify-center border border-slate-700 group-hover:scale-105 transition-transform">
-            <CheckCircle2 className="w-6 h-6" />
+          <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 flex items-center justify-center border border-slate-200 dark:border-slate-700 group-hover:scale-105 transition-transform">
+            <CheckCircle2 className="w-6 h-6 text-slate-700 dark:text-slate-300" />
           </div>
           <h3 className="mt-4 text-base font-bold text-slate-900 dark:text-white flex items-center justify-between">
             <span>Attendance Tracker</span>
@@ -237,8 +237,8 @@ export default function HomePage() {
           href="/assignments" 
           className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-all group"
         >
-          <div className="w-12 h-12 rounded-2xl bg-slate-900 dark:bg-slate-800 text-white flex items-center justify-center border border-slate-700 group-hover:scale-105 transition-transform">
-            <ClipboardList className="w-6 h-6" />
+          <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 flex items-center justify-center border border-slate-200 dark:border-slate-700 group-hover:scale-105 transition-transform">
+            <ClipboardList className="w-6 h-6 text-slate-700 dark:text-slate-300" />
           </div>
           <h3 className="mt-4 text-base font-bold text-slate-900 dark:text-white flex items-center justify-between">
             <span>Assignments Hub</span>
@@ -253,8 +253,8 @@ export default function HomePage() {
           href="/resources" 
           className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-all group"
         >
-          <div className="w-12 h-12 rounded-2xl bg-slate-900 dark:bg-slate-800 text-white flex items-center justify-center border border-slate-700 group-hover:scale-105 transition-transform">
-            <FolderOpen className="w-6 h-6" />
+          <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 flex items-center justify-center border border-slate-200 dark:border-slate-700 group-hover:scale-105 transition-transform">
+            <FolderOpen className="w-6 h-6 text-slate-700 dark:text-slate-300" />
           </div>
           <h3 className="mt-4 text-base font-bold text-slate-900 dark:text-white flex items-center justify-between">
             <span>Resource Locker</span>
@@ -269,8 +269,8 @@ export default function HomePage() {
           href="/forum" 
           className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-all group"
         >
-          <div className="w-12 h-12 rounded-2xl bg-slate-900 dark:bg-slate-800 text-white flex items-center justify-center border border-slate-700 group-hover:scale-105 transition-transform">
-            <MessageSquare className="w-6 h-6" />
+          <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 flex items-center justify-center border border-slate-200 dark:border-slate-700 group-hover:scale-105 transition-transform">
+            <MessageSquare className="w-6 h-6 text-slate-700 dark:text-slate-300" />
           </div>
           <h3 className="mt-4 text-base font-bold text-slate-900 dark:text-white flex items-center justify-between">
             <span>Course Q&A Forum</span>
@@ -292,7 +292,7 @@ export default function HomePage() {
           <div>
             <div className="flex items-center gap-2">
               <span className="font-extrabold text-sm text-slate-900 dark:text-white">Section View:</span>
-              <span className="px-2.5 py-0.5 rounded-full bg-slate-900 dark:bg-slate-800 text-white text-[11px] font-extrabold border border-slate-700">
+              <span className="px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 text-[11px] font-extrabold border border-slate-200 dark:border-slate-700">
                 {selectedSection}
               </span>
               {isStudent && user?.section === selectedSection && (
@@ -332,15 +332,15 @@ export default function HomePage() {
         <motion.div 
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="p-4 sm:p-5 rounded-2xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm"
+          className="p-4 sm:p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xs"
         >
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-slate-900 dark:bg-slate-700 text-white flex items-center justify-center shrink-0">
-              <ShieldAlert className="w-5 h-5" />
+            <div className="w-10 h-10 rounded-xl bg-white dark:bg-slate-700 text-slate-800 dark:text-white border border-slate-200 dark:border-slate-600 flex items-center justify-center shrink-0">
+              <ShieldAlert className="w-5 h-5 text-slate-700 dark:text-slate-200" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-[10px] font-bold uppercase tracking-wider bg-slate-900 text-white dark:bg-slate-700 px-2 py-0.5 rounded">Priority Notice</span>
+                <span className="text-[10px] font-bold uppercase tracking-wider bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200 px-2 py-0.5 rounded border border-slate-300 dark:border-slate-600">Priority Notice</span>
                 <span className="text-xs text-slate-600 dark:text-slate-300 font-semibold">{urgentNotice.department}</span>
               </div>
               <h4 className="text-sm font-bold text-slate-900 dark:text-white mt-0.5">{urgentNotice.title}</h4>
@@ -348,7 +348,7 @@ export default function HomePage() {
           </div>
           <Link
             href="/notices"
-            className="px-4 py-2 rounded-xl bg-slate-900 dark:bg-slate-700 hover:bg-slate-800 text-white text-xs font-semibold transition-colors whitespace-nowrap self-end sm:self-center"
+            className="px-4 py-2 rounded-xl bg-white dark:bg-slate-700 hover:bg-slate-100 dark:hover:bg-slate-600 text-slate-900 dark:text-white text-xs font-semibold border border-slate-200 dark:border-slate-600 transition-colors whitespace-nowrap self-end sm:self-center"
           >
             Read Notice
           </Link>
