@@ -8,12 +8,23 @@ import InitialLoader from './InitialLoader';
 import { fetchNotices } from '../lib/api';
 
 export default function AppLayout({ children }) {
-  const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [isInitialLoading, setIsInitialLoading] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return !sessionStorage.getItem('uniportal_loaded');
+    }
+    return true;
+  });
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [hasNotices, setHasNotices] = useState(false);
   const [hasUrgentNotice, setHasUrgentNotice] = useState(false);
 
+  const handleLoaderComplete = () => {
+    setIsInitialLoading(false);
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('uniportal_loaded', 'true');
+    }
+  };
 
   useEffect(() => {
     async function checkNotices() {
@@ -45,7 +56,7 @@ export default function AppLayout({ children }) {
     <>
       {isInitialLoading && (
         <InitialLoader 
-          onComplete={() => setIsInitialLoading(false)} 
+          onComplete={handleLoaderComplete} 
           minDuration={850} 
         />
       )}
@@ -71,7 +82,7 @@ export default function AppLayout({ children }) {
           isSidebarCollapsed={isSidebarCollapsed} 
         />
 
-        <main className="flex-1 max-w-[1700px] w-full mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 py-6 sm:py-8">
+        <main className="flex-1 w-full max-w-full mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 py-6 sm:py-8">
           {children}
         </main>
 

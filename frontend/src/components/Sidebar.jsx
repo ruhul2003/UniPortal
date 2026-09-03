@@ -116,29 +116,22 @@ export default function Sidebar({ isOpen, onClose, isCollapsed, onToggleCollapse
             )}
           </Link>
 
-          {/* Desktop Collapse Toggle / Mobile Close Button */}
-          <div className="flex items-center gap-1">
+          {/* Mobile Close Button */}
+          <div className="flex items-center gap-1 lg:hidden">
             <button
               onClick={onClose}
-              className="p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 lg:hidden transition-colors"
+              className="p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
               title="Close menu"
             >
               <X className="w-5 h-5" />
-            </button>
-
-            <button
-              onClick={onToggleCollapse}
-              className="hidden lg:flex p-2 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-              title={isCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
-              aria-label={isCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
-            >
-              {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
             </button>
           </div>
         </div>
 
         {/* Scrollable Navigation Items */}
-        <div className="flex-1 overflow-y-auto py-6 px-3 space-y-6 scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-800">
+        <div className={`flex-1 overflow-y-auto py-6 space-y-6 scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-800 ${
+          isCollapsed && !isOpen ? 'px-2' : 'px-3'
+        }`}>
           {navGroups.map((group, groupIdx) => (
             <div key={groupIdx} className="space-y-1.5">
               {/* Group Title */}
@@ -160,8 +153,12 @@ export default function Sidebar({ isOpen, onClose, isCollapsed, onToggleCollapse
                     key={link.href}
                     href={link.href}
                     onClick={onClose}
-                    title={isCollapsed && !isOpen ? link.name : undefined}
-                    className={`relative flex items-center gap-3 px-3 py-2.5 rounded-2xl text-xs font-bold transition-all group ${
+                    title={link.name}
+                    className={`relative flex items-center rounded-2xl text-xs font-bold transition-all group ${
+                      isCollapsed && !isOpen
+                        ? 'justify-center py-3 px-0'
+                        : 'gap-3 px-3 py-2.5'
+                    } ${
                       isActive
                         ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/25'
                         : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60'
@@ -199,34 +196,49 @@ export default function Sidebar({ isOpen, onClose, isCollapsed, onToggleCollapse
         </div>
 
         {/* Sidebar Footer: Profile Quick Status */}
-        {user && (!isCollapsed || isOpen) && (
+        {user && (
           <div className="p-3 border-t border-slate-100 dark:border-slate-800/80 shrink-0">
-            <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-700/60 flex items-center justify-between">
-              <div className="flex items-center gap-2.5 overflow-hidden">
-                <div className="w-8 h-8 rounded-xl bg-blue-600 text-white font-extrabold flex items-center justify-center text-xs shrink-0 shadow-sm">
-                  {user.avatar ? (
-                    <img src={user.avatar} alt={user.name} className="w-full h-full object-cover rounded-xl" />
-                  ) : (
-                    <span>{user.name ? user.name.charAt(0) : 'U'}</span>
-                  )}
+            {(!isCollapsed || isOpen) ? (
+              <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-700/60 flex items-center justify-between">
+                <div className="flex items-center gap-2.5 overflow-hidden">
+                  <div className="w-8 h-8 rounded-xl bg-blue-600 text-white font-extrabold flex items-center justify-center text-xs shrink-0 shadow-sm">
+                    {user.avatar ? (
+                      <img src={user.avatar} alt={user.name} className="w-full h-full object-cover rounded-xl" />
+                    ) : (
+                      <span>{user.name ? user.name.charAt(0) : 'U'}</span>
+                    )}
+                  </div>
+                  <div className="truncate text-xs">
+                    <p className="font-bold text-slate-900 dark:text-white truncate">{user.name}</p>
+                    <p className="text-[10px] text-slate-400 capitalize truncate">
+                      {user.isCR ? 'Class Rep' : user.role}
+                    </p>
+                  </div>
                 </div>
-                <div className="truncate text-xs">
-                  <p className="font-bold text-slate-900 dark:text-white truncate">{user.name}</p>
-                  <p className="text-[10px] text-slate-400 capitalize truncate">
-                    {user.isCR ? 'Class Rep' : user.role}
-                  </p>
-                </div>
-              </div>
 
+                <Link
+                  href="/profile"
+                  onClick={onClose}
+                  className="p-1.5 rounded-xl text-slate-400 hover:text-blue-600 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                  title="Profile Settings"
+                >
+                  <User className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+            ) : (
               <Link
                 href="/profile"
                 onClick={onClose}
-                className="p-1.5 rounded-xl text-slate-400 hover:text-blue-600 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
-                title="Profile Settings"
+                title={`Profile: ${user.name}`}
+                className="w-10 h-10 mx-auto rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all shadow-2xs"
               >
-                <User className="w-3.5 h-3.5" />
+                {user.avatar ? (
+                  <img src={user.avatar} alt={user.name} className="w-full h-full object-cover rounded-xl" />
+                ) : (
+                  <span className="font-bold text-xs">{user.name ? user.name.charAt(0) : 'U'}</span>
+                )}
               </Link>
-            </div>
+            )}
           </div>
         )}
       </aside>
