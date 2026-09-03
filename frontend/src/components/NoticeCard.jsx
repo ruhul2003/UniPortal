@@ -11,15 +11,7 @@ export default function NoticeCard({ notice, onDelete }) {
   const { user } = useAuth();
   const isFaculty = user?.role === 'faculty' || user?.role === 'admin';
 
-  const categoryColors = {
-    Academic: 'bg-blue-50 text-blue-700 border-blue-100',
-    Exam: 'bg-amber-50 text-amber-700 border-amber-100',
-    Administrative: 'bg-purple-50 text-purple-700 border-purple-100',
-    Event: 'bg-emerald-50 text-emerald-700 border-emerald-100',
-    General: 'bg-slate-100 text-slate-700 border-slate-200',
-  };
-
-  const badgeStyle = categoryColors[notice.category] || categoryColors.General;
+  const badgeStyle = 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700';
   const formattedDate = notice.createdAt 
     ? new Date(notice.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
     : 'Recent';
@@ -28,9 +20,9 @@ export default function NoticeCard({ notice, onDelete }) {
     <>
       <motion.div
         whileHover={{ y: -3, transition: { duration: 0.2 } }}
-        className={`group bg-white rounded-2xl p-6 border ${
-          notice.isUrgent ? 'border-amber-200 shadow-amber-500/5' : 'border-slate-100'
-        } shadow-card hover:shadow-xl transition-all duration-300 relative flex flex-col justify-between`}
+        className={`group bg-white dark:bg-slate-900 rounded-2xl p-6 border ${
+          notice.isUrgent ? 'border-slate-400 dark:border-slate-700' : 'border-slate-200 dark:border-slate-800'
+        } shadow-sm hover:shadow-md transition-all duration-300 relative flex flex-col justify-between`}
       >
         <div>
           {/* Header Badges */}
@@ -41,13 +33,14 @@ export default function NoticeCard({ notice, onDelete }) {
               </span>
 
               {notice.isUrgent && (
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500 text-white flex items-center gap-1 shadow-xs">
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-900 dark:bg-slate-800 text-white border border-slate-700 flex items-center gap-1">
                   <AlertTriangle className="w-3 h-3" /> URGENT
                 </span>
               )}
             </div>
 
             {/* Faculty Quick Action: Delete */}
+            {isFaculty && (
               <button
                 onClick={(e) => {
                   e.stopPropagation();

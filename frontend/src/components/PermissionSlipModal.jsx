@@ -67,7 +67,7 @@ export default function PermissionSlipModal({ isOpen, onClose, permitData }) {
           {/* Top Modal Navigation Header (Screen only) */}
           <div className="no-print px-6 py-4 bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-emerald-600/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold">
+              <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 flex items-center justify-center font-bold border border-slate-200 dark:border-slate-700">
                 <BadgeCheck className="w-5 h-5" />
               </div>
               <div>
@@ -79,7 +79,7 @@ export default function PermissionSlipModal({ isOpen, onClose, permitData }) {
             <div className="flex items-center gap-2">
               <button
                 onClick={handlePrint}
-                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-xs shadow-md shadow-emerald-500/20 flex items-center gap-2 transition-all active:scale-95"
+                className="px-4 py-2 bg-slate-900 dark:bg-slate-800 hover:bg-slate-800 text-white rounded-xl font-bold text-xs border border-slate-700 flex items-center gap-2 transition-all active:scale-95"
               >
                 <Printer className="w-4 h-4" />
                 <span>Download / Print PDF</span>
@@ -102,17 +102,17 @@ export default function PermissionSlipModal({ isOpen, onClose, permitData }) {
             className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-6 print:p-0 print:overflow-visible text-slate-900 dark:text-slate-100"
           >
             {/* Header / University Seal */}
-            <div className="relative p-6 rounded-2xl bg-emerald-950 text-white overflow-hidden shadow-lg border border-emerald-800 print:bg-none print:text-black print:border-b-2 print:border-slate-900 print:p-0 print:pb-4">
+            <div className="relative p-6 rounded-2xl bg-slate-900 text-white overflow-hidden shadow-sm border border-slate-800 print:bg-none print:text-black print:border-b-2 print:border-slate-900 print:p-0 print:pb-4">
               <div className="flex flex-col sm:flex-row items-center justify-between gap-4 relative z-10">
                 <div className="flex items-center gap-4 text-center sm:text-left">
-                  <div className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center text-emerald-400 border border-white/20 shrink-0 print:border-black print:text-black">
-                    <GraduationCap className="w-10 h-10 text-emerald-300 print:text-black" />
+                  <div className="w-16 h-16 rounded-2xl bg-slate-800 flex items-center justify-center text-slate-200 border border-slate-700 shrink-0 print:border-black print:text-black">
+                    <GraduationCap className="w-10 h-10 text-slate-200 print:text-black" />
                   </div>
                   <div>
                     <h1 className="text-xl sm:text-2xl font-black tracking-tight text-white print:text-black uppercase">
                       Metropolitan University
                     </h1>
-                    <p className="text-xs font-semibold text-emerald-300 print:text-slate-700 tracking-wide uppercase">
+                    <p className="text-xs font-semibold text-slate-300 print:text-slate-700 tracking-wide uppercase">
                       OFFICE OF ACADEMIC AFFAIRS & CONTROLLER
                     </p>
                     <p className="text-[11px] text-slate-300 print:text-slate-600">

@@ -60,7 +60,7 @@ export default function CreateNoticeModal({ isOpen, onClose, onSubmit }) {
           {/* Header */}
           <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600">
+              <div className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-800 dark:text-slate-200">
                 <Sparkles className="w-4 h-4" />
               </div>
               <div>

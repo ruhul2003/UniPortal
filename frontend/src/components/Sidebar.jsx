@@ -174,12 +174,8 @@ export default function Sidebar({ isOpen, onClose, isCollapsed, onToggleCollapse
 
                       {link.hasBadge && hasNotices && (
                         <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
-                          <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
-                            hasUrgentNotice ? 'bg-amber-400' : 'bg-rose-400'
-                          }`} />
-                          <span className={`relative inline-flex rounded-full h-2.5 w-2.5 ${
-                            hasUrgentNotice ? 'bg-amber-500' : 'bg-rose-500'
-                          }`} />
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 bg-blue-500" />
+                          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-600" />
                         </span>
                       )}
                     </div>

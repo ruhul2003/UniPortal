@@ -28,14 +28,14 @@ export default function StudentDetailsModal({ student, isOpen, onClose, onToggle
           className="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-100 dark:border-slate-800 overflow-hidden"
         >
           {/* Header Banner */}
-          <div className="h-28 bg-indigo-900 p-6 flex items-start justify-between relative">
+          <div className="h-28 bg-slate-900 border-b border-slate-800 p-6 flex items-start justify-between relative">
             <div className="flex items-center gap-2">
-              <span className="px-2.5 py-1 rounded-full bg-white/20 backdrop-blur-md text-white text-[11px] font-bold uppercase tracking-wider">
+              <span className="px-2.5 py-1 rounded-full bg-slate-800 text-slate-200 border border-slate-700 text-[11px] font-bold uppercase tracking-wider">
                 {student.role || 'Student'} Profile
               </span>
               {student.isCR && (
-                <span className="px-2.5 py-1 rounded-full bg-amber-400 text-slate-900 text-[11px] font-black flex items-center gap-1 shadow-sm">
-                  <Crown className="w-3.5 h-3.5 fill-slate-900" />
+                <span className="px-2.5 py-1 rounded-full bg-slate-800 text-slate-100 border border-slate-700 text-[11px] font-black flex items-center gap-1">
+                  <Crown className="w-3.5 h-3.5 fill-white text-white" />
                   CR (Class Representative)
                 </span>
               )}

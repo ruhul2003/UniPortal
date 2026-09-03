@@ -59,11 +59,11 @@ export default function Navbar({ onToggleSidebar, isSidebarCollapsed }) {
   }, [pathname]);
 
   const getCurrentRoleBadge = () => {
-    if (!user) return { label: 'Guest', color: 'bg-slate-400' };
-    if (user.role === 'admin') return { label: 'Admin View', color: 'bg-purple-500' };
-    if (user.role === 'faculty') return { label: 'Faculty View', color: 'bg-indigo-500' };
-    if (user.isCR) return { label: 'CR View', color: 'bg-amber-500' };
-    return { label: 'Student View', color: 'bg-emerald-500' };
+    if (!user) return { label: 'Guest', color: 'bg-slate-800 text-slate-200' };
+    if (user.role === 'admin') return { label: 'Admin View', color: 'bg-slate-900 dark:bg-slate-800 text-white border border-slate-700' };
+    if (user.role === 'faculty') return { label: 'Faculty View', color: 'bg-slate-900 dark:bg-slate-800 text-white border border-slate-700' };
+    if (user.isCR) return { label: 'CR View', color: 'bg-slate-900 dark:bg-slate-800 text-white border border-slate-700' };
+    return { label: 'Student View', color: 'bg-slate-900 dark:bg-slate-800 text-white border border-slate-700' };
   };
 
   const currentBadge = getCurrentRoleBadge();
@@ -171,8 +171,8 @@ export default function Navbar({ onToggleSidebar, isSidebarCollapsed }) {
                   <span>{item.name}</span>
                   {item.hasBadge && hasNotices && (
                     <span className="relative flex h-2 w-2">
-                      <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${hasUrgentNotice ? 'bg-amber-400' : 'bg-rose-400'}`} />
-                      <span className={`relative inline-flex rounded-full h-2 w-2 ${hasUrgentNotice ? 'bg-amber-500' : 'bg-rose-500'}`} />
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 bg-blue-500" />
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-600" />
                     </span>
                   )}
                 </Link>
