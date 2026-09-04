@@ -557,6 +557,9 @@ export default function ResourcesPage() {
                 </form>
               </motion.div>
             </div>
+          )}
+        </AnimatePresence>
+
         {/* AI Resource Summarizer Modal */}
         <ResourceSummarizerModal
           isOpen={showSummarizerModal}

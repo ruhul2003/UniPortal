@@ -505,9 +505,8 @@ export default function CGPACalculatorPage() {
                     <span className="text-slate-500">{g.gpa.toFixed(2)} pts</span>
                   </div>
                 ))}
-              </div>
             </div>
-
+          </div>
         </div>
 
         {/* AI Strategy Advice Modal */}
@@ -589,5 +588,6 @@ export default function CGPACalculatorPage() {
         </AnimatePresence>
       </div>
     </div>
-  );
+  </div>
+);
 }
