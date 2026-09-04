@@ -9,6 +9,7 @@
     "dev": "node --watch src/server.js"
   },
   "dependencies": {
+    "@google/genai": "^2.21.0",
     "better-auth": "^1.1.18",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",

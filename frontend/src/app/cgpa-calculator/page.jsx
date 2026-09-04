@@ -50,6 +50,36 @@ export default function CGPACalculatorPage() {
   const [targetCGPA, setTargetCGPA] = useState(3.80);
   const [loadingMarks, setLoadingMarks] = useState(false);
 
+  // AI Advisor state
+  const [aiAdvice, setAiAdvice] = useState(null);
+  const [loadingAdvice, setLoadingAdvice] = useState(false);
+  const [showAdviceModal, setShowAdviceModal] = useState(false);
+
+  const fetchAIAdvice = async () => {
+    setLoadingAdvice(true);
+    setShowAdviceModal(true);
+    try {
+      const res = await fetch('http://localhost:5000/api/marks/ai-advisor', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          currentCGPA,
+          targetCGPA,
+          completedCredits: totalCompletedCredits,
+          attendancePct: 85
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        setAiAdvice(data.advice);
+      }
+    } catch (err) {
+      console.warn('AI advice error:', err);
+    } finally {
+      setLoadingAdvice(false);
+    }
+  };
+
   // Fetch actual student marks if logged in
   useEffect(() => {
     if (user?.studentId) {
@@ -192,6 +222,14 @@ export default function CGPACalculatorPage() {
           </div>
 
           <div className="flex items-center gap-3">
+            <button
+              onClick={fetchAIAdvice}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs transition-all shadow-md shadow-purple-500/20"
+            >
+              <Sparkles className="w-4 h-4" />
+              Get AI Study Strategy
+            </button>
+
             <button
               onClick={fetchStudentMarks}
               disabled={loadingMarks}
@@ -469,10 +507,85 @@ export default function CGPACalculatorPage() {
               </div>
             </div>
 
-          </div>
-
         </div>
 
+        {/* AI Strategy Advice Modal */}
+        <AnimatePresence>
+          {showAdviceModal && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                className="bg-white dark:bg-slate-900 w-full max-w-lg rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 space-y-6"
+              >
+                <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-purple-600/10 text-purple-600 dark:text-purple-400 flex items-center justify-center font-bold">
+                      <Sparkles className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h3 className="font-extrabold text-base text-slate-900 dark:text-white">
+                        AI Academic Strategy & Advisor
+                      </h3>
+                      <p className="text-xs text-slate-400">Tailored CGPA Improvement Guidelines</p>
+                    </div>
+                  </div>
+                  <button onClick={() => setShowAdviceModal(false)} className="p-1.5 rounded-lg text-slate-400 hover:text-slate-200">
+                    <Trash2 className="w-4 h-4 hidden" /> ✖
+                  </button>
+                </div>
+
+                {loadingAdvice ? (
+                  <div className="p-8 text-center space-y-3">
+                    <Sparkles className="w-8 h-8 text-purple-500 animate-spin mx-auto" />
+                    <p className="text-xs font-semibold text-slate-600 dark:text-slate-300">
+                      Analyzing credit distribution & calculating optimal study strategy...
+                    </p>
+                  </div>
+                ) : aiAdvice ? (
+                  <div className="space-y-4">
+                    <div className="p-4 rounded-2xl bg-purple-50 dark:bg-purple-950/40 border border-purple-100 dark:border-purple-900/60 text-xs text-purple-900 dark:text-purple-200 font-bold">
+                      💡 {aiAdvice.verdict}
+                    </div>
+
+                    <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 flex items-center justify-between text-xs">
+                      <span className="font-semibold text-slate-500">Recommended Weekly Focus:</span>
+                      <span className="font-black text-purple-600 dark:text-purple-400 text-sm">
+                        {aiAdvice.weeklyStudyHours || 16} Hours / Week
+                      </span>
+                    </div>
+
+                    <div className="space-y-2">
+                      <h4 className="text-xs font-black uppercase tracking-wider text-slate-400">
+                        Strategic Action Plan
+                      </h4>
+                      <div className="space-y-2 text-xs">
+                        {(aiAdvice.actionSteps || []).map((step, idx) => (
+                          <div key={idx} className="p-3 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-medium text-slate-800 dark:text-slate-200 flex items-start gap-2">
+                            <span className="w-5 h-5 rounded-full bg-purple-500/10 text-purple-600 flex items-center justify-center font-bold text-[10px] shrink-0">
+                              {idx + 1}
+                            </span>
+                            <span>{step}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ) : null}
+
+                <div className="flex justify-end pt-2">
+                  <button
+                    onClick={() => setShowAdviceModal(false)}
+                    className="px-5 py-2 rounded-xl bg-purple-600 text-white font-bold text-xs"
+                  >
+                    Got It
+                  </button>
+                </div>
+              </motion.div>
+            </div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );

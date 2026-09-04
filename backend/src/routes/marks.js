@@ -1,6 +1,7 @@
 import express from 'express';
 import { ObjectId } from 'mongodb';
 import { getDb } from '../config/db.js';
+import { generateAcademicAdvice } from '../lib/ai.js';
 
 const router = express.Router();
 
@@ -306,10 +307,15 @@ router.delete('/:id', async (req, res) => {
     }
 
     await col.deleteOne({ _id: new ObjectId(id) });
-    res.json({ success: true, message: 'Mark record deleted successfully' });
+// POST /api/marks/ai-advisor - Generate AI study strategy
+router.post('/ai-advisor', async (req, res) => {
+  try {
+    const { currentCGPA = 3.5, targetCGPA = 3.8, completedCredits = 12, attendancePct = 85 } = req.body;
+    const advice = await generateAcademicAdvice(currentCGPA, targetCGPA, completedCredits, attendancePct);
+    res.json({ success: true, advice });
   } catch (error) {
-    console.error('Error deleting mark record:', error);
-    res.status(500).json({ success: false, error: 'Failed to delete mark record' });
+    console.error('Error generating AI academic advice:', error);
+    res.status(500).json({ success: false, error: 'Failed to generate AI academic advice' });
   }
 });
 
