@@ -136,28 +136,19 @@ export default function FeedbackPage() {
             Students can rate teaching quality, course content organization, and communication effectiveness after completing courses. Submissions support optional total anonymity.
           </p>
 
-          <div className="pt-2 flex flex-wrap items-center gap-3">
-            <button
-              onClick={() => {
-                if (isFaculty) {
-                  alert('Faculty members are not permitted to rate or evaluate other faculty members.');
-                  return;
-                }
-                setTargetFacultyForModal(null);
-                setIsModalOpen(true);
-              }}
-              disabled={isFaculty}
-              title={isFaculty ? 'Faculty members cannot evaluate other faculty' : 'Evaluate a Course Teacher'}
-              className="px-5 py-2.5 rounded-2xl bg-amber-500 hover:bg-amber-600 disabled:opacity-40 disabled:cursor-not-allowed text-slate-950 text-xs font-extrabold transition-all flex items-center gap-2 shadow-lg shadow-amber-500/25"
-            >
-              <Plus className="w-4 h-4" /> Evaluate a Course Teacher
-            </button>
-            {isFaculty && (
-              <span className="text-xs text-amber-300 font-semibold italic">
-                (Only enrolled students of a faculty's subjects can submit ratings)
-              </span>
-            )}
-          </div>
+          {!isFaculty && (
+            <div className="pt-2 flex flex-wrap items-center gap-3">
+              <button
+                onClick={() => {
+                  setTargetFacultyForModal(null);
+                  setIsModalOpen(true);
+                }}
+                className="px-5 py-2.5 rounded-2xl bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-extrabold transition-all flex items-center gap-2 shadow-lg shadow-amber-500/25"
+              >
+                <Plus className="w-4 h-4" /> Evaluate a Course Teacher
+              </button>
+            </div>
+          )}
         </div>
       </section>
 
