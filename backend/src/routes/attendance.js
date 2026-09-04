@@ -228,6 +228,15 @@ router.delete('/:id', async (req, res) => {
     const filter = ObjectId.isValid(id) ? { _id: new ObjectId(id) } : { _id: id };
     const result = await col.deleteOne(filter);
 
+    if (result.deletedCount > 0) {
+      return res.json({ success: true, message: 'Attendance session deleted' });
+    }
+    res.status(404).json({ success: false, error: 'Attendance session not found' });
+  } catch (error) {
+    res.status(500).json({ success: false, error: 'Failed to delete attendance session' });
+  }
+});
+
 // GET attendance risk assessment for a student
 router.get('/risk-check', async (req, res) => {
   try {
