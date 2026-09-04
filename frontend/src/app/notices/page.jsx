@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Search, Filter, Plus, Bell, Sparkles } from 'lucide-react';
+import { Search, Filter, Plus, Bell, Sparkles, LayoutGrid, List } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import NoticeCard from '../../components/NoticeCard';
 import CreateNoticeModal from '../../components/CreateNoticeModal';
@@ -16,6 +16,7 @@ export default function NoticesPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedDepartment, setSelectedDepartment] = useState('All');
+  const [viewMode, setViewMode] = useState('column'); // 'column' (1 col list) or 'grid' (multi-col)
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -68,7 +69,7 @@ export default function NoticesPage() {
             <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">University Notice Board</h1>
           </div>
           <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
-            Official announcements, examination schedules, and academic circulars.
+            Official academic circulars, exam schedules, and university notices presented in column list view.
           </p>
         </div>
 
@@ -84,7 +85,7 @@ export default function NoticesPage() {
         )}
       </div>
 
-      {/* Filter & Search Bar */}
+      {/* Filter, Search Bar & Layout Switcher */}
       <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-100 dark:border-slate-800 shadow-card flex flex-col md:flex-row items-center justify-between gap-4">
         
         {/* Search */}
@@ -100,28 +101,58 @@ export default function NoticesPage() {
           />
         </div>
 
-        {/* Category Pills */}
-        <div className="flex items-center gap-1.5 overflow-x-auto max-w-full w-full md:w-auto scrollbar-none py-1">
-          {categories.map((cat) => (
-            <motion.button
-              key={cat}
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.96 }}
-              onClick={() => setSelectedCategory(cat)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
-                selectedCategory === cat
-                  ? 'bg-blue-600 text-white shadow-xs'
-                  : 'bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-100 dark:border-slate-700'
+        {/* Category Pills & Layout View Toggle */}
+        <div className="flex flex-wrap items-center justify-between gap-3 w-full md:w-auto">
+          <div className="flex items-center gap-1.5 overflow-x-auto max-w-full scrollbar-none py-1">
+            {categories.map((cat) => (
+              <motion.button
+                key={cat}
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.96 }}
+                onClick={() => setSelectedCategory(cat)}
+                className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
+                  selectedCategory === cat
+                    ? 'bg-blue-600 text-white shadow-xs'
+                    : 'bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-100 dark:border-slate-700'
+                }`}
+              >
+                {cat}
+              </motion.button>
+            ))}
+          </div>
+
+          {/* Column vs Grid Switcher */}
+          <div className="flex items-center gap-1 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shrink-0">
+            <button
+              onClick={() => setViewMode('column')}
+              title="Column View (1-Column List)"
+              className={`p-1.5 rounded-lg text-xs font-bold transition-colors flex items-center gap-1 ${
+                viewMode === 'column'
+                  ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-xs'
+                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
               }`}
             >
-              {cat}
-            </motion.button>
-          ))}
+              <List className="w-4 h-4" />
+              <span className="hidden sm:inline">Column</span>
+            </button>
+            <button
+              onClick={() => setViewMode('grid')}
+              title="Grid View"
+              className={`p-1.5 rounded-lg text-xs font-bold transition-colors flex items-center gap-1 ${
+                viewMode === 'grid'
+                  ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-xs'
+                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
+              }`}
+            >
+              <LayoutGrid className="w-4 h-4" />
+              <span className="hidden sm:inline">Grid</span>
+            </button>
+          </div>
         </div>
 
       </div>
 
-      {/* Notices Grid */}
+      {/* Notices Column List */}
       {loading ? (
         <div className="py-20 text-center">
           <div className="w-8 h-8 border-3 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
@@ -148,7 +179,7 @@ export default function NoticesPage() {
               transition: { staggerChildren: 0.05 }
             }
           }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          className={viewMode === 'column' ? "flex flex-col gap-4" : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"}
         >
           <AnimatePresence>
             {filteredNotices.map((notice) => (
@@ -160,9 +191,9 @@ export default function NoticesPage() {
                 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.3 }}
-                className="h-full flex flex-col"
+                className={viewMode === 'column' ? "w-full" : "h-full flex flex-col"}
               >
-                <NoticeCard notice={notice} onDelete={handleDeleteNotice} />
+                <NoticeCard notice={notice} onDelete={handleDeleteNotice} layout={viewMode} />
               </motion.div>
             ))}
           </AnimatePresence>

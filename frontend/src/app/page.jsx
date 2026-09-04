@@ -426,7 +426,7 @@ export default function HomePage() {
               </div>
             ) : (
               filteredNotices.slice(0, 4).map((notice) => (
-                <NoticeCard key={notice._id} notice={notice} onDelete={handleDeleteNotice} />
+                <NoticeCard key={notice._id} notice={notice} onDelete={handleDeleteNotice} layout="grid" />
               ))
             )}
           </div>
