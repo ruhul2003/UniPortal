@@ -307,6 +307,13 @@ router.delete('/:id', async (req, res) => {
     }
 
     await col.deleteOne({ _id: new ObjectId(id) });
+    res.json({ success: true, message: 'Mark record deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting mark record:', error);
+    res.status(500).json({ success: false, error: 'Failed to delete mark record' });
+  }
+});
+
 // POST /api/marks/ai-advisor - Generate AI study strategy
 router.post('/ai-advisor', async (req, res) => {
   try {
