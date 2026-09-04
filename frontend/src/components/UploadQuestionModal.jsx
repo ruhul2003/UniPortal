@@ -180,7 +180,7 @@ export default function UploadQuestionModal({ isOpen, onClose, onQuestionUploade
                 <select
                   value={courseCode}
                   onChange={(e) => handleCourseChange(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-xs font-bold focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                  className="w-full px-3.5 py-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-xs font-bold focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                 >
                   {COURSES.map(c => (
                     <option key={c.code} value={c.code}>{c.code} - {c.title}</option>
@@ -195,7 +195,7 @@ export default function UploadQuestionModal({ isOpen, onClose, onQuestionUploade
                 <select
                   value={semester}
                   onChange={(e) => setSemester(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-xs font-bold focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                  className="w-full px-3.5 py-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-xs font-bold focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                 >
                   {SEMESTERS.map(sem => (
                     <option key={sem} value={sem}>{sem}</option>
@@ -213,7 +213,7 @@ export default function UploadQuestionModal({ isOpen, onClose, onQuestionUploade
                 <select
                   value={category}
                   onChange={(e) => handleCategoryChange(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-xs font-bold focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                  className="w-full px-3.5 py-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-xs font-bold focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                 >
                   <option value="CT Questions (Class Test)">CT Questions (Class Test)</option>
                   <option value="Midterm Questions">Midterm Questions</option>
@@ -230,7 +230,7 @@ export default function UploadQuestionModal({ isOpen, onClose, onQuestionUploade
                   <select
                     value={examType}
                     onChange={(e) => setExamType(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-2xl bg-purple-50 dark:bg-purple-950/60 border border-purple-200 dark:border-purple-800 text-purple-700 dark:text-purple-300 text-xs font-black focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                    className="w-full px-3.5 py-2.5 rounded-2xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300 text-xs font-black focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                   >
                     <option value="CT 1">CT 1 (Class Test 1)</option>
                     <option value="CT 2">CT 2 (Class Test 2)</option>
@@ -249,7 +249,7 @@ export default function UploadQuestionModal({ isOpen, onClose, onQuestionUploade
                     type="text"
                     readOnly
                     value="Final Exam"
-                    className="w-full px-3.5 py-2.5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 text-xs font-black"
+                    className="w-full px-3.5 py-2.5 rounded-2xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300 text-xs font-black"
                   />
                 ) : (
                   <input
@@ -273,7 +273,7 @@ export default function UploadQuestionModal({ isOpen, onClose, onQuestionUploade
                 placeholder={`e.g. ${courseCode} ${examType} Question Paper & Answer Key`}
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-xs font-medium focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                className="w-full px-3.5 py-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-xs font-medium focus:ring-2 focus:ring-indigo-500 focus:outline-none"
               />
             </div>
 
@@ -290,7 +290,7 @@ export default function UploadQuestionModal({ isOpen, onClose, onQuestionUploade
                   placeholder="https://drive.google.com/file/d/... or PDF link"
                   value={fileUrl}
                   onChange={(e) => setFileUrl(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-xs font-medium focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-xs font-medium focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                 />
               </div>
             </div>
@@ -301,13 +301,13 @@ export default function UploadQuestionModal({ isOpen, onClose, onQuestionUploade
                 Solution / Answer Key Link <span className="text-slate-400 font-normal">(Optional)</span>
               </label>
               <div className="relative">
-                <CheckCircle2 className="w-4 h-4 absolute left-3.5 top-3 text-emerald-500" />
+                <CheckCircle2 className="w-4 h-4 absolute left-3.5 top-3 text-indigo-500" />
                 <input
                   type="url"
                   placeholder="https://drive.google.com/file/d/... (Official solution key)"
                   value={solutionUrl}
                   onChange={(e) => setSolutionUrl(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-xs font-medium focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-xs font-medium focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                 />
               </div>
             </div>
@@ -322,7 +322,7 @@ export default function UploadQuestionModal({ isOpen, onClose, onQuestionUploade
                 placeholder="e.g. Covers modules 1-3. Total marks 20. Allowed duration 45 mins."
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-xs font-medium focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                className="w-full px-3.5 py-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-xs font-medium focus:ring-2 focus:ring-indigo-500 focus:outline-none"
               />
             </div>
 
@@ -343,7 +343,7 @@ export default function UploadQuestionModal({ isOpen, onClose, onQuestionUploade
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-6 py-2.5 rounded-2xl bg-slate-900 dark:bg-slate-800 hover:bg-slate-800 dark:hover:bg-slate-700 text-white text-xs font-extrabold border border-slate-700 transition-all flex items-center gap-2"
+                  className="px-6 py-2.5 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition-all shadow-xs flex items-center gap-2"
                 >
                   <Upload className="w-4 h-4" />
                   <span>{isSubmitting ? 'Publishing...' : 'Publish Question Paper'}</span>

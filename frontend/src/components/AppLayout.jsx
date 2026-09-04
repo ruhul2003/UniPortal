@@ -8,12 +8,7 @@ import InitialLoader from './InitialLoader';
 import { fetchNotices } from '../lib/api';
 
 export default function AppLayout({ children }) {
-  const [isInitialLoading, setIsInitialLoading] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return !sessionStorage.getItem('uniportal_loaded');
-    }
-    return true;
-  });
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [hasNotices, setHasNotices] = useState(false);
@@ -22,9 +17,16 @@ export default function AppLayout({ children }) {
   const handleLoaderComplete = () => {
     setIsInitialLoading(false);
     if (typeof window !== 'undefined') {
+      sessionStorage.getItem('uniportal_loaded');
       sessionStorage.setItem('uniportal_loaded', 'true');
     }
   };
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && sessionStorage.getItem('uniportal_loaded')) {
+      setIsInitialLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
     async function checkNotices() {

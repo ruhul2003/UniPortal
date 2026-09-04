@@ -220,37 +220,37 @@ export default function ResourcesPage() {
       <div className="max-w-7xl mx-auto space-y-8">
         
         {/* Header Banner */}
-        <div className="relative overflow-hidden rounded-3xl bg-purple-800 p-6 sm:p-10 text-white shadow-2xl border border-purple-500/20">
-          <div className="absolute -right-12 -bottom-12 w-96 h-96 bg-purple-400/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="relative overflow-hidden rounded-3xl bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 sm:p-8 text-white shadow-md">
+          <div className="absolute -right-12 -bottom-12 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
 
           <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
             <div className="space-y-3 max-w-2xl">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-extrabold uppercase tracking-wider">
-                <FolderOpen className="w-4 h-4 text-purple-300" />
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-bold uppercase tracking-wider">
+                <FolderOpen className="w-4 h-4 text-indigo-400" />
                 <span>Question Bank & Study Materials Hub</span>
               </div>
-              <h1 className="text-3xl sm:text-4xl font-black tracking-tight">
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
                 Past Exam Question Bank & Notes 📚
               </h1>
-              <p className="text-purple-100 text-sm sm:text-base font-medium">
-                Access official faculty-verified <strong className="text-white">Class Test (CT 1 - CT 4)</strong>, <strong className="text-white">Midterm</strong>, and <strong className="text-white">Final Exam</strong> question papers along with solved answer keys and study materials.
+              <p className="text-slate-300 text-sm font-medium leading-relaxed">
+                Access official faculty-verified <strong className="text-white font-semibold">Class Test (CT 1 - CT 4)</strong>, <strong className="text-white font-semibold">Midterm</strong>, and <strong className="text-white font-semibold">Final Exam</strong> question papers along with solved answer keys and study materials.
               </p>
             </div>
 
             <div className="flex flex-wrap items-center gap-3 shrink-0">
               <button
                 onClick={() => setShowQuestionModal(true)}
-                className="px-6 py-3.5 rounded-2xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2.5 group active:scale-95"
+                className="px-5 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs transition-all shadow-xs flex items-center justify-center gap-2 group active:scale-95"
               >
-                <ShieldCheck className="w-5 h-5 text-slate-950 group-hover:rotate-12 transition-transform" />
+                <ShieldCheck className="w-4 h-4 text-white group-hover:rotate-12 transition-transform" />
                 <span>Upload Past Question Paper</span>
               </button>
 
               <button
                 onClick={() => setShowUploadModal(true)}
-                className="px-5 py-3.5 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs border border-white/20 transition-all flex items-center justify-center gap-2 active:scale-95"
+                className="px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 transition-all flex items-center justify-center gap-2 active:scale-95"
               >
-                <Plus className="w-4 h-4 text-purple-300" />
+                <Plus className="w-4 h-4 text-indigo-400" />
                 <span>Share General Note</span>
               </button>
             </div>
@@ -268,19 +268,19 @@ export default function ResourcesPage() {
                 placeholder="Search by course (e.g. CSE-101), topic, CT 1/2, Midterm, or Final..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-medium focus:ring-2 focus:ring-purple-500 transition-all"
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
               />
             </div>
 
             {/* Exam Tag Sub-Filter */}
             <div className="flex items-center gap-2 w-full md:w-auto overflow-x-auto scrollbar-none">
-              <span className="text-xs font-extrabold text-slate-500 shrink-0">Sub-Tag:</span>
+              <span className="text-xs font-bold text-slate-400 shrink-0">Sub-Tag:</span>
               <div className="flex items-center gap-1.5">
                 {EXAM_SUBTYPES.map(sub => (
                   <button
                     key={sub}
                     onClick={() => setSelectedExamType(sub)}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-extrabold whitespace-nowrap transition-all ${
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
                       selectedExamType === sub
                         ? 'bg-indigo-600 text-white shadow-xs'
                         : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
@@ -299,9 +299,9 @@ export default function ResourcesPage() {
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-4 py-2 rounded-xl text-xs font-extrabold whitespace-nowrap transition-all ${
+                className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
                   selectedCategory === cat
-                    ? 'bg-purple-600 text-white shadow-sm'
+                    ? 'bg-indigo-600 text-white shadow-xs'
                     : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
                 }`}
               >
@@ -314,7 +314,7 @@ export default function ResourcesPage() {
         {/* Resources & Question Papers Cards Grid */}
         {loading ? (
           <div className="py-16 text-center text-slate-400 font-medium">
-            <div className="w-8 h-8 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+            <div className="w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
             <p>Fetching study materials & past question bank...</p>
           </div>
         ) : (
@@ -327,54 +327,50 @@ export default function ResourcesPage() {
               return (
                 <div
                   key={item._id}
-                  className={`p-6 rounded-3xl bg-white dark:bg-slate-900 border transition-all flex flex-col justify-between space-y-4 shadow-sm hover:shadow-xl ${
-                    isOfficial
-                      ? 'border-amber-400/50 dark:border-amber-500/40 ring-1 ring-amber-400/20'
-                      : 'border-slate-200/80 dark:border-slate-800'
-                  }`}
+                  className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 transition-all flex flex-col justify-between space-y-4 shadow-xs hover:shadow-md"
                 >
                   <div className="space-y-3">
                     {/* Header Badges */}
                     <div className="flex items-start justify-between gap-2 flex-wrap">
                       <div className="flex items-center gap-1.5">
-                        <span className="px-2.5 py-1 rounded-lg text-xs font-black bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 border border-purple-100 dark:border-purple-800">
+                        <span className="px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
                           {item.courseCode}
                         </span>
 
                         {item.examType && (
-                          <span className="px-2.5 py-1 rounded-lg text-xs font-black bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-300 border border-indigo-100 dark:border-indigo-800">
+                          <span className="px-2.5 py-1 rounded-lg text-xs font-bold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-900/60">
                             {item.examType}
                           </span>
                         )}
                       </div>
 
                       {isOfficial ? (
-                        <span className="px-2.5 py-1 rounded-full text-[10px] font-black bg-amber-500 text-slate-950 shadow-xs flex items-center gap-1">
-                          <ShieldCheck className="w-3.5 h-3.5 text-slate-950" />
+                        <span className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800/60 flex items-center gap-1">
+                          <ShieldCheck className="w-3.5 h-3.5 text-indigo-500" />
                           Faculty Verified
                         </span>
                       ) : (
-                        <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
+                        <span className="px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
                           {item.category}
                         </span>
                       )}
                     </div>
 
                     {/* Title */}
-                    <h3 className="text-base font-black text-slate-900 dark:text-white leading-snug line-clamp-2">
+                    <h3 className="text-base font-bold text-slate-900 dark:text-white leading-snug line-clamp-2">
                       {item.title}
                     </h3>
 
                     {/* Description */}
-                    <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2">
+                    <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
                       {item.description || 'No additional remarks provided.'}
                     </p>
 
                     {/* Meta info */}
-                    <div className="text-[11px] text-slate-400 flex items-center justify-between pt-1">
+                    <div className="text-xs text-slate-400 flex items-center justify-between pt-1">
                       <span className="flex items-center gap-1">
-                        <User className="w-3 h-3 text-slate-400" />
-                        <strong className="text-slate-700 dark:text-slate-300">{item.uploadedBy}</strong>
+                        <User className="w-3.5 h-3.5 text-slate-400" />
+                        <strong className="text-slate-700 dark:text-slate-300 font-medium">{item.uploadedBy}</strong>
                       </span>
                       <span>{item.semester}</span>
                     </div>
@@ -386,9 +382,9 @@ export default function ResourcesPage() {
                     {item.solutionUrl && (
                       <button
                         onClick={() => handleDownloadClick(item, item.solutionUrl)}
-                        className="w-full py-2 px-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 text-xs font-bold transition-all flex items-center justify-center gap-1.5"
+                        className="w-full py-2 px-3 rounded-xl bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700/80 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold transition-all flex items-center justify-center gap-1.5"
                       >
-                        <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                        <CheckCircle2 className="w-4 h-4 text-indigo-500 dark:text-indigo-400" />
                         <span>View Model Solution / Answer Key</span>
                       </button>
                     )}
@@ -399,16 +395,16 @@ export default function ResourcesPage() {
                           onClick={() => handleUpvote(item._id)}
                           className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all ${
                             hasUpvoted
-                              ? 'bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-300 border border-purple-300'
-                              : 'bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-purple-50'
+                              ? 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800'
+                              : 'bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700'
                           }`}
                         >
-                          <ThumbsUp className={`w-3.5 h-3.5 ${hasUpvoted ? 'fill-purple-600 text-purple-600' : ''}`} />
+                          <ThumbsUp className={`w-3.5 h-3.5 ${hasUpvoted ? 'fill-indigo-600 text-indigo-600 dark:fill-indigo-400 dark:text-indigo-400' : ''}`} />
                           <span>{item.upvotes?.length || 0}</span>
                         </button>
 
-                        <span className="text-[11px] text-slate-400 font-medium flex items-center gap-1">
-                          <Download className="w-3 h-3 text-slate-400" />
+                        <span className="text-xs text-slate-400 font-medium flex items-center gap-1 px-1">
+                          <Download className="w-3.5 h-3.5 text-slate-400" />
                           {item.downloadsCount || 0}
                         </span>
                       </div>
@@ -417,7 +413,7 @@ export default function ResourcesPage() {
                         {(user?.role === 'admin' || user?.role === 'faculty' || user?.name === item.uploadedBy) && (
                           <button
                             onClick={() => handleDelete(item._id)}
-                            className="p-1.5 rounded-xl text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40"
+                            className="p-2 rounded-xl text-slate-400 hover:text-rose-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
                             title="Delete resource"
                           >
                             <Trash2 className="w-4 h-4" />
@@ -426,7 +422,7 @@ export default function ResourcesPage() {
 
                         <button
                           onClick={() => handleDownloadClick(item, item.fileUrl)}
-                          className="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-extrabold transition-all shadow-xs flex items-center gap-1.5 active:scale-95"
+                          className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition-all shadow-xs flex items-center gap-1.5 active:scale-95"
                         >
                           <span>Open Paper</span>
                           <ExternalLink className="w-3.5 h-3.5" />
@@ -452,50 +448,50 @@ export default function ResourcesPage() {
         {/* Share General Material Modal */}
         <AnimatePresence>
           {showUploadModal && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm">
               <motion.div 
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 className="w-full max-w-lg bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden"
               >
-                <div className="p-6 bg-slate-900 text-white flex items-center justify-between">
+                <div className="p-6 bg-slate-900 text-white flex items-center justify-between border-b border-slate-800">
                   <h3 className="text-lg font-bold">Share Study Material 📚</h3>
-                  <button onClick={() => setShowUploadModal(false)} className="text-slate-400 hover:text-white">
+                  <button onClick={() => setShowUploadModal(false)} className="text-slate-400 hover:text-white p-1 rounded-lg">
                     <XCircle className="w-6 h-6" />
                   </button>
                 </div>
 
                 <form onSubmit={handleUploadResource} className="p-6 space-y-4">
                   <div>
-                    <label className="block text-xs font-bold mb-1">Resource Title *</label>
+                    <label className="block text-xs font-bold mb-1.5 text-slate-700 dark:text-slate-300">Resource Title *</label>
                     <input 
                       type="text"
                       required
                       placeholder="e.g. CSE-101 Lecture Notes 2026"
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-medium"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-medium focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                     />
                   </div>
 
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs font-bold mb-1">Course Code</label>
+                      <label className="block text-xs font-bold mb-1.5 text-slate-700 dark:text-slate-300">Course Code</label>
                       <input 
                         type="text"
                         required
                         value={courseCode}
                         onChange={(e) => setCourseCode(e.target.value)}
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-medium"
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-medium focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-bold mb-1">Category</label>
+                      <label className="block text-xs font-bold mb-1.5 text-slate-700 dark:text-slate-300">Category</label>
                       <select
                         value={category}
                         onChange={(e) => setCategory(e.target.value)}
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-medium"
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-medium focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                       >
                         <option value="Lecture Slides">Lecture Slides</option>
                         <option value="Class Notes">Class Notes</option>
@@ -506,40 +502,40 @@ export default function ResourcesPage() {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold mb-1">File URL / Google Drive Link *</label>
+                    <label className="block text-xs font-bold mb-1.5 text-slate-700 dark:text-slate-300">File URL / Google Drive Link *</label>
                     <input 
                       type="url"
                       required
                       placeholder="https://drive.google.com/..."
                       value={fileUrl}
                       onChange={(e) => setFileUrl(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-medium"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-medium focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold mb-1">Brief Summary / Note</label>
+                    <label className="block text-xs font-bold mb-1.5 text-slate-700 dark:text-slate-300">Brief Summary / Note</label>
                     <textarea 
                       rows={2}
                       placeholder="What is covered in this PDF / link..."
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-medium"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-medium focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                     />
                   </div>
 
-                  <div className="flex justify-end gap-3 pt-3">
+                  <div className="flex justify-end gap-3 pt-3 border-t border-slate-100 dark:border-slate-800">
                     <button
                       type="button"
                       onClick={() => setShowUploadModal(false)}
-                      className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-500"
+                      className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
                       disabled={isUploading}
-                      className="px-6 py-2.5 rounded-xl bg-purple-600 text-white text-xs font-bold hover:bg-purple-700"
+                      className="px-6 py-2.5 rounded-xl bg-indigo-600 text-white text-xs font-bold hover:bg-indigo-500 transition-all shadow-xs"
                     >
                       {isUploading ? 'Uploading...' : 'Publish Material'}
                     </button>
