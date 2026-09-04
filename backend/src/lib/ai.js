@@ -226,3 +226,85 @@ Return a valid JSON object strictly matching this schema (do NOT wrap in markdow
     isRealAI: false
   };
 }
+
+/**
+ * Chat with UniBot AI Assistant (General & Policy FAQs)
+ */
+export async function chatWithUniBot(userMessage, conversationHistory = [], userContext = {}) {
+  const ai = getAIClient();
+
+  const systemInstruction = `You are UniBot AI, the official intelligent academic assistant for Metropolitan University (UniPortal).
+Be polite, professional, concise, and helpful. Use markdown formatting (bolding, bullet points) when listing steps.
+
+Metropolitan University Policies & Portal Guidelines:
+1. **Attendance Policy**: Minimum 75% class attendance is mandatory for exam permit qualification. Attendance under 75% triggers a Red Risk Alert and can block Admit Card generation.
+2. **Section Transfer Requests**: Students cannot alter their assigned section directly. They submit a transfer request specifying target section (Section A to E) and reason. Admins review and approve/reject.
+3. **One-Day Special Permits**: Students with tuition dues > ৳25,000 BDT can apply to faculty for a 1-day academic pass.
+4. **Class Representative (CR) Capacity**: Enforces max 2 CRs per section. CRs can edit class routines.
+5. **CGPA Scale**: Maximum 4.00 CGPA scale. (80%+ = A+ 4.00, 75-79% = A 3.75, 70-74% = A- 3.50, 65-69% = B+ 3.25, 60-64% = B 3.00, 55-59% = B- 2.75, 50-54% = C+ 2.50, 45-49% = C 2.25, 40-44% = D 2.00, <40% = F 0.00).
+6. **Sick Leave & Exemption Desk**: Students submit medical notes/prescriptions for absence waiver approval by faculty.
+7. **Resource Locker**: Access past CT (Class Test), Midterm, and Final question papers with AI Summarizer and model answer keys.
+
+User Context:
+Name: ${userContext.name || 'Student'}, Role: ${userContext.role || 'student'}, Section: ${userContext.section || 'Section A'}.`;
+
+  if (ai) {
+    try {
+      const formattedHistory = conversationHistory.map(msg => `${msg.role === 'user' ? 'Student' : 'UniBot'}: ${msg.content}`).join('\n');
+      const prompt = `${systemInstruction}\n\nRecent Conversation:\n${formattedHistory}\n\nStudent Question: ${userMessage}\n\nUniBot Response:`;
+
+      const response = await ai.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: prompt
+      });
+
+      return {
+        reply: response.text?.trim() || 'I am happy to assist you with any questions regarding UniPortal!',
+        isRealAI: true
+      };
+    } catch (err) {
+      console.warn('Gemini AI chat fallback:', err.message);
+    }
+  }
+
+  // Smart FAQ Matcher Fallback
+  const q = userMessage.toLowerCase();
+  let reply = '';
+
+  if (q.includes('section') || q.includes('transfer')) {
+    reply = `🎓 **Section Transfer Workflow**:
+1. Go to your **Profile** page.
+2. Under **Section Details**, click **"Request Section Transfer"**.
+3. Select your target section (Section A – E) and state your reason.
+4. Admin will review and approve/reject your request.`;
+  } else if (q.includes('attendance') || q.includes('risk') || q.includes('percent')) {
+    reply = `⚠️ **Attendance Policy & Exam Eligibility**:
+- Minimum **75% attendance** is required to qualify for examination admit cards.
+- Attendance below 75% triggers an **Attendance Risk Alert**.
+- If sick, submit a medical certificate via the **Sick Leave Desk** for faculty exemption.`;
+  } else if (q.includes('permit') || q.includes('due') || q.includes('tuition')) {
+    reply = `💳 **One-Day Special Permit**:
+- If your tuition dues exceed **৳25,000 BDT**, you can apply for a 1-day pass.
+- Go to **One-Day Permits**, select your faculty member, date, and reason.
+- Once approved, download your verified PDF permission slip.`;
+  } else if (q.includes('cgpa') || q.includes('gpa') || q.includes('grade')) {
+    reply = `📊 **CGPA Scale & Simulator**:
+- **A+** (80-100%) = 4.00 | **A** (75-79%) = 3.75 | **A-** (70-74%) = 3.50
+- Use the **CGPA Calculator** page to simulate target grades for upcoming semesters and get **AI Study Strategies**!`;
+  } else if (q.includes('admit') || q.includes('exam') || q.includes('hall')) {
+    reply = `📄 **Exam & Admit Card Pass**:
+- Visit **Exam & Admit Card** to view room allocations and invigilator schedules.
+- Click **"View / Print Digital Admit Card"** to generate your official verified hall pass.`;
+  } else {
+    reply = `🤖 **UniBot AI Assistant**:
+I am here to help you navigate UniPortal! You can ask me about:
+- **Attendance & Minimum 75% Requirement**
+- **Section Transfer Requests**
+- **1-Day Dues Permission Slips**
+- **CGPA Calculator & Grading Scale**
+- **Sick Leave Applications & Exam Prep**`;
+  }
+
+  return { reply, isRealAI: false };
+}
+

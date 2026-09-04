@@ -612,3 +612,24 @@ export async function deletePermitRequest(permitId) {
   const apiBase = getApiBase();
   return await safeFetchJson(`${apiBase}/permits/${permitId}`, { method: 'DELETE' }, 'Failed to delete permit request');
 }
+
+// ==================== AI CHAT ASSISTANT API ====================
+export async function sendAIChatQuery(message, history = [], context = {}) {
+  try {
+    const apiBase = getApiBase();
+    const data = await safeFetchJson(`${apiBase}/ai/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message, history, context })
+    }, 'Failed to get AI chat response');
+    return data;
+  } catch (err) {
+    console.warn('[API Client] AI Chat error:', err.message);
+    return {
+      success: false,
+      reply: '⚠️ Unable to connect to AI server right now. Please check your internet connection or try again shortly.',
+      isRealAI: false
+    };
+  }
+}
+

@@ -5,6 +5,7 @@ import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 import Footer from './Footer';
 import InitialLoader from './InitialLoader';
+import AIChatbox from './AIChatbox';
 import { fetchNotices } from '../lib/api';
 
 export default function AppLayout({ children }) {
@@ -91,6 +92,8 @@ export default function AppLayout({ children }) {
         <Footer />
       </div>
 
+      {/* Global Floating AI Chatbot */}
+      <AIChatbox />
     </div>
     </>
   );
