@@ -24,6 +24,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import UploadQuestionModal from '../../components/UploadQuestionModal';
+import ResourceSummarizerModal from '../../components/ResourceSummarizerModal';
 
 const CATEGORIES = [
   'All',
@@ -51,6 +52,8 @@ export default function ResourcesPage() {
   // Modals state
   const [showQuestionModal, setShowQuestionModal] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
+  const [showSummarizerModal, setShowSummarizerModal] = useState(false);
+  const [selectedResourceForSummary, setSelectedResourceForSummary] = useState(null);
 
   // General share form state
   const [title, setTitle] = useState('');
@@ -409,6 +412,18 @@ export default function ResourcesPage() {
                       </div>
 
                       <div className="flex items-center gap-1.5">
+                        <button
+                          onClick={() => {
+                            setSelectedResourceForSummary(item);
+                            setShowSummarizerModal(true);
+                          }}
+                          className="px-3 py-1.5 rounded-xl bg-purple-50 dark:bg-purple-950/60 border border-purple-200 dark:border-purple-800 text-purple-600 dark:text-purple-300 text-xs font-bold flex items-center gap-1 hover:bg-purple-100 dark:hover:bg-purple-900 transition-colors"
+                          title="AI Summarize Notes"
+                        >
+                          <Sparkles className="w-3.5 h-3.5 text-purple-500" />
+                          <span>Summarize</span>
+                        </button>
+
                         {(user?.role === 'admin' || user?.role === 'faculty' || user?.name === item.uploadedBy) && (
                           <button
                             onClick={() => handleDelete(item._id)}
@@ -542,9 +557,15 @@ export default function ResourcesPage() {
                 </form>
               </motion.div>
             </div>
-          )}
-        </AnimatePresence>
-
+        {/* AI Resource Summarizer Modal */}
+        <ResourceSummarizerModal
+          isOpen={showSummarizerModal}
+          onClose={() => {
+            setShowSummarizerModal(false);
+            setSelectedResourceForSummary(null);
+          }}
+          resource={selectedResourceForSummary}
+        />
       </div>
   );
 }

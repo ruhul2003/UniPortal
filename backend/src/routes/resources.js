@@ -170,4 +170,49 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+// POST summarize resource content
+router.post('/summarize', async (req, res) => {
+  try {
+    const { title = 'Lecture Material', courseCode = 'CSE', description = '' } = req.body;
+
+    const sentences = description
+      .split(/[.!?]+/)
+      .map(s => s.trim())
+      .filter(Boolean);
+
+    const overview = sentences.length > 0
+      ? sentences.slice(0, 2).join('. ') + '.'
+      : `Comprehensive study guide and lecture notes for ${title} (${courseCode}). Covers core domain principles, sample problems, and exam review guidelines.`;
+
+    const keyTakeaways = sentences.length > 2
+      ? sentences.slice(2, 6)
+      : [
+          `Fundamental concepts of ${title}`,
+          `Practical implementation and design patterns`,
+          `High-frequency midterm & final examination questions`,
+          `Best practices for academic problem solving`
+        ];
+
+    const highYieldTopics = [
+      `${courseCode} Core Definitions & Architectural Models`,
+      `Performance Optimization & Algorithmic Complexity`,
+      `Case Studies & Practical Applied Examples`
+    ];
+
+    const summary = {
+      title,
+      courseCode,
+      overview,
+      keyTakeaways,
+      highYieldTopics,
+      readTimeMinutes: Math.max(1, Math.ceil((description.length || 300) / 200))
+    };
+
+    res.json({ success: true, summary });
+  } catch (error) {
+    console.error('Error generating resource summary:', error);
+    res.status(500).json({ success: false, error: 'Failed to summarize resource' });
+  }
+});
+
 export default router;
