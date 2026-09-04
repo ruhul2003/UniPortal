@@ -58,23 +58,23 @@ export default function NoticeCard({ notice, onDelete }) {
           {/* Title */}
           <h3 
             onClick={() => setIsOpen(true)}
-            className="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition-colors cursor-pointer line-clamp-2 mb-2 leading-snug"
+            className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors cursor-pointer line-clamp-2 mb-2 leading-snug"
           >
             {notice.title}
           </h3>
 
           {/* Content snippet */}
-          <p className="text-sm text-slate-500 line-clamp-3 mb-4 leading-relaxed font-normal">
+          <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-3 mb-4 leading-relaxed font-normal">
             {notice.content}
           </p>
         </div>
 
         {/* Footer info */}
-        <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+        <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-400">
           <div className="flex items-center gap-3">
             <span className="flex items-center gap-1">
               <User className="w-3.5 h-3.5 text-slate-400" />
-              <span className="font-medium text-slate-600 truncate max-w-[120px] sm:max-w-[160px]">
+              <span className="font-medium text-slate-600 dark:text-slate-300 truncate max-w-[120px] sm:max-w-[160px]">
                 {notice.publishedBy}
               </span>
             </span>
@@ -87,7 +87,7 @@ export default function NoticeCard({ notice, onDelete }) {
 
           <button
             onClick={() => setIsOpen(true)}
-            className="flex items-center gap-1 text-xs font-semibold text-blue-600 group-hover:translate-x-1 transition-transform"
+            className="flex items-center gap-1 text-xs font-semibold text-blue-600 dark:text-blue-400 group-hover:translate-x-1 transition-transform"
           >
             Read <ChevronRight className="w-3.5 h-3.5" />
           </button>

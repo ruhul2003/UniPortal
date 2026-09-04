@@ -14,19 +14,19 @@ export default function NoticeModal({ notice, isOpen, onClose }) {
           initial={{ opacity: 0, scale: 0.95, y: 10 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 10 }}
-          className="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-modal border border-slate-100 max-h-[85vh] overflow-y-auto relative"
+          className="bg-white dark:bg-slate-900 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-modal border border-slate-100 dark:border-slate-800 max-h-[85vh] overflow-y-auto relative"
         >
           {/* Close button */}
           <button
             onClick={onClose}
-            className="absolute top-6 right-6 p-2 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-all"
+            className="absolute top-6 right-6 p-2 rounded-full text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
           >
             <X className="w-5 h-5" />
           </button>
 
           {/* Badges */}
           <div className="flex items-center gap-2 mb-4">
-            <span className="px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-100">
+            <span className="px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-100 dark:border-blue-800">
               {notice.category || 'Academic'}
             </span>
             {notice.isUrgent && (
@@ -34,27 +34,27 @@ export default function NoticeModal({ notice, isOpen, onClose }) {
                 <AlertTriangle className="w-3.5 h-3.5" /> URGENT NOTICE
               </span>
             )}
-            <span className="px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-600">
+            <span className="px-3 py-1 rounded-full text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
               {notice.department || 'All Departments'}
             </span>
           </div>
 
           {/* Title */}
-          <h2 className="text-2xl font-bold text-slate-900 mb-4 leading-snug">
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 leading-snug">
             {notice.title}
           </h2>
 
           {/* Author Meta */}
-          <div className="flex flex-wrap items-center gap-4 py-3 px-4 rounded-xl bg-slate-50 border border-slate-100 text-xs text-slate-600 mb-6">
+          <div className="flex flex-wrap items-center gap-4 py-3 px-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700 text-xs text-slate-600 dark:text-slate-300 mb-6">
             <div className="flex items-center gap-2">
-              <User className="w-4 h-4 text-blue-600" />
+              <User className="w-4 h-4 text-blue-600 dark:text-blue-400" />
               <div>
-                <p className="font-bold text-slate-900">{notice.publishedBy}</p>
+                <p className="font-bold text-slate-900 dark:text-white">{notice.publishedBy}</p>
                 <p className="text-[10px] text-slate-400">{notice.facultyRole || 'Faculty'}</p>
               </div>
             </div>
 
-            <div className="h-6 w-[1px] bg-slate-200 hidden sm:block" />
+            <div className="h-6 w-[1px] bg-slate-200 dark:bg-slate-700 hidden sm:block" />
 
             <div className="flex items-center gap-2">
               <Calendar className="w-4 h-4 text-slate-400" />
@@ -63,15 +63,15 @@ export default function NoticeModal({ notice, isOpen, onClose }) {
           </div>
 
           {/* Notice Body */}
-          <div className="prose max-w-none text-slate-700 text-sm leading-relaxed whitespace-pre-line mb-8">
+          <div className="prose max-w-none text-slate-700 dark:text-slate-300 text-sm leading-relaxed whitespace-pre-line mb-8">
             {notice.content}
           </div>
 
           {/* Close Action */}
-          <div className="pt-4 border-t border-slate-100 flex justify-end">
+          <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-end">
             <button
               onClick={onClose}
-              className="px-6 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold transition-all shadow-sm"
+              className="px-6 py-2.5 rounded-xl bg-slate-900 dark:bg-slate-800 hover:bg-slate-800 dark:hover:bg-slate-700 text-white text-xs font-semibold border border-slate-700 transition-all shadow-sm"
             >
               Done Reading
             </button>
