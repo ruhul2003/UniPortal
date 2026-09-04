@@ -1,6 +1,6 @@
 import express from 'express';
 import { ObjectId } from 'mongodb';
-import { getDb } from '../config/db.js';
+import { getDb, getUsersCollection } from '../config/db.js';
 
 const router = express.Router();
 
@@ -43,10 +43,32 @@ router.post('/', async (req, res) => {
     const col = getCol();
     if (!col) return res.status(503).json({ success: false, error: 'Database unavailable' });
 
-    const { title, content, courseCode, section, authorName, authorRole, authorAvatar, imageUrl } = req.body;
+    const { title, content, courseCode, section, authorName, authorRole, authorAvatar, imageUrl, authorEmail } = req.body;
 
     if (!title || !content || !courseCode || !authorName) {
       return res.status(400).json({ success: false, error: 'Title, Content, Course Code, and Author Name are required' });
+    }
+
+    // Role check: Faculty members cannot post questions in the discussion forum
+    let submitterRole = authorRole || 'student';
+    const usersCol = getUsersCollection();
+    if (usersCol && (authorEmail || authorName)) {
+      const dbUser = await usersCol.findOne({
+        $or: [
+          ...(authorEmail ? [{ email: authorEmail.trim() }] : []),
+          { name: authorName.trim() }
+        ]
+      });
+      if (dbUser && dbUser.role) {
+        submitterRole = dbUser.role;
+      }
+    }
+
+    if (submitterRole === 'faculty') {
+      return res.status(403).json({
+        success: false,
+        error: 'Faculty members are not permitted to post questions in the discussion forum. Faculty members can answer questions and verify responses.'
+      });
     }
 
     const newDoc = {
@@ -55,7 +77,7 @@ router.post('/', async (req, res) => {
       courseCode: courseCode.trim(),
       section: section || 'All Sections',
       authorName: authorName.trim(),
-      authorRole: authorRole || 'student',
+      authorRole: submitterRole,
       authorAvatar: authorAvatar || '',
       imageUrl: imageUrl || '',
       upvotes: [],

@@ -26,6 +26,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 export default function ForumPage() {
   const { user } = useAuth();
+  const isFaculty = user?.role === 'faculty';
   const isFacultyOrCR = user?.role === 'faculty' || user?.role === 'admin' || user?.isCR;
 
   const [posts, setPosts] = useState([]);
@@ -127,6 +128,10 @@ export default function ForumPage() {
 
   const handleAskQuestion = async (e) => {
     e.preventDefault();
+    if (isFaculty) {
+      alert('Faculty members are not permitted to post questions in the discussion forum.');
+      return;
+    }
     if (!title || !content) return;
 
     setIsPosting(true);
@@ -137,6 +142,7 @@ export default function ForumPage() {
         courseCode,
         section: user?.section || 'Section A',
         authorName: user?.name || 'Student User',
+        authorEmail: user?.email || '',
         authorRole: user?.role === 'student' ? (user?.isCR ? 'cr' : 'student') : user?.role || 'faculty',
         authorAvatar: user?.avatar || '',
         imageUrl
@@ -222,13 +228,28 @@ export default function ForumPage() {
               </p>
             </div>
 
-            <button
-              onClick={() => setShowAskModal(true)}
-              className="px-6 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-bold transition-all shadow-md flex items-center justify-center gap-2.5 group shrink-0 text-xs"
-            >
-              <Plus className="w-5 h-5 text-white group-hover:scale-110 transition-transform" />
-              <span>Ask a Question</span>
-            </button>
+            <div className="flex flex-col items-end gap-1.5 shrink-0">
+              <button
+                onClick={() => {
+                  if (isFaculty) {
+                    alert('Faculty members are not permitted to post questions in the discussion forum.');
+                    return;
+                  }
+                  setShowAskModal(true);
+                }}
+                disabled={isFaculty}
+                title={isFaculty ? 'Faculty members cannot post questions in the forum' : 'Ask a Question'}
+                className="px-6 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold transition-all shadow-md flex items-center justify-center gap-2.5 group text-xs"
+              >
+                <Plus className="w-5 h-5 text-white group-hover:scale-110 transition-transform" />
+                <span>Ask a Question</span>
+              </button>
+              {isFaculty && (
+                <span className="text-[11px] text-blue-300 font-semibold italic">
+                  (Faculty can answer & verify student questions)
+                </span>
+              )}
+            </div>
           </div>
         </div>
 
