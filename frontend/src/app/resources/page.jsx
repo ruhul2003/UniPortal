@@ -216,8 +216,7 @@ export default function ResourcesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto space-y-8">
+    <div className="space-y-8">
         
         {/* Header Banner */}
         <div className="relative overflow-hidden rounded-3xl bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 sm:p-8 text-white shadow-md">
@@ -547,6 +546,5 @@ export default function ResourcesPage() {
         </AnimatePresence>
 
       </div>
-    </div>
   );
 }

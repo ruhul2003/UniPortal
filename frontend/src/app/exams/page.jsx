@@ -168,8 +168,7 @@ export default function ExamsPage() {
   const hasClashes = Object.values(dateCounts).some(count => count > 1);
 
   return (
-    <div className="w-full space-y-8 pb-12">
-      <div className="max-w-7xl mx-auto space-y-8">
+    <div className="space-y-8 pb-12">
         {/* Top Hero Banner */}
         <div className="relative rounded-3xl bg-slate-900 p-6 sm:p-8 text-white overflow-hidden shadow-2xl border border-slate-800">
           <div className="absolute -right-10 -bottom-10 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
@@ -466,7 +465,6 @@ export default function ExamsPage() {
             </div>
           )}
         </div>
-      </div>
 
       {/* Modals */}
       <AdmitCardModal

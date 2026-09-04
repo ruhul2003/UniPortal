@@ -203,8 +203,7 @@ export default function AttendancePage() {
   const overallPercentage = overallTotal > 0 ? Math.round((overallAttended / overallTotal) * 100) : 100;
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto space-y-8">
+    <div className="space-y-8">
         
         {/* Header Banner */}
         <div className="relative overflow-hidden rounded-3xl bg-emerald-800 p-6 sm:p-10 text-white shadow-xl">
@@ -850,6 +849,5 @@ export default function AttendancePage() {
         </AnimatePresence>
 
       </div>
-    </div>
   );
 }

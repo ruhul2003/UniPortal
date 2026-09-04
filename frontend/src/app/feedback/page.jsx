@@ -119,7 +119,7 @@ export default function FeedbackPage() {
   });
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
+    <div className="space-y-8">
       
       {/* Header Banner */}
       <section className="relative overflow-hidden rounded-3xl bg-slate-900 p-8 sm:p-10 text-white shadow-2xl border border-amber-500/20">

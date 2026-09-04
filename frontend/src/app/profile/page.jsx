@@ -194,7 +194,7 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8">
+    <div className="space-y-8">
       
       {/* Header Banner */}
       <div className="bg-slate-900 p-8 rounded-3xl text-white shadow-xl relative overflow-hidden">
