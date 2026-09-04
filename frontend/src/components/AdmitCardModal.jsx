@@ -113,9 +113,14 @@ export default function AdmitCardModal({ isOpen, onClose, admitCardData, user })
                 </div>
 
                 <div className="text-center sm:text-right shrink-0">
-                  <span className="inline-block px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-extrabold text-xs tracking-wider uppercase print:border-black print:text-black">
-                    VERIFIED HALL PASS
-                  </span>
+                  <div className="flex flex-col items-center sm:items-end gap-1">
+                    <span className="inline-block px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-extrabold text-xs tracking-wider uppercase print:border-black print:text-black">
+                      VERIFIED HALL PASS
+                    </span>
+                    <span className="inline-block px-2.5 py-0.5 rounded-md bg-blue-500/20 text-blue-200 text-[10px] font-bold border border-blue-400/30">
+                      Attendance Eligibility Verified (≥75%)
+                    </span>
+                  </div>
                   <p className="text-[10px] text-slate-400 print:text-slate-600 mt-1">Ref: {verificationCode}</p>
                 </div>
               </div>

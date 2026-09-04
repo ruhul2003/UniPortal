@@ -228,12 +228,79 @@ router.delete('/:id', async (req, res) => {
     const filter = ObjectId.isValid(id) ? { _id: new ObjectId(id) } : { _id: id };
     const result = await col.deleteOne(filter);
 
-    if (result.deletedCount > 0) {
-      return res.json({ success: true, message: 'Attendance session deleted' });
+// GET attendance risk assessment for a student
+router.get('/risk-check', async (req, res) => {
+  try {
+    const col = getCol();
+    const { studentId, section } = req.query;
+
+    if (!col) {
+      return res.json({
+        success: true,
+        overallPercentage: 100,
+        isEligibleForAdmitCard: true,
+        riskLevel: 'SAFE',
+        courseRisks: []
+      });
     }
-    res.status(404).json({ success: false, error: 'Attendance session not found' });
+
+    let query = {};
+    if (section) query.section = section;
+
+    const allSessions = await col.find(query).toArray();
+    const courseStats = {};
+
+    allSessions.forEach(session => {
+      const code = session.courseCode;
+      if (!courseStats[code]) {
+        courseStats[code] = {
+          courseCode: code,
+          courseTitle: session.courseTitle || code,
+          total: 0,
+          attended: 0
+        };
+      }
+
+      const records = session.records || [];
+      const rec = records.find(r => (studentId && r.studentId === studentId));
+      if (rec) {
+        courseStats[code].total += 1;
+        if (rec.status === 'Present' || rec.status === 'Late') {
+          courseStats[code].attended += 1;
+        }
+      }
+    });
+
+    const courseRisks = Object.values(courseStats).map(c => {
+      const pct = c.total > 0 ? Math.round((c.attended / c.total) * 100) : 100;
+      const riskLevel = pct < 75 ? 'HIGH' : pct <= 80 ? 'MODERATE' : 'SAFE';
+      return {
+        ...c,
+        percentage: pct,
+        riskLevel,
+        isBlocked: pct < 75
+      };
+    });
+
+    const totalClasses = Object.values(courseStats).reduce((a, b) => a + b.total, 0);
+    const totalAttended = Object.values(courseStats).reduce((a, b) => a + b.attended, 0);
+    const overallPercentage = totalClasses > 0 ? Math.round((totalAttended / totalClasses) * 100) : 100;
+    const isEligibleForAdmitCard = overallPercentage >= 75;
+    const overallRiskLevel = overallPercentage < 75 ? 'HIGH' : overallPercentage <= 80 ? 'MODERATE' : 'SAFE';
+
+    res.json({
+      success: true,
+      overallPercentage,
+      isEligibleForAdmitCard,
+      riskLevel: overallRiskLevel,
+      warningMessage: !isEligibleForAdmitCard 
+        ? 'Warning: Your attendance is under 75%. You are at risk of exam permit disqualification.' 
+        : 'Attendance criteria satisfied for exam permit eligibility.',
+      courseRisks
+    });
   } catch (error) {
-    res.status(500).json({ success: false, error: 'Failed to delete attendance session' });
+    console.error('Error conducting attendance risk check:', error);
+    res.status(500).json({ success: false, error: 'Failed to complete attendance risk check' });
   }
 });
 

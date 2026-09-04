@@ -251,6 +251,26 @@ export default function AttendancePage() {
           </div>
         </div>
 
+        {/* Attendance Risk Warning Alert Banner */}
+        {overallPercentage < 75 && (
+          <div className="p-5 rounded-3xl bg-rose-50 dark:bg-rose-950/60 border-2 border-rose-500/50 flex items-start gap-4 text-rose-900 dark:text-rose-200 shadow-md">
+            <ShieldAlert className="w-7 h-7 text-rose-600 dark:text-rose-400 shrink-0 mt-0.5" />
+            <div className="space-y-1">
+              <div className="flex items-center gap-2 flex-wrap">
+                <h4 className="text-sm font-black uppercase tracking-wide text-rose-700 dark:text-rose-300">
+                  ⚠️ ATTENDANCE RISK ALERT: EXAM PERMIT DISQUALIFICATION WARNING
+                </h4>
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-black bg-rose-600 text-white">
+                  {overallPercentage}% ATTENDANCE
+                </span>
+              </div>
+              <p className="text-xs font-medium leading-relaxed text-rose-800 dark:text-rose-300">
+                Your cumulative section attendance is currently below the mandatory 75% university requirement. You are at high risk of exam admit card disqualification.
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* Controls Bar: Section Selector (For Admin) & Tabs */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
           
