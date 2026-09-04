@@ -30,8 +30,8 @@ export default function NoticeModal({ notice, isOpen, onClose }) {
               {notice.category || 'Academic'}
             </span>
             {notice.isUrgent && (
-              <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-500 text-white flex items-center gap-1">
-                <AlertTriangle className="w-3.5 h-3.5" /> URGENT NOTICE
+              <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-rose-600 text-white flex items-center gap-1.5 shadow-sm border border-rose-500 uppercase tracking-wider">
+                <AlertTriangle className="w-4 h-4 text-white fill-white/20" /> URGENT NOTICE
               </span>
             )}
             <span className="px-3 py-1 rounded-full text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">

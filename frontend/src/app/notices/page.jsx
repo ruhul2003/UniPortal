@@ -160,6 +160,7 @@ export default function NoticesPage() {
                 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.3 }}
+                className="h-full flex flex-col"
               >
                 <NoticeCard notice={notice} onDelete={handleDeleteNotice} />
               </motion.div>

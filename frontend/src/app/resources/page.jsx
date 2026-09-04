@@ -221,12 +221,12 @@ export default function ResourcesPage() {
         
         {/* Header Banner */}
         <div className="relative overflow-hidden rounded-3xl bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 sm:p-8 text-white shadow-md">
-          <div className="absolute -right-12 -bottom-12 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -right-12 -bottom-12 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
 
           <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
             <div className="space-y-3 max-w-2xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-bold uppercase tracking-wider">
-                <FolderOpen className="w-4 h-4 text-indigo-400" />
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold uppercase tracking-wider">
+                <FolderOpen className="w-4 h-4 text-blue-400" />
                 <span>Question Bank & Study Materials Hub</span>
               </div>
               <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
@@ -240,7 +240,7 @@ export default function ResourcesPage() {
             <div className="flex flex-wrap items-center gap-3 shrink-0">
               <button
                 onClick={() => setShowQuestionModal(true)}
-                className="px-5 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs transition-all shadow-xs flex items-center justify-center gap-2 group active:scale-95"
+                className="px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs transition-all shadow-xs flex items-center justify-center gap-2 group active:scale-95"
               >
                 <ShieldCheck className="w-4 h-4 text-white group-hover:rotate-12 transition-transform" />
                 <span>Upload Past Question Paper</span>
@@ -250,7 +250,7 @@ export default function ResourcesPage() {
                 onClick={() => setShowUploadModal(true)}
                 className="px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 transition-all flex items-center justify-center gap-2 active:scale-95"
               >
-                <Plus className="w-4 h-4 text-indigo-400" />
+                <Plus className="w-4 h-4 text-blue-400" />
                 <span>Share General Note</span>
               </button>
             </div>
@@ -268,7 +268,7 @@ export default function ResourcesPage() {
                 placeholder="Search by course (e.g. CSE-101), topic, CT 1/2, Midterm, or Final..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
               />
             </div>
 
@@ -282,7 +282,7 @@ export default function ResourcesPage() {
                     onClick={() => setSelectedExamType(sub)}
                     className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
                       selectedExamType === sub
-                        ? 'bg-indigo-600 text-white shadow-xs'
+                        ? 'bg-blue-600 text-white shadow-xs'
                         : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
                     }`}
                   >
@@ -301,7 +301,7 @@ export default function ResourcesPage() {
                 onClick={() => setSelectedCategory(cat)}
                 className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
                   selectedCategory === cat
-                    ? 'bg-indigo-600 text-white shadow-xs'
+                    ? 'bg-blue-600 text-white shadow-xs'
                     : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
                 }`}
               >
@@ -314,7 +314,7 @@ export default function ResourcesPage() {
         {/* Resources & Question Papers Cards Grid */}
         {loading ? (
           <div className="py-16 text-center text-slate-400 font-medium">
-            <div className="w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+            <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
             <p>Fetching study materials & past question bank...</p>
           </div>
         ) : (
@@ -327,7 +327,7 @@ export default function ResourcesPage() {
               return (
                 <div
                   key={item._id}
-                  className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 transition-all flex flex-col justify-between space-y-4 shadow-xs hover:shadow-md"
+                  className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 transition-all flex flex-col justify-between space-y-4 shadow-xs hover:shadow-md h-full w-full"
                 >
                   <div className="space-y-3">
                     {/* Header Badges */}
@@ -338,15 +338,15 @@ export default function ResourcesPage() {
                         </span>
 
                         {item.examType && (
-                          <span className="px-2.5 py-1 rounded-lg text-xs font-bold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-900/60">
+                          <span className="px-2.5 py-1 rounded-lg text-xs font-bold bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-900/60">
                             {item.examType}
                           </span>
                         )}
                       </div>
 
                       {isOfficial ? (
-                        <span className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800/60 flex items-center gap-1">
-                          <ShieldCheck className="w-3.5 h-3.5 text-indigo-500" />
+                        <span className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800/60 flex items-center gap-1">
+                          <ShieldCheck className="w-3.5 h-3.5 text-blue-500" />
                           Faculty Verified
                         </span>
                       ) : (
@@ -384,7 +384,7 @@ export default function ResourcesPage() {
                         onClick={() => handleDownloadClick(item, item.solutionUrl)}
                         className="w-full py-2 px-3 rounded-xl bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700/80 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold transition-all flex items-center justify-center gap-1.5"
                       >
-                        <CheckCircle2 className="w-4 h-4 text-indigo-500 dark:text-indigo-400" />
+                        <CheckCircle2 className="w-4 h-4 text-blue-500 dark:text-blue-400" />
                         <span>View Model Solution / Answer Key</span>
                       </button>
                     )}
@@ -395,11 +395,11 @@ export default function ResourcesPage() {
                           onClick={() => handleUpvote(item._id)}
                           className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all ${
                             hasUpvoted
-                              ? 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800'
+                              ? 'bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800'
                               : 'bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700'
                           }`}
                         >
-                          <ThumbsUp className={`w-3.5 h-3.5 ${hasUpvoted ? 'fill-indigo-600 text-indigo-600 dark:fill-indigo-400 dark:text-indigo-400' : ''}`} />
+                          <ThumbsUp className={`w-3.5 h-3.5 ${hasUpvoted ? 'fill-blue-600 text-blue-600 dark:fill-blue-400 dark:text-blue-400' : ''}`} />
                           <span>{item.upvotes?.length || 0}</span>
                         </button>
 
@@ -422,7 +422,7 @@ export default function ResourcesPage() {
 
                         <button
                           onClick={() => handleDownloadClick(item, item.fileUrl)}
-                          className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition-all shadow-xs flex items-center gap-1.5 active:scale-95"
+                          className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all shadow-xs flex items-center gap-1.5 active:scale-95"
                         >
                           <span>Open Paper</span>
                           <ExternalLink className="w-3.5 h-3.5" />
@@ -471,7 +471,7 @@ export default function ResourcesPage() {
                       placeholder="e.g. CSE-101 Lecture Notes 2026"
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-medium focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none"
                     />
                   </div>
 
@@ -483,7 +483,7 @@ export default function ResourcesPage() {
                         required
                         value={courseCode}
                         onChange={(e) => setCourseCode(e.target.value)}
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-medium focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none"
                       />
                     </div>
                     <div>
@@ -491,7 +491,7 @@ export default function ResourcesPage() {
                       <select
                         value={category}
                         onChange={(e) => setCategory(e.target.value)}
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-medium focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none"
                       >
                         <option value="Lecture Slides">Lecture Slides</option>
                         <option value="Class Notes">Class Notes</option>
@@ -509,7 +509,7 @@ export default function ResourcesPage() {
                       placeholder="https://drive.google.com/..."
                       value={fileUrl}
                       onChange={(e) => setFileUrl(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-medium focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none"
                     />
                   </div>
 
@@ -520,7 +520,7 @@ export default function ResourcesPage() {
                       placeholder="What is covered in this PDF / link..."
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-medium focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none"
                     />
                   </div>
 
@@ -535,7 +535,7 @@ export default function ResourcesPage() {
                     <button
                       type="submit"
                       disabled={isUploading}
-                      className="px-6 py-2.5 rounded-xl bg-indigo-600 text-white text-xs font-bold hover:bg-indigo-500 transition-all shadow-xs"
+                      className="px-6 py-2.5 rounded-xl bg-blue-600 text-white text-xs font-bold hover:bg-blue-500 transition-all shadow-xs"
                     >
                       {isUploading ? 'Uploading...' : 'Publish Material'}
                     </button>

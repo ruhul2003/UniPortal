@@ -16,7 +16,11 @@ import {
   XCircle,
   MessageCircle,
   ShieldCheck,
-  Crown
+  Crown,
+  ImageIcon,
+  Upload,
+  Link as LinkIcon,
+  X
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -34,6 +38,7 @@ export default function ForumPage() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [courseCode, setCourseCode] = useState('CSE-102');
+  const [imageUrl, setImageUrl] = useState('');
   const [isPosting, setIsPosting] = useState(false);
 
   // Comment state per post
@@ -55,7 +60,8 @@ export default function ForumPage() {
           {
             _id: 'post-1',
             title: 'How does time complexity of QuickSort become O(n^2) in worst case?',
-            content: 'Can someone explain why choosing the smallest or largest element repeatedly as pivot leads to O(n^2) time complexity?',
+            content: 'Can someone explain why choosing the smallest or largest element repeatedly as pivot leads to O(n^2) time complexity? Attached recursion tree diagram below.',
+            imageUrl: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&auto=format&fit=crop&q=80',
             courseCode: 'CSE-102',
             section: 'Section A',
             authorName: 'Ruhul Amin',
@@ -77,6 +83,7 @@ export default function ForumPage() {
             _id: 'post-2',
             title: 'Is Chapter 5 (Partial Derivatives) included in Midterm 1 syllabus?',
             content: 'Instructor mentioned Chapter 4, but syllabus outline shows Chapter 5 as well. Please clarify.',
+            imageUrl: '',
             courseCode: 'MAT-105',
             section: 'Section A',
             authorName: 'Sabbir Ahmed',
@@ -103,6 +110,21 @@ export default function ForumPage() {
     }
   }
 
+  const handleImageFileChange = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        alert('Image size should be less than 5MB.');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImageUrl(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleAskQuestion = async (e) => {
     e.preventDefault();
     if (!title || !content) return;
@@ -116,12 +138,14 @@ export default function ForumPage() {
         section: user?.section || 'Section A',
         authorName: user?.name || 'Student User',
         authorRole: user?.role === 'student' ? (user?.isCR ? 'cr' : 'student') : user?.role || 'faculty',
-        authorAvatar: user?.avatar || ''
+        authorAvatar: user?.avatar || '',
+        imageUrl
       });
 
       setShowAskModal(false);
       setTitle('');
       setContent('');
+      setImageUrl('');
       loadPosts();
     } catch (err) {
       alert('Failed to publish question: ' + err.message);
@@ -183,26 +207,26 @@ export default function ForumPage() {
       <div className="max-w-7xl mx-auto space-y-8">
         
         {/* Header Banner */}
-        <div className="relative overflow-hidden rounded-3xl bg-teal-700 p-6 sm:p-10 text-white shadow-xl">
+        <div className="relative overflow-hidden rounded-3xl bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 sm:p-10 text-white shadow-xl">
           <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-bold uppercase tracking-wider mb-3">
-                <MessageSquare className="w-4 h-4 text-teal-300" />
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-xs font-bold uppercase tracking-wider mb-3 text-blue-400">
+                <MessageSquare className="w-4 h-4 text-blue-400" />
                 <span>Class Discussion & Q&A</span>
               </div>
-              <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
+              <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
                 Course Q&A & Academic Forum 💬
               </h1>
-              <p className="mt-2 text-teal-100 text-sm sm:text-base max-w-xl">
-                Ask questions, collaborate on course topics, and get instructor-verified answers from faculty and Class Representatives.
+              <p className="mt-2 text-slate-300 text-sm sm:text-base max-w-xl">
+                Ask questions with attached diagrams/images, collaborate on course topics, and get instructor-verified answers.
               </p>
             </div>
 
             <button
               onClick={() => setShowAskModal(true)}
-              className="px-6 py-3.5 rounded-2xl bg-white text-slate-900 font-bold hover:bg-teal-50 transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2.5 group shrink-0"
+              className="px-6 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-bold transition-all shadow-md flex items-center justify-center gap-2.5 group shrink-0 text-xs"
             >
-              <Plus className="w-5 h-5 text-teal-600 group-hover:scale-110 transition-transform" />
+              <Plus className="w-5 h-5 text-white group-hover:scale-110 transition-transform" />
               <span>Ask a Question</span>
             </button>
           </div>
@@ -216,7 +240,7 @@ export default function ForumPage() {
             placeholder="Search discussion threads by title, question content, or course code..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-medium focus:ring-2 focus:ring-teal-500 transition-all"
+            className="w-full pl-10 pr-4 py-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all"
           />
         </div>
 
@@ -226,7 +250,6 @@ export default function ForumPage() {
             const userId = user?.studentId || user?._id || user?.email || 'guest-user';
             const hasUpvoted = post.upvotes?.includes(userId);
             const isExpanded = expandedPostId === post._id;
-            const verifiedCount = post.comments?.filter(c => c.isVerifiedAnswer).length || 0;
 
             return (
               <div 
@@ -236,7 +259,7 @@ export default function ForumPage() {
                 <div className="flex items-start justify-between gap-4">
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
-                      <span className="px-2.5 py-0.5 rounded-lg text-xs font-bold bg-teal-50 dark:bg-teal-950/60 text-teal-600 dark:text-teal-400 border border-teal-100 dark:border-teal-800">
+                      <span className="px-2.5 py-0.5 rounded-lg text-xs font-bold bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-800">
                         {post.courseCode}
                       </span>
 
@@ -257,11 +280,11 @@ export default function ForumPage() {
                     onClick={() => handleUpvote(post._id)}
                     className={`px-3 py-1.5 rounded-2xl text-xs font-bold flex items-center gap-1.5 transition-all shrink-0 ${
                       hasUpvoted
-                        ? 'bg-teal-100 dark:bg-teal-950 text-teal-700 dark:text-teal-300 border border-teal-300'
-                        : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-teal-50'
+                        ? 'bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800'
+                        : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200'
                     }`}
                   >
-                    <ThumbsUp className={`w-3.5 h-3.5 ${hasUpvoted ? 'fill-teal-600 text-teal-600' : ''}`} />
+                    <ThumbsUp className={`w-3.5 h-3.5 ${hasUpvoted ? 'fill-blue-600 text-blue-600 dark:fill-blue-400 dark:text-blue-400' : ''}`} />
                     <span>{post.upvotes?.length || 0}</span>
                   </button>
                 </div>
@@ -269,6 +292,19 @@ export default function ForumPage() {
                 <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
                   {post.content}
                 </p>
+
+                {/* Attached Image Display */}
+                {post.imageUrl && (
+                  <div className="mt-3 overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-800/60 max-h-96 flex items-center justify-center p-2">
+                    <img
+                      src={post.imageUrl}
+                      alt="Question Attachment / Diagram"
+                      className="max-h-88 w-auto object-contain rounded-xl hover:scale-[1.01] transition-transform cursor-pointer"
+                      onClick={() => window.open(post.imageUrl, '_blank')}
+                      title="Click to view full image"
+                    />
+                  </div>
+                )}
 
                 <div className="flex items-center justify-between text-xs text-slate-400 pt-2 border-t border-slate-100 dark:border-slate-800">
                   <div className="flex items-center gap-2">
@@ -281,7 +317,7 @@ export default function ForumPage() {
                   <div className="flex items-center gap-3">
                     <button
                       onClick={() => setExpandedPostId(isExpanded ? null : post._id)}
-                      className="flex items-center gap-1 text-teal-600 dark:text-teal-400 font-bold hover:underline"
+                      className="flex items-center gap-1 text-blue-600 dark:text-blue-400 font-bold hover:underline"
                     >
                       <MessageCircle className="w-4 h-4" />
                       <span>{post.comments?.length || 0} Answers</span>
@@ -321,7 +357,7 @@ export default function ForumPage() {
                             <div className="flex items-center gap-2">
                               <span className="text-xs font-bold text-slate-900 dark:text-white">{comment.authorName}</span>
                               <span className={`text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded ${
-                                comment.authorRole === 'faculty' ? 'bg-indigo-100 text-indigo-700' : 'bg-slate-200 text-slate-700'
+                                comment.authorRole === 'faculty' ? 'bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300' : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300'
                               }`}>
                                 {comment.authorRole}
                               </span>
@@ -360,11 +396,11 @@ export default function ForumPage() {
                         value={commentInputs[post._id] || ''}
                         onChange={(e) => setCommentInputs({ ...commentInputs, [post._id]: e.target.value })}
                         onKeyDown={(e) => e.key === 'Enter' && handleAddComment(post._id)}
-                        className="flex-1 px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-medium"
+                        className="flex-1 px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none"
                       />
                       <button
                         onClick={() => handleAddComment(post._id)}
-                        className="px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold transition-all shadow-xs flex items-center gap-1"
+                        className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all shadow-xs flex items-center gap-1"
                       >
                         <Send className="w-3.5 h-3.5" />
                         Reply
@@ -379,72 +415,130 @@ export default function ForumPage() {
           })}
         </div>
 
-        {/* Ask Question Modal */}
+        {/* Ask Question Modal with Image Upload Support */}
         <AnimatePresence>
           {showAskModal && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm">
               <motion.div 
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 className="w-full max-w-lg bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden"
               >
-                <div className="p-6 bg-slate-900 text-white flex items-center justify-between">
-                  <h3 className="text-lg font-bold">Ask Course Question 💬</h3>
-                  <button onClick={() => setShowAskModal(false)} className="text-slate-400 hover:text-white">
+                <div className="p-6 bg-slate-900 text-white flex items-center justify-between border-b border-slate-800">
+                  <div className="flex items-center gap-2">
+                    <MessageSquare className="w-5 h-5 text-blue-400" />
+                    <h3 className="text-lg font-bold">Ask Course Question 💬</h3>
+                  </div>
+                  <button onClick={() => setShowAskModal(false)} className="text-slate-400 hover:text-white p-1 rounded-lg">
                     <XCircle className="w-6 h-6" />
                   </button>
                 </div>
 
-                <form onSubmit={handleAskQuestion} className="p-6 space-y-4">
+                <form onSubmit={handleAskQuestion} className="p-6 space-y-4 max-h-[85vh] overflow-y-auto">
                   <div>
-                    <label className="block text-xs font-bold mb-1">Course Code *</label>
+                    <label className="block text-xs font-bold mb-1.5 text-slate-700 dark:text-slate-300">Course Code *</label>
                     <input 
                       type="text"
                       required
                       placeholder="e.g. CSE-102"
                       value={courseCode}
                       onChange={(e) => setCourseCode(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-medium"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold mb-1">Question Title *</label>
+                    <label className="block text-xs font-bold mb-1.5 text-slate-700 dark:text-slate-300">Question Title *</label>
                     <input 
                       type="text"
                       required
                       placeholder="Summary of your question..."
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-medium"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold mb-1">Details & Problem Description *</label>
+                    <label className="block text-xs font-bold mb-1.5 text-slate-700 dark:text-slate-300">Details & Problem Description *</label>
                     <textarea 
                       rows={4}
                       required
                       placeholder="Describe what you are trying to understand or solve..."
                       value={content}
                       onChange={(e) => setContent(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-medium"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none"
                     />
                   </div>
 
-                  <div className="flex justify-end gap-3 pt-3">
+                  {/* Image Attachment Section */}
+                  <div className="space-y-2 pt-1 border-t border-slate-100 dark:border-slate-800">
+                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center justify-between">
+                      <span className="flex items-center gap-1.5">
+                        <ImageIcon className="w-4 h-4 text-blue-500" />
+                        <span>Attach Question Image / Diagram</span>
+                      </span>
+                      <span className="text-[10px] text-slate-400 font-normal">(Optional)</span>
+                    </label>
+
+                    {/* Image Source Selection */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      <label className="cursor-pointer px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-dashed border-slate-300 dark:border-slate-700 hover:border-blue-500 transition-colors flex items-center justify-center gap-2 text-xs text-slate-600 dark:text-slate-300 font-semibold">
+                        <Upload className="w-4 h-4 text-blue-500" />
+                        <span>Upload File</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleImageFileChange}
+                          className="hidden"
+                        />
+                      </label>
+
+                      <div className="relative">
+                        <LinkIcon className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-3" />
+                        <input
+                          type="url"
+                          placeholder="Image URL..."
+                          value={imageUrl}
+                          onChange={(e) => setImageUrl(e.target.value)}
+                          className="w-full pl-8 pr-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Live Image Preview */}
+                    {imageUrl && (
+                      <div className="relative rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-slate-950/40 p-2 mt-2 group">
+                        <img
+                          src={imageUrl}
+                          alt="Attachment preview"
+                          className="max-h-48 w-full object-contain rounded-xl"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setImageUrl('')}
+                          className="absolute top-3 right-3 p-1.5 rounded-full bg-slate-900/80 text-white hover:bg-rose-600 transition-colors"
+                          title="Remove image"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex justify-end gap-3 pt-3 border-t border-slate-100 dark:border-slate-800">
                     <button
                       type="button"
                       onClick={() => setShowAskModal(false)}
-                      className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-500"
+                      className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
                       disabled={isPosting}
-                      className="px-6 py-2.5 rounded-xl bg-teal-600 text-white text-xs font-bold hover:bg-teal-700"
+                      className="px-6 py-2.5 rounded-xl bg-blue-600 text-white text-xs font-bold hover:bg-blue-500 transition-all shadow-xs"
                     >
                       {isPosting ? 'Posting...' : 'Post Question'}
                     </button>

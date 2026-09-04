@@ -170,17 +170,17 @@ function MarksPageContent() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       {/* Top Banner & Header */}
-      <div className="relative overflow-hidden rounded-3xl bg-indigo-900 text-white p-6 sm:p-10 shadow-xl">
+      <div className="relative overflow-hidden rounded-3xl bg-slate-900 border border-slate-200 dark:border-slate-800 text-white p-6 sm:p-10 shadow-xl">
         <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-semibold tracking-wider text-indigo-200 mb-3">
-              <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-xs font-semibold tracking-wider text-blue-400 mb-3">
+              <Sparkles className="w-3.5 h-3.5 text-blue-400" />
               {isFacultyOrAdmin ? 'FACULTY MARKS PUBLISHING PORTAL' : 'STUDENT ACADEMIC GRADEBOOK'}
             </div>
-            <h1 className="text-3xl sm:text-4xl font-black tracking-tight">
+            <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-white">
               {isFacultyOrAdmin ? 'Publish & Manage Course Marks' : 'My Academic Marks & Performance'}
             </h1>
-            <p className="mt-2 text-indigo-200 text-sm sm:text-base max-w-2xl">
+            <p className="mt-2 text-slate-300 text-sm sm:text-base max-w-2xl">
               {isFacultyOrAdmin
                 ? 'Publish class tests (CT1, CT2), midterms, finals, assignment scores, and attendance marks directly to student portals.'
                 : 'Review your semester scores across CT1, CT2, Midterm, Final Exams, Assignments, and Attendance.'}
@@ -189,11 +189,11 @@ function MarksPageContent() {
 
           {/* Role badge */}
           <div className="flex items-center gap-3 bg-white/10 backdrop-blur-md p-3.5 rounded-2xl border border-white/15">
-            <div className="w-10 h-10 rounded-xl bg-indigo-500 flex items-center justify-center font-bold">
+            <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center font-bold">
               <Award className="w-5 h-5 text-white" />
             </div>
             <div>
-              <span className="text-xs text-indigo-200 block uppercase font-bold tracking-wider">
+              <span className="text-xs text-slate-300 block uppercase font-bold tracking-wider">
                 Current Mode
               </span>
               <span className="text-sm font-bold text-white">
@@ -204,8 +204,7 @@ function MarksPageContent() {
         </div>
 
         {/* Decorative background glow circles */}
-        <div className="absolute -top-24 -right-24 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-24 -right-24 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
       </div>
 
       {/* Unified Section Navigation Tabs (Attendance & Marks) */}
@@ -214,7 +213,7 @@ function MarksPageContent() {
           onClick={() => setActiveSectionTab('marks')}
           className={`flex items-center gap-2.5 px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all ${
             activeSectionTab === 'marks'
-              ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-md'
+              ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-md'
               : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
           }`}
         >

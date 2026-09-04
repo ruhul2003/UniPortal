@@ -43,7 +43,7 @@ router.post('/', async (req, res) => {
     const col = getCol();
     if (!col) return res.status(503).json({ success: false, error: 'Database unavailable' });
 
-    const { title, content, courseCode, section, authorName, authorRole, authorAvatar } = req.body;
+    const { title, content, courseCode, section, authorName, authorRole, authorAvatar, imageUrl } = req.body;
 
     if (!title || !content || !courseCode || !authorName) {
       return res.status(400).json({ success: false, error: 'Title, Content, Course Code, and Author Name are required' });
@@ -57,6 +57,7 @@ router.post('/', async (req, res) => {
       authorName: authorName.trim(),
       authorRole: authorRole || 'student',
       authorAvatar: authorAvatar || '',
+      imageUrl: imageUrl || '',
       upvotes: [],
       isResolved: false,
       comments: [],
@@ -115,7 +116,7 @@ router.post('/:id/comment', async (req, res) => {
     const col = getCol();
     if (!col) return res.status(503).json({ success: false, error: 'Database unavailable' });
 
-    const { authorName, authorRole, authorAvatar, content } = req.body;
+    const { authorName, authorRole, authorAvatar, content, imageUrl } = req.body;
 
     if (!authorName || !content) {
       return res.status(400).json({ success: false, error: 'Author Name and Content are required' });
@@ -135,6 +136,7 @@ router.post('/:id/comment', async (req, res) => {
       authorRole: authorRole || 'student',
       authorAvatar: authorAvatar || '',
       content: content.trim(),
+      imageUrl: imageUrl || '',
       isVerifiedAnswer: authorRole === 'faculty',
       createdAt: new Date()
     };

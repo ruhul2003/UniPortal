@@ -200,9 +200,9 @@ export default function ExamsPage() {
                 {isFacultyOrAdmin && (
                   <button
                     onClick={() => setIsUploadQuestionOpen(true)}
-                    className="px-5 py-3 rounded-2xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs transition-all shadow-md flex items-center gap-2 active:scale-95"
+                    className="px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs transition-all shadow-md flex items-center gap-2 active:scale-95"
                   >
-                    <ShieldCheck className="w-4 h-4 text-slate-950" />
+                    <ShieldCheck className="w-4 h-4 text-white" />
                     <span>Upload Past CT / Mid / Final Paper</span>
                   </button>
                 )}
@@ -221,7 +221,7 @@ export default function ExamsPage() {
                   href="/resources"
                   className="px-5 py-3 rounded-2xl bg-slate-800/80 hover:bg-slate-800 text-slate-200 font-bold text-xs border border-slate-700/80 flex items-center gap-2 transition-all"
                 >
-                  <FolderOpen className="w-4 h-4 text-purple-400" />
+                  <FolderOpen className="w-4 h-4 text-blue-400" />
                   <span>Browse Question Bank</span>
                 </Link>
               </div>

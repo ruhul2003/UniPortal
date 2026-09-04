@@ -21,20 +21,20 @@ export default function NoticeCard({ notice, onDelete }) {
       <motion.div
         whileHover={{ y: -3, transition: { duration: 0.2 } }}
         className={`group bg-white dark:bg-slate-900 rounded-2xl p-6 border ${
-          notice.isUrgent ? 'border-slate-400 dark:border-slate-700' : 'border-slate-200 dark:border-slate-800'
-        } shadow-sm hover:shadow-md transition-all duration-300 relative flex flex-col justify-between`}
+          notice.isUrgent ? 'border-rose-300 dark:border-rose-800 shadow-rose-500/10' : 'border-slate-200 dark:border-slate-800'
+        } shadow-sm hover:shadow-md transition-all duration-300 relative flex flex-col justify-between h-full w-full`}
       >
-        <div>
+        <div className="flex-1 flex flex-col">
           {/* Header Badges */}
-          <div className="flex items-center justify-between gap-2 mb-3">
+          <div className="flex items-center justify-between gap-2 mb-3 min-h-[28px]">
             <div className="flex items-center gap-2 flex-wrap">
               <span className={`px-2.5 py-1 rounded-full text-xs font-semibold border ${badgeStyle}`}>
                 {notice.category || 'Academic'}
               </span>
 
               {notice.isUrgent && (
-                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-900 dark:bg-slate-800 text-white border border-slate-700 flex items-center gap-1">
-                  <AlertTriangle className="w-3 h-3" /> URGENT
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-rose-600 dark:bg-rose-600 text-white border border-rose-500 flex items-center gap-1 shadow-xs uppercase tracking-wider">
+                  <AlertTriangle className="w-3 h-3 text-white fill-white/20" /> URGENT
                 </span>
               )}
             </div>
@@ -58,19 +58,19 @@ export default function NoticeCard({ notice, onDelete }) {
           {/* Title */}
           <h3 
             onClick={() => setIsOpen(true)}
-            className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors cursor-pointer line-clamp-2 mb-2 leading-snug"
+            className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors cursor-pointer line-clamp-2 mb-2 leading-snug min-h-[3.25rem] flex items-start"
           >
             {notice.title}
           </h3>
 
           {/* Content snippet */}
-          <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-3 mb-4 leading-relaxed font-normal">
+          <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-3 mb-4 leading-relaxed font-normal flex-1">
             {notice.content}
           </p>
         </div>
 
         {/* Footer info */}
-        <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-400">
+        <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-400 mt-auto">
           <div className="flex items-center gap-3">
             <span className="flex items-center gap-1">
               <User className="w-3.5 h-3.5 text-slate-400" />
