@@ -1,19 +1,22 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { X, Star, Sparkles, User, Lock, Award, BookOpen, MessageSquare, Check, ShieldCheck } from 'lucide-react';
+import { X, Star, Sparkles, User, Lock, Award, BookOpen, MessageSquare, Check, ShieldCheck, AlertTriangle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { fetchUsers, submitFeedback } from '../lib/api';
+import { fetchUsers, fetchRoutines, submitFeedback } from '../lib/api';
 import { useAuth } from '../context/AuthContext';
 
 export default function SubmitFeedbackModal({ isOpen, onClose, onSubmitSuccess, initialFaculty = null }) {
   const { user } = useAuth();
+  const isFaculty = user?.role === 'faculty';
   
   const [faculties, setFaculties] = useState([]);
+  const [routines, setRoutines] = useState([]);
   const [selectedFacultyId, setSelectedFacultyId] = useState('');
   const [courseCode, setCourseCode] = useState('');
   const [courseTitle, setCourseTitle] = useState('');
   const [semester, setSemester] = useState('Spring 2026');
+  const [facultyCourses, setFacultyCourses] = useState([]);
 
   // Star Ratings (1-5)
   const [rating, setRating] = useState(5);
@@ -27,13 +30,17 @@ export default function SubmitFeedbackModal({ isOpen, onClose, onSubmitSuccess, 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Pre-fill faculty list and default values
+  // Pre-fill faculty list, routines, and default values
   useEffect(() => {
-    async function loadFaculty() {
+    async function loadModalData() {
       try {
-        const users = await fetchUsers();
+        const [users, allRoutines] = await Promise.all([
+          fetchUsers(),
+          fetchRoutines()
+        ]);
         const facultyList = users.filter(u => u.role === 'faculty');
         setFaculties(facultyList);
+        setRoutines(allRoutines);
 
         if (initialFaculty && initialFaculty._id) {
           setSelectedFacultyId(initialFaculty._id);
@@ -41,19 +48,59 @@ export default function SubmitFeedbackModal({ isOpen, onClose, onSubmitSuccess, 
           setSelectedFacultyId(facultyList[0]._id);
         }
       } catch (err) {
-        console.error('Error loading faculties in modal:', err);
+        console.error('Error loading data in feedback modal:', err);
       }
     }
 
     if (isOpen) {
-      loadFaculty();
+      loadModalData();
     }
   }, [isOpen, initialFaculty]);
+
+  // Whenever selected faculty changes, update available courses taught by them
+  useEffect(() => {
+    if (!selectedFacultyId || faculties.length === 0) return;
+    const targetFac = faculties.find(f => f._id === selectedFacultyId) || initialFaculty;
+    if (!targetFac) return;
+
+    const facName = targetFac.name?.toLowerCase() || '';
+    const matchingRoutines = routines.filter(r => 
+      r.facultyName && (
+        r.facultyName.toLowerCase().includes(facName) || 
+        facName.includes(r.facultyName.toLowerCase())
+      )
+    );
+
+    // Map unique course codes & titles
+    const courseMap = new Map();
+    matchingRoutines.forEach(r => {
+      if (!courseMap.has(r.courseCode)) {
+        courseMap.set(r.courseCode, { code: r.courseCode, title: r.courseTitle });
+      }
+    });
+
+    const uniqueCourses = Array.from(courseMap.values());
+    setFacultyCourses(uniqueCourses);
+
+    if (uniqueCourses.length > 0) {
+      setCourseCode(uniqueCourses[0].code);
+      setCourseTitle(uniqueCourses[0].title);
+    }
+  }, [selectedFacultyId, faculties, routines]);
 
   if (!isOpen) return null;
 
   const handleSelectFaculty = (e) => {
     setSelectedFacultyId(e.target.value);
+  };
+
+  const handleSelectCourse = (e) => {
+    const selectedCode = e.target.value;
+    setCourseCode(selectedCode);
+    const found = facultyCourses.find(c => c.code === selectedCode);
+    if (found) {
+      setCourseTitle(found.title);
+    }
   };
 
   const handleSuggestionClick = (text) => {
@@ -67,6 +114,11 @@ export default function SubmitFeedbackModal({ isOpen, onClose, onSubmitSuccess, 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+
+    if (isFaculty) {
+      setError('Faculty members are not permitted to rate or evaluate other faculty members.');
+      return;
+    }
 
     const targetFaculty = faculties.find(f => f._id === selectedFacultyId) || initialFaculty;
 
@@ -98,7 +150,9 @@ export default function SubmitFeedbackModal({ isOpen, onClose, onSubmitSuccess, 
         isAnonymous,
         studentId: user?.studentId || '',
         studentName: user?.name || 'Student',
-        studentEmail: user?.email || ''
+        studentEmail: user?.email || '',
+        userRole: user?.role || 'student',
+        studentSection: user?.section || 'Section A'
       };
 
       const res = await submitFeedback(payload);
@@ -152,6 +206,18 @@ export default function SubmitFeedbackModal({ isOpen, onClose, onSubmitSuccess, 
             </div>
           </div>
 
+          {isFaculty && (
+            <div className="mb-5 p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-300 text-xs font-semibold flex items-center gap-3">
+              <AlertTriangle className="w-5 h-5 text-amber-500 shrink-0" />
+              <div>
+                <p className="font-extrabold">Faculty Rating Restriction</p>
+                <p className="text-[11px] font-normal opacity-90">
+                  Faculty members cannot submit ratings or evaluations for other faculty members. Only students enrolled in a faculty member's subjects can evaluate them.
+                </p>
+              </div>
+            </div>
+          )}
+
           {error && (
             <div className="mb-5 p-3.5 rounded-2xl bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs font-semibold">
               {error}
@@ -167,7 +233,8 @@ export default function SubmitFeedbackModal({ isOpen, onClose, onSubmitSuccess, 
               <select
                 value={selectedFacultyId}
                 onChange={handleSelectFaculty}
-                className="w-full px-4 py-2.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+                disabled={isFaculty}
+                className="w-full px-4 py-2.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500/20 disabled:opacity-50"
                 required
               >
                 {faculties.length === 0 && (
@@ -181,7 +248,27 @@ export default function SubmitFeedbackModal({ isOpen, onClose, onSubmitSuccess, 
               </select>
             </div>
 
-            {/* Course Code & Title Grid */}
+            {/* Course Selection / Code & Title Grid */}
+            {facultyCourses.length > 0 && (
+              <div>
+                <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1.5">
+                  Select Taught Subject / Course *
+                </label>
+                <select
+                  value={courseCode}
+                  onChange={handleSelectCourse}
+                  disabled={isFaculty}
+                  className="w-full px-4 py-2.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500/20 disabled:opacity-50"
+                >
+                  {facultyCourses.map(c => (
+                    <option key={c.code} value={c.code}>
+                      {c.code} — {c.title}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1.5">
@@ -192,7 +279,8 @@ export default function SubmitFeedbackModal({ isOpen, onClose, onSubmitSuccess, 
                   placeholder="e.g. CSE-3101"
                   value={courseCode}
                   onChange={(e) => setCourseCode(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500/20 uppercase"
+                  disabled={isFaculty}
+                  className="w-full px-4 py-2.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500/20 uppercase disabled:opacity-50"
                   required
                 />
               </div>
@@ -204,7 +292,8 @@ export default function SubmitFeedbackModal({ isOpen, onClose, onSubmitSuccess, 
                 <select
                   value={semester}
                   onChange={(e) => setSemester(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+                  disabled={isFaculty}
+                  className="w-full px-4 py-2.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500/20 disabled:opacity-50"
                 >
                   <option value="Spring 2026">Spring 2026</option>
                   <option value="Fall 2025">Fall 2025</option>
@@ -222,7 +311,8 @@ export default function SubmitFeedbackModal({ isOpen, onClose, onSubmitSuccess, 
                 placeholder="e.g. Database Management Systems"
                 value={courseTitle}
                 onChange={(e) => setCourseTitle(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+                disabled={isFaculty}
+                className="w-full px-4 py-2.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500/20 disabled:opacity-50"
                 required
               />
             </div>
@@ -337,8 +427,8 @@ export default function SubmitFeedbackModal({ isOpen, onClose, onSubmitSuccess, 
 
               <button
                 type="submit"
-                disabled={loading}
-                className="px-6 py-2.5 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold transition-all flex items-center gap-2 disabled:opacity-50 shadow-xs"
+                disabled={loading || isFaculty}
+                className="px-6 py-2.5 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-xs"
               >
                 {loading ? (
                   <>

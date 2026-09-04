@@ -18,11 +18,15 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { fetchUsers } from '../lib/api';
+import { useAuth } from '../context/AuthContext';
 import SubmitFeedbackModal from './SubmitFeedbackModal';
 
 const ITEMS_PER_PAGE = 30;
 
 export default function FacultyList() {
+  const { user } = useAuth();
+  const isFaculty = user?.role === 'faculty';
+
   const [faculties, setFaculties] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedDept, setSelectedDept] = useState('all');
@@ -227,6 +231,7 @@ export default function FacultyList() {
               <FacultyCard 
                 key={faculty._id} 
                 faculty={faculty} 
+                isFaculty={isFaculty}
                 onFeedbackClick={() => handleOpenFeedbackModal(faculty)}
               />
             ))}
@@ -262,6 +267,7 @@ export default function FacultyList() {
                   <FacultyCard 
                     key={faculty._id} 
                     faculty={faculty} 
+                    isFaculty={isFaculty}
                     onFeedbackClick={() => handleOpenFeedbackModal(faculty)}
                   />
                 ))}
@@ -328,7 +334,7 @@ export default function FacultyList() {
 }
 
 /* Individual Faculty Card Component */
-function FacultyCard({ faculty, onFeedbackClick }) {
+function FacultyCard({ faculty, onFeedbackClick, isFaculty }) {
   const acronym = faculty.acronym || faculty.name.split(' ').map(n => n[0]).join('').substring(0, 3).toUpperCase();
 
 
@@ -414,7 +420,7 @@ function FacultyCard({ faculty, onFeedbackClick }) {
         </a>
 
         {/* Feedback Button */}
-        {onFeedbackClick && (
+        {onFeedbackClick && !isFaculty && (
           <button
             onClick={onFeedbackClick}
             className="w-full mt-3 py-2 px-3 rounded-2xl bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-extrabold text-xs border border-slate-200 dark:border-slate-700 transition-all flex items-center justify-center gap-1.5 shadow-2xs"

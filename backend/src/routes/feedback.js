@@ -1,6 +1,6 @@
 import express from 'express';
 import { ObjectId } from 'mongodb';
-import { getFeedbackCollection } from '../config/db.js';
+import { getFeedbackCollection, getUsersCollection, getRoutinesCollection, getMarksCollection } from '../config/db.js';
 
 const router = express.Router();
 
@@ -122,7 +122,9 @@ router.post('/', async (req, res) => {
       isAnonymous,
       studentId,
       studentName,
-      studentEmail
+      studentEmail,
+      userRole,
+      studentSection
     } = req.body;
 
     if (!facultyId || !facultyName || !courseCode || !courseTitle || !rating) {
@@ -134,6 +136,98 @@ router.post('/', async (req, res) => {
     const numRating = Number(rating);
     if (isNaN(numRating) || numRating < 1 || numRating > 5) {
       return res.status(400).json({ error: 'Rating must be a number between 1 and 5.' });
+    }
+
+    // 1. Role Verification: Faculty members cannot rate other faculty members
+    let submitterRole = userRole || 'student';
+    const usersCol = getUsersCollection();
+    let submitterUser = null;
+
+    if (usersCol) {
+      if (studentEmail) {
+        submitterUser = await usersCol.findOne({ email: studentEmail.trim() });
+      } else if (studentId) {
+        submitterUser = await usersCol.findOne({ studentId: studentId.trim() });
+      }
+    }
+
+    if (submitterUser && submitterUser.role) {
+      submitterRole = submitterUser.role;
+    }
+
+    if (submitterRole === 'faculty') {
+      return res.status(403).json({
+        success: false,
+        error: 'Faculty members are not permitted to rate or evaluate other faculty members.'
+      });
+    }
+
+    // 2. Subject Enrollment Verification: Only students of the faculty's subjects can rate
+    const targetFacultyName = facultyName.trim();
+    const cleanCourseCode = courseCode.trim().toUpperCase();
+
+    const routinesCol = getRoutinesCollection();
+    const marksCol = getMarksCollection();
+
+    let isEnrolledInFacultySubject = false;
+
+    // Check routines for matching faculty and courseCode
+    if (routinesCol) {
+      const routines = await routinesCol.find({
+        courseCode: { $regex: cleanCourseCode, $options: 'i' }
+      }).toArray();
+
+      const matchingRoutineForFaculty = routines.find(r => 
+        r.facultyName && (
+          r.facultyName.toLowerCase().includes(targetFacultyName.toLowerCase()) ||
+          targetFacultyName.toLowerCase().includes(r.facultyName.toLowerCase())
+        )
+      );
+
+      if (matchingRoutineForFaculty) {
+        const userSec = submitterUser?.section || studentSection || '';
+        const userDept = submitterUser?.department || department || '';
+
+        // If routine matches student's section or department, or student belongs to section taking the course
+        if (
+          !userSec ||
+          matchingRoutineForFaculty.section === userSec ||
+          matchingRoutineForFaculty.department === userDept ||
+          routines.some(r => r.section === userSec)
+        ) {
+          isEnrolledInFacultySubject = true;
+        }
+      }
+    }
+
+    // Check marks collection if routine check was not sufficient
+    if (!isEnrolledInFacultySubject && marksCol && (studentId || submitterUser?.studentId)) {
+      const stId = submitterUser?.studentId || studentId;
+      const markRecord = await marksCol.findOne({
+        studentId: stId,
+        courseCode: { $regex: cleanCourseCode, $options: 'i' }
+      });
+      if (markRecord) {
+        isEnrolledInFacultySubject = true;
+      }
+    }
+
+    // If routines exist for this faculty member, enforce that the student must be in their subject
+    if (routinesCol) {
+      const allRoutines = await routinesCol.find().toArray();
+      const facultyTeachesInSystem = allRoutines.some(r => 
+        r.facultyName && (
+          r.facultyName.toLowerCase().includes(targetFacultyName.toLowerCase()) ||
+          targetFacultyName.toLowerCase().includes(r.facultyName.toLowerCase())
+        )
+      );
+
+      if (facultyTeachesInSystem && !isEnrolledInFacultySubject) {
+        return res.status(403).json({
+          success: false,
+          error: `Only students enrolled in ${targetFacultyName}'s subjects can submit ratings for them.`
+        });
+      }
     }
 
     const feedbackCol = getFeedbackCollection();
@@ -148,10 +242,10 @@ router.post('/', async (req, res) => {
       studentName: isAnon ? 'Anonymous Student' : (studentName || 'Student'),
       studentEmail: isAnon ? '' : (studentEmail || ''),
       facultyId: String(facultyId),
-      facultyName: facultyName.trim(),
+      facultyName: targetFacultyName,
       facultyEmail: facultyEmail || '',
       department: department || 'Computer Science & Engineering',
-      courseCode: courseCode.trim().toUpperCase(),
+      courseCode: cleanCourseCode,
       courseTitle: courseTitle.trim(),
       semester: semester || 'Spring 2026',
       rating: numRating,
