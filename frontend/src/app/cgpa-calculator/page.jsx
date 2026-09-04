@@ -15,7 +15,8 @@ import {
   CheckCircle2, 
   AlertCircle,
   BarChart3,
-  HelpCircle
+  HelpCircle,
+  X
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -532,7 +533,7 @@ export default function CGPACalculatorPage() {
                     </div>
                   </div>
                   <button onClick={() => setShowAdviceModal(false)} className="p-1.5 rounded-lg text-slate-400 hover:text-slate-200">
-                    <Trash2 className="w-4 h-4 hidden" /> ✖
+                    <X className="w-5 h-5" />
                   </button>
                 </div>
 
