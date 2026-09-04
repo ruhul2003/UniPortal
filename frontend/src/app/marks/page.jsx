@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { useAuth } from '../../context/AuthContext';
 import { fetchMarks, fetchStudentMarks, saveMarks, bulkPublishMarks, updateCTRule, deleteMarkRecord } from '../../lib/api';
 import MarksFormModal from '../../components/MarksFormModal';
+import DigitalTranscriptModal from '../../components/DigitalTranscriptModal';
 import AttendancePage from '../attendance/page';
 import {
   Award,
@@ -52,6 +53,7 @@ function MarksPageContent() {
 
   // Modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isTranscriptModalOpen, setIsTranscriptModalOpen] = useState(false);
   const [editingRecord, setEditingRecord] = useState(null);
 
   const loadData = async () => {
@@ -613,6 +615,14 @@ function MarksPageContent() {
                     : '4.00'}
                 </span>
               </div>
+
+              <button
+                onClick={() => setIsTranscriptModalOpen(true)}
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition-all shadow-md shadow-blue-500/20 shrink-0"
+              >
+                <FileSpreadsheet className="w-4 h-4" />
+                Export Transcript
+              </button>
             </div>
           </div>
 
@@ -757,6 +767,14 @@ function MarksPageContent() {
         initialData={editingRecord}
         onSave={handleSaveModalRecord}
         isFaculty={isFacultyOrAdmin}
+      />
+
+      {/* Digital Transcript & Grade Sheet Export Modal */}
+      <DigitalTranscriptModal
+        isOpen={isTranscriptModalOpen}
+        onClose={() => setIsTranscriptModalOpen(false)}
+        studentData={user}
+        marksList={marksList}
       />
     </div>
   );
