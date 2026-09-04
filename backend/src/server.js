@@ -16,6 +16,7 @@ import feedbackRouter from './routes/feedback.js';
 import marksRouter from './routes/marks.js';
 import examsRouter from './routes/exams.js';
 import permitsRouter from './routes/permits.js';
+import leaveRequestsRouter from './routes/leaveRequests.js';
 
 dotenv.config();
 
@@ -73,6 +74,7 @@ app.use('/api/feedback', feedbackRouter);
 app.use('/api/marks', marksRouter);
 app.use('/api/exams', examsRouter);
 app.use('/api/permits', permitsRouter);
+app.use('/api/leave-requests', leaveRequestsRouter);
 
 // Root welcome endpoint
 app.get('/', (req, res) => {
