@@ -34,6 +34,11 @@
   - 💼 **Faculty View** (Indigo badge)
   - ⚡ **Admin View** (Purple badge with Crown)
 
+### 📜 7. Academic Documents & Certificate Requests
+- **Document Request Workflow**: Apply for official transcripts, grade sheets, clearance certificates, testimonials, and provisional certificates.
+- **Digital Certificate Verification**: Interactive digital document preview with QR verification codes, cryptographic seals, and 1-click PDF printing.
+- **Controller Approval Desk**: Review, process, and approve student document applications with status tracking codes (`DOC-2026-XXXX`).
+
 ---
 
 ## 🛠️ Technology Stack
