@@ -43,7 +43,7 @@ export default function Sidebar({ isOpen, onClose, isCollapsed, onToggleCollapse
   const academicsGroup = [
     { name: 'Attendance & Marks', href: '/marks', icon: Award },
     { name: 'CGPA Calculator', href: '/cgpa-calculator', icon: Calculator },
-    { name: 'Academic Documents', href: '/document-requests', icon: FileCheck },
+    { name: 'Academic Documents', href: '/document-requests', icon: FileCheck, badgeText: 'Desk' },
     { name: 'Sick Leave Desk', href: '/leave-requests', icon: Stethoscope },
     { name: 'Exam & Admit Card', href: '/exams', icon: FileText },
     { name: 'One-Day Permits', href: '/permits', icon: BadgeCheck },
