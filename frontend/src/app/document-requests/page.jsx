@@ -396,9 +396,16 @@ export default function DocumentRequestsPage() {
                             <Zap className="w-3 h-3 fill-rose-500 text-rose-500" /> Urgent
                           </span>
                         )}
-                        <span className="px-2.5 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 font-mono text-[10px] font-bold text-slate-600 dark:text-slate-300">
+                        <button
+                          onClick={() => {
+                            navigator.clipboard.writeText(req.trackingCode);
+                            alert(`📋 Tracking code ${req.trackingCode} copied to clipboard!`);
+                          }}
+                          title="Click to copy tracking code"
+                          className="px-2.5 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 font-mono text-[10px] font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                        >
                           {req.trackingCode}
-                        </span>
+                        </button>
                       </div>
                     </div>
 
