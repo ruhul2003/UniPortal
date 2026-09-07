@@ -28,6 +28,24 @@ router.get('/', async (req, res) => {
   }
 });
 
+// GET /api/document-requests/verify/:code - Verify document tracking code
+router.get('/verify/:code', async (req, res) => {
+  try {
+    const { code } = req.params;
+    const request = await DocumentRequest.findOne({ trackingCode: code.toUpperCase() })
+      .populate('student', 'name email studentId department section avatar');
+
+    if (!request) {
+      return res.status(404).json({ success: false, error: 'Document verification failed. Invalid tracking code.' });
+    }
+
+    res.json({ success: true, verified: true, request });
+  } catch (err) {
+    console.error('Verify document code error:', err);
+    res.status(500).json({ error: 'Failed to verify document code' });
+  }
+});
+
 // POST /api/document-requests - Submit a new document request
 router.post('/', async (req, res) => {
   try {
