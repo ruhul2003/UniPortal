@@ -161,6 +161,20 @@ export default function DocumentCertificateModal({ isOpen, onClose, requestData,
                   </p>
                 </div>
               </div>
+            ) : documentType === 'Provisional Degree Certificate' ? (
+              <div className="space-y-6">
+                <div className="p-8 rounded-2xl bg-amber-50/50 border border-amber-200 space-y-4 print:border-black text-center">
+                  <h3 className="text-base font-black text-amber-900 uppercase tracking-widest">
+                    Provisional Bachelor of Science Degree Certificate
+                  </h3>
+                  <p className="text-xs text-slate-700 leading-relaxed max-w-2xl mx-auto">
+                    This is to certify that <strong>{studentName}</strong> (Student ID: <strong>{studentId}</strong>) has successfully fulfilled all academic curriculum requirements for the degree of <strong>Bachelor of Science in {department}</strong> in Spring 2026, securing a Cumulative Grade Point Average of <strong>3.85</strong> on a 4.00 scale with <strong>First Class Honors</strong>.
+                  </p>
+                  <div className="inline-block px-4 py-1.5 rounded-full bg-amber-900 text-amber-100 font-extrabold text-[11px] uppercase tracking-wider">
+                    Degree Awarded: B.Sc. in {department}
+                  </div>
+                </div>
+              </div>
             ) : (
               /* Default Transcript / Grade Sheet Table */
               <div className="space-y-3">
