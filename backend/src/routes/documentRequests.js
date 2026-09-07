@@ -46,6 +46,25 @@ router.get('/verify/:code', async (req, res) => {
   }
 });
 
+// GET /api/document-requests/stats - Get analytics summary counts
+router.get('/stats', async (req, res) => {
+  try {
+    const total = await DocumentRequest.countDocuments();
+    const pending = await DocumentRequest.countDocuments({ status: 'Pending' });
+    const inProcessing = await DocumentRequest.countDocuments({ status: 'In Processing' });
+    const approved = await DocumentRequest.countDocuments({ status: 'Approved' });
+    const rejected = await DocumentRequest.countDocuments({ status: 'Rejected' });
+
+    res.json({
+      success: true,
+      stats: { total, pending, inProcessing, approved, rejected }
+    });
+  } catch (err) {
+    console.error('Fetch document stats error:', err);
+    res.status(500).json({ error: 'Failed to fetch document request statistics' });
+  }
+});
+
 // POST /api/document-requests - Submit a new document request
 router.post('/', async (req, res) => {
   try {
