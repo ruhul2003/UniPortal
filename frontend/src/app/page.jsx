@@ -188,6 +188,13 @@ export default function HomePage() {
             </Link>
 
             <Link
+              href="/document-requests"
+              className="px-5 py-3 rounded-2xl bg-indigo-50 dark:bg-indigo-950/80 hover:bg-indigo-100 dark:hover:bg-indigo-900 text-indigo-700 dark:text-indigo-300 font-bold transition-all flex items-center gap-2 border border-indigo-200 dark:border-indigo-800 shadow-xs"
+            >
+              Academic Documents <Award className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+            </Link>
+
+            <Link
               href="/forum"
               className="px-5 py-3 rounded-2xl bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold transition-all flex items-center gap-2 border border-slate-200 dark:border-slate-700 shadow-xs"
             >
