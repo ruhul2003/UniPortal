@@ -96,6 +96,7 @@ app.get('/', (req, res) => {
       resources: '/api/resources',
       forum: '/api/forum',
       feedback: '/api/feedback',
+      documentRequests: '/api/document-requests',
       auth: '/api/auth'
     },
     timestamp: new Date().toISOString()
