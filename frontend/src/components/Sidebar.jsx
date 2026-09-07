@@ -26,7 +26,8 @@ import {
   FileText,
   BadgeCheck,
   Calculator,
-  Stethoscope
+  Stethoscope,
+  FileCheck
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -42,6 +43,7 @@ export default function Sidebar({ isOpen, onClose, isCollapsed, onToggleCollapse
   const academicsGroup = [
     { name: 'Attendance & Marks', href: '/marks', icon: Award },
     { name: 'CGPA Calculator', href: '/cgpa-calculator', icon: Calculator },
+    { name: 'Academic Documents', href: '/document-requests', icon: FileCheck },
     { name: 'Sick Leave Desk', href: '/leave-requests', icon: Stethoscope },
     { name: 'Exam & Admit Card', href: '/exams', icon: FileText },
     { name: 'One-Day Permits', href: '/permits', icon: BadgeCheck },
