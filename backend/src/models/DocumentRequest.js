@@ -47,4 +47,9 @@ const documentRequestSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// Indexes for fast lookup by student ID, status, and tracking code
+documentRequestSchema.index({ studentId: 1, createdAt: -1 });
+documentRequestSchema.index({ trackingCode: 1 });
+documentRequestSchema.index({ status: 1 });
+
 export const DocumentRequest = mongoose.models.DocumentRequest || mongoose.model('DocumentRequest', documentRequestSchema);
