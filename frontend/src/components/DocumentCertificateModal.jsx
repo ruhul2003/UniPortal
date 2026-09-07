@@ -64,7 +64,12 @@ export default function DocumentCertificateModal({ isOpen, onClose, requestData,
           </div>
 
           {/* Printable Document Body */}
-          <div className="p-8 sm:p-12 overflow-y-auto print:p-0 space-y-8 text-slate-900 dark:text-white bg-white print:text-black">
+          <div className="relative p-8 sm:p-12 overflow-y-auto print:p-0 space-y-8 text-slate-900 dark:text-white bg-white print:text-black">
+            
+            {/* Security Watermark Background */}
+            <div className="absolute inset-0 pointer-events-none flex items-center justify-center opacity-[0.03] select-none">
+              <span className="font-serif text-8xl font-black uppercase tracking-widest rotate-[-30deg]">METROPOLITAN</span>
+            </div>
             
             {/* University Header */}
             <div className="text-center border-b-2 border-slate-900 dark:border-slate-100 print:border-black pb-6 space-y-2">
