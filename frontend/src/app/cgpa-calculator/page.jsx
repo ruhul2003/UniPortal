@@ -243,21 +243,21 @@ export default function CGPACalculatorPage() {
         </div>
 
         {/* Top Analytics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-5">
           {/* Current CGPA */}
-          <div className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden group">
+          <div className="bg-white dark:bg-slate-900 p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden group">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Current CGPA</span>
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
-                <Award className="w-5 h-5" />
+              <span className="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider">Current CGPA</span>
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                <Award className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
             </div>
-            <div className="mt-4">
-              <div className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">
+            <div className="mt-3 sm:mt-4">
+              <div className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
                 {currentCGPA.toFixed(2)}
               </div>
-              <p className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 mt-1">
-                Based on {totalCompletedCredits} Completed Credits
+              <p className="text-[10px] sm:text-xs font-semibold text-emerald-600 dark:text-emerald-400 mt-1 truncate">
+                {totalCompletedCredits} Credits
               </p>
             </div>
           </div>
