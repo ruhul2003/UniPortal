@@ -62,33 +62,35 @@ export default function PermissionSlipModal({ isOpen, onClose, permitData }) {
           initial={{ opacity: 0, scale: 0.95, y: 10 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 10 }}
-          className="relative w-full max-w-3xl bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col max-h-[90vh] print:max-h-none print:shadow-none print:border-none"
+          className="relative w-full max-w-3xl bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col max-h-[94vh] sm:max-h-[90vh] print:max-h-none print:shadow-none print:border-none"
         >
           {/* Top Modal Navigation Header (Screen only) */}
-          <div className="no-print px-6 py-4 bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between shrink-0">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 flex items-center justify-center font-bold border border-slate-200 dark:border-slate-700">
-                <BadgeCheck className="w-5 h-5" />
+          <div className="no-print px-4 sm:px-6 py-3 sm:py-4 bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between shrink-0">
+            <div className="flex items-center gap-2.5 sm:gap-3">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 flex items-center justify-center font-bold border border-slate-200 dark:border-slate-700 shrink-0">
+                <BadgeCheck className="w-5 h-5 text-emerald-600" />
               </div>
               <div>
-                <h3 className="font-extrabold text-slate-900 dark:text-white text-base">One-Day Permission Slip</h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400">Official Special Academic Entry Pass</p>
+                <h3 className="font-extrabold text-slate-900 dark:text-white text-sm sm:text-base leading-tight">One-Day Permission Slip</h3>
+                <p className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400">Official Special Academic Entry Pass</p>
               </div>
             </div>
 
             <div className="flex items-center gap-2">
               <button
                 onClick={handlePrint}
-                className="px-4 py-2 bg-slate-900 dark:bg-slate-800 hover:bg-slate-800 text-white rounded-xl font-bold text-xs border border-slate-700 flex items-center gap-2 transition-all active:scale-95"
+                className="px-3 sm:px-4 py-2 bg-slate-900 dark:bg-slate-800 hover:bg-slate-800 text-white rounded-xl font-bold text-xs border border-slate-700 flex items-center gap-1.5 sm:gap-2 transition-all active:scale-95 touch-manipulation"
               >
-                <Printer className="w-4 h-4" />
-                <span>Download / Print PDF</span>
+                <Printer className="w-4 h-4 shrink-0" />
+                <span className="hidden sm:inline">Download / Print PDF</span>
+                <span className="sm:hidden">Print</span>
               </button>
 
               <button
                 onClick={onClose}
-                className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-700/60 rounded-xl transition-colors"
+                className="p-2 min-w-[38px] min-h-[38px] flex items-center justify-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-700/60 rounded-xl transition-colors touch-manipulation"
                 title="Close Permission Slip"
+                aria-label="Close Permission Slip"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -99,7 +101,7 @@ export default function PermissionSlipModal({ isOpen, onClose, permitData }) {
           <div
             id="permission-slip-print-area"
             ref={printRef}
-            className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-6 print:p-0 print:overflow-visible text-slate-900 dark:text-slate-100"
+            className="flex-1 overflow-y-auto p-4 sm:p-8 space-y-4 sm:space-y-6 print:p-0 print:overflow-visible text-slate-900 dark:text-slate-100 touch-scroll"
           >
             {/* Header / University Seal */}
             <div className="relative p-6 rounded-2xl bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white overflow-hidden shadow-xs border border-slate-200 dark:border-slate-700 print:bg-none print:text-black print:border-b-2 print:border-slate-900 print:p-0 print:pb-4">

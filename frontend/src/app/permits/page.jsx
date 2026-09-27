@@ -284,48 +284,48 @@ export default function PermitsPage() {
         </div>
 
         {/* Status Metrics Bar */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
-              <FileText className="w-6 h-6" />
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          <div className="p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-3 sm:gap-4">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
+              <FileText className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
             <div>
-              <p className="text-xs font-medium text-slate-400">Total Applications</p>
-              <h4 className="text-xl font-black text-slate-900 dark:text-white">{permits.length}</h4>
+              <p className="text-[10px] sm:text-xs font-medium text-slate-400">Total Applied</p>
+              <h4 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white">{permits.length}</h4>
             </div>
           </div>
 
-          <div className="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
-              <CheckCircle2 className="w-6 h-6" />
+          <div className="p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-3 sm:gap-4">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+              <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
             <div>
-              <p className="text-xs font-medium text-slate-400">Approved Permits</p>
-              <h4 className="text-xl font-black text-emerald-600 dark:text-emerald-400">
+              <p className="text-[10px] sm:text-xs font-medium text-slate-400">Approved</p>
+              <h4 className="text-lg sm:text-xl font-black text-emerald-600 dark:text-emerald-400">
                 {permits.filter(p => p.status === 'Approved').length}
               </h4>
             </div>
           </div>
 
-          <div className="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0">
-              <Clock className="w-6 h-6" />
+          <div className="p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-3 sm:gap-4">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0">
+              <Clock className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
             <div>
-              <p className="text-xs font-medium text-slate-400">Pending Review</p>
-              <h4 className="text-xl font-black text-amber-600 dark:text-amber-400">
+              <p className="text-[10px] sm:text-xs font-medium text-slate-400">Pending</p>
+              <h4 className="text-lg sm:text-xl font-black text-amber-600 dark:text-amber-400">
                 {permits.filter(p => p.status === 'Pending').length}
               </h4>
             </div>
           </div>
 
-          <div className="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0">
-              <XCircle className="w-6 h-6" />
+          <div className="p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-3 sm:gap-4">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0">
+              <XCircle className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
             <div>
-              <p className="text-xs font-medium text-slate-400">Cancelled / Rejected</p>
-              <h4 className="text-xl font-black text-rose-600 dark:text-rose-400">
+              <p className="text-[10px] sm:text-xs font-medium text-slate-400">Cancelled</p>
+              <h4 className="text-lg sm:text-xl font-black text-rose-600 dark:text-rose-400">
                 {permits.filter(p => p.status === 'Cancelled').length}
               </h4>
             </div>
