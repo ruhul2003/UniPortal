@@ -137,13 +137,13 @@ export default function FeedbackPage() {
           </p>
 
           {!isFaculty && (
-            <div className="pt-2 flex flex-wrap items-center gap-3">
+            <div className="pt-2 flex flex-wrap items-center gap-3 w-full sm:w-auto">
               <button
                 onClick={() => {
                   setTargetFacultyForModal(null);
                   setIsModalOpen(true);
                 }}
-                className="px-5 py-2.5 rounded-2xl bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-extrabold transition-all flex items-center gap-2 shadow-lg shadow-amber-500/25"
+                className="w-full sm:w-auto px-5 py-3 min-h-[44px] rounded-2xl bg-amber-500 hover:bg-amber-600 active:scale-95 text-slate-950 text-xs font-extrabold transition-all flex items-center justify-center gap-2 shadow-lg shadow-amber-500/25 touch-manipulation"
               >
                 <Plus className="w-4 h-4" /> Evaluate a Course Teacher
               </button>
@@ -153,68 +153,68 @@ export default function FeedbackPage() {
       </section>
 
       {/* Analytics Overview Section */}
-      <section className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <section className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
         
         {/* Overall Average Rating Card */}
-        <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-100 dark:border-slate-800 shadow-xl flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-amber-500/10 text-amber-500 flex items-center justify-center font-black text-xl shrink-0 border border-amber-500/20">
-            <Star className="w-7 h-7 fill-amber-500" />
+        <div className="bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl p-3.5 sm:p-6 border border-slate-100 dark:border-slate-800 shadow-xl flex items-center gap-3 sm:gap-4">
+          <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-amber-500/10 text-amber-500 flex items-center justify-center font-black text-xl shrink-0 border border-amber-500/20">
+            <Star className="w-5 h-5 sm:w-7 sm:h-7 fill-amber-500" />
           </div>
           <div>
-            <p className="text-xs font-semibold text-slate-400 dark:text-slate-500">
-              {isFaculty ? 'Your Overall Rating' : 'Global Teacher Avg'}
+            <p className="text-[10px] sm:text-xs font-semibold text-slate-400 dark:text-slate-500">
+              {isFaculty ? 'Your Rating' : 'Global Avg'}
             </p>
-            <div className="flex items-baseline gap-1.5 mt-0.5">
-              <span className="text-3xl font-black text-slate-900 dark:text-white">
+            <div className="flex items-baseline gap-1 mt-0.5">
+              <span className="text-xl sm:text-3xl font-black text-slate-900 dark:text-white">
                 {summary.averageRating > 0 ? summary.averageRating : '5.0'}
               </span>
-              <span className="text-xs font-bold text-slate-400">/ 5.0</span>
+              <span className="text-[10px] sm:text-xs font-bold text-slate-400">/ 5</span>
             </div>
-            <p className="text-[11px] text-amber-600 dark:text-amber-400 font-bold mt-0.5">
-              Based on {summary.totalReviews} student reviews
+            <p className="text-[9px] sm:text-[11px] text-amber-600 dark:text-amber-400 font-bold mt-0.5 truncate">
+              {summary.totalReviews} reviews
             </p>
           </div>
         </div>
 
         {/* Teaching Quality Card */}
-        <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-100 dark:border-slate-800 shadow-xl flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold shrink-0">
-            <BookOpen className="w-6 h-6" />
+        <div className="bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl p-3.5 sm:p-6 border border-slate-100 dark:border-slate-800 shadow-xl flex items-center gap-3 sm:gap-4">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold shrink-0">
+            <BookOpen className="w-5 h-5 sm:w-6 sm:h-6" />
           </div>
           <div>
-            <p className="text-xs font-semibold text-slate-400 dark:text-slate-500">Teaching Quality</p>
-            <h3 className="text-2xl font-black text-slate-900 dark:text-white mt-0.5">
-              {summary.teachingQualityAvg > 0 ? summary.teachingQualityAvg : '5.0'} <span className="text-xs text-slate-400">/ 5</span>
+            <p className="text-[10px] sm:text-xs font-semibold text-slate-400 dark:text-slate-500">Teaching</p>
+            <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mt-0.5">
+              {summary.teachingQualityAvg > 0 ? summary.teachingQualityAvg : '5.0'} <span className="text-[10px] sm:text-xs text-slate-400">/ 5</span>
             </h3>
-            <p className="text-[11px] text-slate-500 dark:text-slate-400">Clarity & Pedagogy</p>
+            <p className="text-[9px] sm:text-[11px] text-slate-500 dark:text-slate-400 truncate">Clarity</p>
           </div>
         </div>
 
         {/* Course Content Card */}
-        <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-100 dark:border-slate-800 shadow-xl flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold shrink-0">
-            <BarChart3 className="w-6 h-6" />
+        <div className="bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl p-3.5 sm:p-6 border border-slate-100 dark:border-slate-800 shadow-xl flex items-center gap-3 sm:gap-4">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold shrink-0">
+            <BarChart3 className="w-5 h-5 sm:w-6 sm:h-6" />
           </div>
           <div>
-            <p className="text-xs font-semibold text-slate-400 dark:text-slate-500">Course Content</p>
-            <h3 className="text-2xl font-black text-slate-900 dark:text-white mt-0.5">
-              {summary.courseContentAvg > 0 ? summary.courseContentAvg : '5.0'} <span className="text-xs text-slate-400">/ 5</span>
+            <p className="text-[10px] sm:text-xs font-semibold text-slate-400 dark:text-slate-500">Content</p>
+            <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mt-0.5">
+              {summary.courseContentAvg > 0 ? summary.courseContentAvg : '5.0'} <span className="text-[10px] sm:text-xs text-slate-400">/ 5</span>
             </h3>
-            <p className="text-[11px] text-slate-500 dark:text-slate-400">Syllabus & Material</p>
+            <p className="text-[9px] sm:text-[11px] text-slate-500 dark:text-slate-400 truncate">Syllabus</p>
           </div>
         </div>
 
         {/* Communication Card */}
-        <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-100 dark:border-slate-800 shadow-xl flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold shrink-0">
-            <MessageSquare className="w-6 h-6" />
+        <div className="bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl p-3.5 sm:p-6 border border-slate-100 dark:border-slate-800 shadow-xl flex items-center gap-3 sm:gap-4">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold shrink-0">
+            <MessageSquare className="w-5 h-5 sm:w-6 sm:h-6" />
           </div>
           <div>
-            <p className="text-xs font-semibold text-slate-400 dark:text-slate-500">Communication</p>
-            <h3 className="text-2xl font-black text-slate-900 dark:text-white mt-0.5">
-              {summary.communicationAvg > 0 ? summary.communicationAvg : '4.8'} <span className="text-xs text-slate-400">/ 5</span>
+            <p className="text-[10px] sm:text-xs font-semibold text-slate-400 dark:text-slate-500">Communication</p>
+            <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mt-0.5">
+              {summary.communicationAvg > 0 ? summary.communicationAvg : '4.8'} <span className="text-[10px] sm:text-xs text-slate-400">/ 5</span>
             </h3>
-            <p className="text-[11px] text-slate-500 dark:text-slate-400">Punctuality & Helpfulness</p>
+            <p className="text-[9px] sm:text-[11px] text-slate-500 dark:text-slate-400 truncate">Helpfulness</p>
           </div>
         </div>
 

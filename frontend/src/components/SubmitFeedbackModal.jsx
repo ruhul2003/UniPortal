@@ -456,16 +456,17 @@ function StarPicker({ value, onChange, size = 'normal' }) {
   const isSmall = size === 'small';
 
   return (
-    <div className="flex items-center gap-1">
+    <div className="flex items-center gap-0.5 sm:gap-1">
       {stars.map((s) => (
         <button
           key={s}
           type="button"
           onClick={() => onChange(s)}
-          className="focus:outline-none transition-transform hover:scale-110"
+          className="p-1 sm:p-1.5 focus:outline-none transition-transform hover:scale-110 active:scale-95 touch-manipulation min-w-[32px] sm:min-w-[36px] min-h-[32px] sm:min-h-[36px] flex items-center justify-center"
+          aria-label={`${s} star`}
         >
           <Star
-            className={`${isSmall ? 'w-4 h-4' : 'w-6 h-6'} ${
+            className={`${isSmall ? 'w-4 h-4 sm:w-4.5 sm:h-4.5' : 'w-6 h-6 sm:w-7 sm:h-7'} ${
               s <= value
                 ? 'text-amber-400 fill-amber-400'
                 : 'text-slate-300 dark:text-slate-700'
@@ -473,7 +474,7 @@ function StarPicker({ value, onChange, size = 'normal' }) {
           />
         </button>
       ))}
-      <span className={`ml-1.5 font-black text-amber-500 ${isSmall ? 'text-xs' : 'text-sm'}`}>
+      <span className={`ml-1 font-black text-amber-500 ${isSmall ? 'text-xs' : 'text-sm'}`}>
         {value}.0
       </span>
     </div>
