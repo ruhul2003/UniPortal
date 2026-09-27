@@ -6,6 +6,7 @@ import Sidebar from './Sidebar';
 import Footer from './Footer';
 import InitialLoader from './InitialLoader';
 import AIChatbox from './AIChatbox';
+import MobileBottomNav from './MobileBottomNav';
 import { fetchNotices } from '../lib/api';
 
 export default function AppLayout({ children }) {
@@ -65,7 +66,6 @@ export default function AppLayout({ children }) {
       )}
       <div className="flex min-h-screen bg-slate-50/50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 antialiased selection:bg-blue-100 selection:text-blue-700 transition-colors duration-200">
 
-      
       {/* Sidebar Navigation */}
       <Sidebar
         isOpen={isSidebarOpen}
@@ -85,12 +85,19 @@ export default function AppLayout({ children }) {
           isSidebarCollapsed={isSidebarCollapsed} 
         />
 
-        <main className="flex-1 w-full max-w-full mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 py-6 sm:py-8">
+        <main className="flex-1 w-full max-w-full mx-auto px-3 sm:px-6 lg:px-8 xl:px-10 py-5 sm:py-8 pb-24 lg:pb-8 touch-scroll">
           {children}
         </main>
 
         <Footer />
       </div>
+
+      {/* Mobile Bottom Dock Navigation */}
+      <MobileBottomNav 
+        onOpenMenu={() => setIsSidebarOpen(true)}
+        hasNotices={hasNotices}
+        hasUrgentNotice={hasUrgentNotice}
+      />
 
       {/* Global Floating AI Chatbot */}
       <AIChatbox />
