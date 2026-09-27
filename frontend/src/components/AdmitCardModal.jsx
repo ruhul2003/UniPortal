@@ -23,7 +23,7 @@ export default function AdmitCardModal({ isOpen, onClose, admitCardData, user })
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 print:p-0 print:bg-white print:static">
+      <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-2 sm:p-6 print:p-0 print:bg-white print:static">
         {/* Printable CSS override */}
         <style jsx global>{`
           @media print {
@@ -53,33 +53,35 @@ export default function AdmitCardModal({ isOpen, onClose, admitCardData, user })
           initial={{ opacity: 0, scale: 0.95, y: 10 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 10 }}
-          className="relative w-full max-w-4xl bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col max-h-[90vh] print:max-h-none print:shadow-none print:border-none"
+          className="relative w-full max-w-4xl bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col max-h-[94vh] sm:max-h-[90vh] print:max-h-none print:shadow-none print:border-none"
         >
           {/* Top Modal Navigation Header (Screen only) */}
-          <div className="no-print px-6 py-4 bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between shrink-0">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-blue-600/10 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold">
+          <div className="no-print px-4 sm:px-6 py-3 sm:py-4 bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between shrink-0">
+            <div className="flex items-center gap-2.5 sm:gap-3">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-blue-600/10 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold shrink-0">
                 <FileCheck2 className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="font-extrabold text-slate-900 dark:text-white text-base">Official Digital Admit Card</h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400">Spring Semester 2026 Examination Pass</p>
+                <h3 className="font-extrabold text-slate-900 dark:text-white text-sm sm:text-base leading-tight">Digital Admit Card</h3>
+                <p className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400">Spring 2026 Examination Pass</p>
               </div>
             </div>
 
             <div className="flex items-center gap-2">
               <button
                 onClick={handlePrint}
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-xs shadow-md shadow-blue-500/20 flex items-center gap-2 transition-all active:scale-95"
+                className="px-3 sm:px-4 py-2 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white rounded-xl font-bold text-xs shadow-md shadow-blue-500/20 flex items-center gap-1.5 sm:gap-2 transition-all touch-manipulation"
               >
-                <Printer className="w-4 h-4" />
-                <span>Print Admit Card</span>
+                <Printer className="w-4 h-4 shrink-0" />
+                <span className="hidden sm:inline">Print Admit Card</span>
+                <span className="sm:hidden">Print</span>
               </button>
 
               <button
                 onClick={onClose}
-                className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-700/60 rounded-xl transition-colors"
+                className="p-2 min-w-[38px] min-h-[38px] flex items-center justify-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-700/60 rounded-xl transition-colors touch-manipulation"
                 title="Close Admit Card"
+                aria-label="Close Admit Card"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -90,7 +92,7 @@ export default function AdmitCardModal({ isOpen, onClose, admitCardData, user })
           <div
             id="admit-card-print-area"
             ref={printRef}
-            className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-6 print:p-6 print:overflow-visible text-slate-900 dark:text-slate-100"
+            className="flex-1 overflow-y-auto p-4 sm:p-8 space-y-4 sm:space-y-6 print:p-6 print:overflow-visible text-slate-900 dark:text-slate-100 touch-scroll"
           >
             {/* Header / Seal Banner */}
             <div className="relative p-6 rounded-2xl bg-slate-900 text-white overflow-hidden shadow-lg border border-slate-800 print:bg-none print:text-black print:border-b-2 print:border-slate-900 print:p-0 print:pb-4">
