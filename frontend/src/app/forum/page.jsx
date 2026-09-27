@@ -212,17 +212,17 @@ export default function ForumPage() {
     <div className="space-y-8">
         
         {/* Header Banner */}
-        <div className="relative overflow-hidden rounded-3xl bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 sm:p-10 text-white shadow-xl">
-          <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 sm:p-10 text-white shadow-xl">
+          <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-6">
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-xs font-bold uppercase tracking-wider mb-3 text-blue-400">
-                <MessageSquare className="w-4 h-4 text-blue-400" />
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-[11px] sm:text-xs font-bold uppercase tracking-wider mb-2 sm:mb-3 text-blue-400">
+                <MessageSquare className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-400" />
                 <span>Class Discussion & Q&A</span>
               </div>
-              <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
+              <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white">
                 Course Q&A & Academic Forum 💬
               </h1>
-              <p className="mt-2 text-slate-300 text-sm sm:text-base max-w-xl">
+              <p className="mt-1 sm:mt-2 text-slate-300 text-xs sm:text-base max-w-xl">
                 Ask questions with attached diagrams/images, collaborate on course topics, and get instructor-verified answers.
               </p>
             </div>
@@ -230,9 +230,9 @@ export default function ForumPage() {
             {!isFaculty && (
               <button
                 onClick={() => setShowAskModal(true)}
-                className="px-6 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-bold transition-all shadow-md flex items-center justify-center gap-2.5 group shrink-0 text-xs"
+                className="w-full sm:w-auto px-5 sm:px-6 py-3 sm:py-3.5 min-h-[44px] rounded-2xl bg-blue-600 hover:bg-blue-500 active:scale-95 text-white font-bold transition-all shadow-md flex items-center justify-center gap-2.5 group shrink-0 text-xs touch-manipulation"
               >
-                <Plus className="w-5 h-5 text-white group-hover:scale-110 transition-transform" />
+                <Plus className="w-4 h-4 sm:w-5 sm:h-5 text-white group-hover:scale-110 transition-transform" />
                 <span>Ask a Question</span>
               </button>
             )}
@@ -247,7 +247,7 @@ export default function ForumPage() {
             placeholder="Search discussion threads by title, question content, or course code..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all"
+            className="w-full pl-10 pr-4 py-2.5 sm:py-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all"
           />
         </div>
 
