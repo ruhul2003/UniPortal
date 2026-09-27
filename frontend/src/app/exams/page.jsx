@@ -261,49 +261,49 @@ export default function ExamsPage() {
         </div>
 
         {/* Quick Analytics & Conflict Detector */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
-              <Calendar className="w-6 h-6" />
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          <div className="p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-3 sm:gap-4">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
+              <Calendar className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
             <div>
-              <p className="text-xs font-medium text-slate-400">Total Exams</p>
-              <h4 className="text-xl font-black text-slate-900 dark:text-white">{exams.length}</h4>
+              <p className="text-[10px] sm:text-xs font-medium text-slate-400">Total Exams</p>
+              <h4 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white">{exams.length}</h4>
             </div>
           </div>
 
-          <div className="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
-              <CheckCircle2 className="w-6 h-6" />
+          <div className="p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-3 sm:gap-4">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+              <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
             <div>
-              <p className="text-xs font-medium text-slate-400">Hall Pass Status</p>
-              <h4 className="text-sm font-black text-emerald-600 dark:text-emerald-400">Active & Verified</h4>
+              <p className="text-[10px] sm:text-xs font-medium text-slate-400">Hall Pass</p>
+              <h4 className="text-xs sm:text-sm font-black text-emerald-600 dark:text-emerald-400">Active & Verified</h4>
             </div>
           </div>
 
-          <div className="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0">
-              <Clock className="w-6 h-6" />
+          <div className="p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-3 sm:gap-4">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0">
+              <Clock className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
             <div>
-              <p className="text-xs font-medium text-slate-400">Target Section</p>
-              <h4 className="text-base font-black text-slate-900 dark:text-white">{user?.section || 'Section A'}</h4>
+              <p className="text-[10px] sm:text-xs font-medium text-slate-400">Section</p>
+              <h4 className="text-sm sm:text-base font-black text-slate-900 dark:text-white truncate max-w-[90px]">{user?.section || 'Section A'}</h4>
             </div>
           </div>
 
-          <div className="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4">
-            <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 ${
+          <div className="p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-3 sm:gap-4">
+            <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center shrink-0 ${
               hasClashes 
                 ? 'bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400'
                 : 'bg-teal-50 dark:bg-teal-950/60 text-teal-600 dark:text-teal-400'
             }`}>
-              {hasClashes ? <AlertTriangle className="w-6 h-6" /> : <ShieldAlert className="w-6 h-6" />}
+              {hasClashes ? <AlertTriangle className="w-5 h-5 sm:w-6 sm:h-6" /> : <ShieldAlert className="w-5 h-5 sm:w-6 sm:h-6" />}
             </div>
             <div>
-              <p className="text-xs font-medium text-slate-400">Conflict Detector</p>
-              <h4 className={`text-sm font-black ${hasClashes ? 'text-rose-600 dark:text-rose-400' : 'text-slate-900 dark:text-white'}`}>
-                {hasClashes ? 'Warning: Same-Day Exam' : 'No Schedule Clashes'}
+              <p className="text-[10px] sm:text-xs font-medium text-slate-400">Clashes</p>
+              <h4 className={`text-xs sm:text-sm font-black ${hasClashes ? 'text-rose-600 dark:text-rose-400' : 'text-slate-900 dark:text-white'}`}>
+                {hasClashes ? 'Warning' : 'None Detected'}
               </h4>
             </div>
           </div>
