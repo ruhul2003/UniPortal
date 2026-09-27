@@ -126,8 +126,9 @@ export default function Sidebar({ isOpen, onClose, isCollapsed, onToggleCollapse
           <div className="flex items-center gap-1 lg:hidden">
             <button
               onClick={onClose}
-              className="p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              className="p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-2xl text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 active:scale-95 transition-all touch-manipulation"
               title="Close menu"
+              aria-label="Close menu"
             >
               <X className="w-5 h-5" />
             </button>
@@ -135,14 +136,14 @@ export default function Sidebar({ isOpen, onClose, isCollapsed, onToggleCollapse
         </div>
 
         {/* Scrollable Navigation Items */}
-        <div className={`flex-1 overflow-y-auto py-6 space-y-6 scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-800 ${
+        <div className={`flex-1 overflow-y-auto py-5 space-y-6 scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-800 pb-20 lg:pb-6 touch-scroll ${
           isCollapsed && !isOpen ? 'px-2' : 'px-3'
         }`}>
           {navGroups.map((group, groupIdx) => (
-            <div key={groupIdx} className="space-y-1.5">
+            <div key={groupIdx} className="space-y-1">
               {/* Group Title */}
               {(!isCollapsed || isOpen) ? (
-                <h4 className="px-3 text-[10px] font-extrabold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
+                <h4 className="px-3 text-[10px] font-extrabold text-slate-400 dark:text-slate-500 uppercase tracking-wider py-1">
                   {group.title}
                 </h4>
               ) : (
@@ -160,10 +161,10 @@ export default function Sidebar({ isOpen, onClose, isCollapsed, onToggleCollapse
                     href={link.href}
                     onClick={onClose}
                     title={link.name}
-                    className={`relative flex items-center rounded-2xl text-xs font-bold transition-all group ${
+                    className={`relative flex items-center rounded-2xl text-xs font-bold transition-all touch-manipulation active:scale-[0.98] group ${
                       isCollapsed && !isOpen
-                        ? 'justify-center py-3 px-0'
-                        : 'gap-3 px-3 py-2.5'
+                        ? 'justify-center py-3 px-0 min-h-[44px]'
+                        : 'gap-3 px-3.5 py-3 lg:py-2.5 min-h-[44px]'
                     } ${
                       isActive
                         ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/25'
@@ -184,14 +185,25 @@ export default function Sidebar({ isOpen, onClose, isCollapsed, onToggleCollapse
                     </div>
 
                     {(!isCollapsed || isOpen) && (
-                      <span className="truncate">{link.name}</span>
+                      <span className="truncate flex-1">{link.name}</span>
+                    )}
+
+                    {/* Badge Text (e.g. Desk) */}
+                    {link.badgeText && (!isCollapsed || isOpen) && (
+                      <span className={`text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded transition-colors ${
+                        isActive 
+                          ? 'bg-white/20 text-white' 
+                          : 'bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-900'
+                      }`}>
+                        {link.badgeText}
+                      </span>
                     )}
 
                     {/* Active Route Indicator Bar */}
                     {isActive && (!isCollapsed || isOpen) && (
                       <motion.div
                         layoutId="sidebar-active-indicator"
-                        className="absolute right-2 w-1.5 h-4 rounded-full bg-white"
+                        className="ml-1 w-1.5 h-4 rounded-full bg-white shrink-0"
                       />
                     )}
                   </Link>
