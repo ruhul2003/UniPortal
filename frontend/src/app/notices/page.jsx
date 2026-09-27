@@ -78,7 +78,7 @@ export default function NoticesPage() {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => setIsModalOpen(true)}
-            className="px-5 py-2.5 rounded-xl bg-slate-900 dark:bg-blue-600 hover:bg-slate-800 dark:hover:bg-blue-500 text-white text-xs font-semibold flex items-center gap-2 shadow-sm transition-all whitespace-nowrap"
+            className="w-full sm:w-auto justify-center px-5 py-2.5 min-h-[44px] rounded-xl bg-slate-900 dark:bg-blue-600 hover:bg-slate-800 dark:hover:bg-blue-500 text-white text-xs font-semibold flex items-center gap-2 shadow-sm transition-all whitespace-nowrap touch-manipulation"
           >
             <Plus className="w-4 h-4 text-blue-400 dark:text-white" /> Post New Notice
           </motion.button>
@@ -97,20 +97,20 @@ export default function NoticesPage() {
             aria-label="Search notices by keyword"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+            className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-base sm:text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
           />
         </div>
 
         {/* Category Pills & Layout View Toggle */}
         <div className="flex flex-wrap items-center justify-between gap-3 w-full md:w-auto">
-          <div className="flex items-center gap-1.5 overflow-x-auto max-w-full scrollbar-none py-1">
+          <div className="flex items-center gap-1.5 overflow-x-auto max-w-full no-scrollbar touch-scroll py-1">
             {categories.map((cat) => (
               <motion.button
                 key={cat}
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.96 }}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
+                className={`px-3 py-1.5 min-h-[38px] rounded-xl text-xs font-semibold whitespace-nowrap transition-all touch-manipulation flex items-center ${
                   selectedCategory === cat
                     ? 'bg-blue-600 text-white shadow-xs'
                     : 'bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-100 dark:border-slate-700'
