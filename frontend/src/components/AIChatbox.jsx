@@ -168,8 +168,8 @@ export default function AIChatbox() {
 
   return (
     <>
-      {/* Floating Action Button */}
-      <div className="fixed bottom-6 right-6 z-50 flex items-center">
+      {/* Floating Action Button with Mobile Bottom Nav Clearance */}
+      <div className="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-50 flex items-center">
         {!isOpen && unreadCount > 0 && (
           <span className="absolute -top-2 -right-2 flex h-6 w-6 items-center justify-center rounded-full bg-rose-500 text-[11px] font-bold text-white shadow-lg animate-bounce">
             {unreadCount}
@@ -178,12 +178,13 @@ export default function AIChatbox() {
 
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className={`relative group flex items-center justify-center p-4 rounded-full shadow-2xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-blue-400/50 ${
+          className={`relative group flex items-center justify-center p-3.5 sm:p-4 rounded-full shadow-2xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-blue-400/50 touch-manipulation ${
             isOpen
               ? 'bg-slate-800 text-white rotate-90 scale-95'
-              : 'bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 text-white hover:scale-110 hover:shadow-blue-500/25 ring-4 ring-white dark:ring-slate-900'
+              : 'bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 text-white hover:scale-105 active:scale-95 hover:shadow-blue-500/25 ring-4 ring-white dark:ring-slate-900'
           }`}
           title={isOpen ? 'Close AI Chat' : 'Ask UniBot AI Assistant'}
+          aria-label={isOpen ? 'Close AI Chat' : 'Ask UniBot AI Assistant'}
         >
           {/* Pulsing ring indicator when closed */}
           {!isOpen && (
@@ -191,39 +192,43 @@ export default function AIChatbox() {
           )}
 
           {isOpen ? (
-            <X className="w-6 h-6 transition-transform duration-200" />
+            <X className="w-5 h-5 sm:w-6 sm:h-6 transition-transform duration-200" />
           ) : (
             <div className="flex items-center space-x-2 px-1">
-              <Bot className="w-6 h-6 animate-pulse" />
+              <Bot className="w-5 h-5 sm:w-6 sm:h-6 animate-pulse" />
               <span className="hidden sm:inline font-bold text-sm tracking-wide pr-1">UniBot AI</span>
             </div>
           )}
         </button>
       </div>
 
-      {/* Floating Chat Window Drawer */}
+      {/* Floating Chat Window / Mobile Bottom-Sheet Drawer */}
       {isOpen && (
-        <div className="fixed bottom-24 right-4 sm:right-6 z-50 w-[92vw] sm:w-[420px] h-[580px] max-h-[82vh] flex flex-col bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl overflow-hidden transition-all duration-300 animate-in fade-in slide-in-from-bottom-5">
+        <div className="fixed inset-x-0 bottom-0 sm:inset-x-auto sm:bottom-24 sm:right-6 z-50 w-full sm:w-[420px] h-[88vh] sm:h-[580px] max-h-[92vh] flex flex-col bg-white dark:bg-slate-900 border-t sm:border border-slate-200 dark:border-slate-800 rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden transition-all duration-300 animate-in fade-in slide-in-from-bottom-5">
           
           {/* Header */}
-          <div className="flex items-center justify-between px-5 py-4 bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 text-white shadow-md">
-            <div className="flex items-center space-x-3">
-              <div className="relative">
-                <div className="w-10 h-10 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 shadow-inner">
-                  <Bot className="w-6 h-6 text-white" />
+          <div className="px-5 pt-3 pb-4 bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 text-white shadow-md">
+            {/* Mobile Sheet Grab Handle */}
+            <div className="w-12 h-1 bg-white/40 rounded-full mx-auto mb-2 sm:hidden" />
+
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="relative">
+                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 shadow-inner">
+                    <Bot className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                  </div>
+                  <span className="absolute bottom-0 right-0 w-2.5 h-2.5 sm:w-3 sm:h-3 bg-emerald-400 border-2 border-indigo-600 rounded-full ring-2 ring-emerald-400/50" />
                 </div>
-                <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-400 border-2 border-indigo-600 rounded-full ring-2 ring-emerald-400/50" />
-              </div>
-              <div>
-                <div className="flex items-center space-x-2">
-                  <h3 className="font-bold text-base leading-tight">UniBot AI</h3>
-                  <span className="px-2 py-0.5 text-[10px] font-semibold bg-white/20 backdrop-blur-md rounded-full border border-white/30 text-blue-100 flex items-center gap-1">
-                    <Sparkles className="w-2.5 h-2.5" /> Gemini 2.5
-                  </span>
+                <div>
+                  <div className="flex items-center space-x-1.5 sm:space-x-2">
+                    <h3 className="font-bold text-sm sm:text-base leading-tight">UniBot AI</h3>
+                    <span className="px-2 py-0.5 text-[9px] sm:text-[10px] font-semibold bg-white/20 backdrop-blur-md rounded-full border border-white/30 text-blue-100 flex items-center gap-1">
+                      <Sparkles className="w-2.5 h-2.5" /> Gemini 2.5
+                    </span>
+                  </div>
+                  <p className="text-[11px] sm:text-xs text-blue-100/90 font-medium">Metropolitan University Helper</p>
                 </div>
-                <p className="text-xs text-blue-100/90 font-medium">Metropolitan University Helper</p>
               </div>
-            </div>
 
             <div className="flex items-center space-x-1">
               <button
@@ -242,6 +247,7 @@ export default function AIChatbox() {
               </button>
             </div>
           </div>
+        </div>
 
           {/* Quick FAQ Chips Bar */}
           <div className="px-4 py-2.5 bg-slate-50 dark:bg-slate-900/90 border-b border-slate-200/60 dark:border-slate-800 flex items-center space-x-2 overflow-x-auto no-scrollbar scroll-smooth">
