@@ -197,7 +197,7 @@ export default function RegisterPage() {
         </div>
 
         {/* Right Form Panel */}
-        <div className="lg:col-span-7 p-6 sm:p-10 flex flex-col justify-center">
+        <div className="lg:col-span-7 p-5 sm:p-8 lg:p-10 flex flex-col justify-center">
           
           <div className="max-w-md mx-auto w-full space-y-6">
             
@@ -216,7 +216,7 @@ export default function RegisterPage() {
                 <button
                   type="button"
                   onClick={() => { setRole('student'); setError(''); }}
-                  className={`relative p-3.5 rounded-2xl border-2 text-left transition-all flex items-start gap-3 ${
+                  className={`relative p-3.5 rounded-2xl border-2 text-left transition-all flex items-start gap-3 touch-manipulation min-h-[56px] ${
                     role === 'student'
                       ? 'border-blue-600 dark:border-blue-500 bg-blue-50/50 dark:bg-blue-950/40 shadow-sm ring-2 ring-blue-500/20'
                       : 'border-slate-200/80 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-slate-50/30 dark:bg-slate-800/30'
@@ -240,7 +240,7 @@ export default function RegisterPage() {
                 <button
                   type="button"
                   onClick={() => { setRole('faculty'); setError(''); }}
-                  className={`relative p-3.5 rounded-2xl border-2 text-left transition-all flex items-start gap-3 ${
+                  className={`relative p-3.5 rounded-2xl border-2 text-left transition-all flex items-start gap-3 touch-manipulation min-h-[56px] ${
                     role === 'faculty'
                       ? 'border-indigo-600 dark:border-indigo-500 bg-indigo-50/50 dark:bg-indigo-950/40 shadow-sm ring-2 ring-indigo-500/20'
                       : 'border-slate-200/80 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-slate-50/30 dark:bg-slate-800/30'
@@ -288,7 +288,7 @@ export default function RegisterPage() {
                     placeholder={role === 'faculty' ? 'Dr. Sarah Jenkins' : 'Alex Rivera'}
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-white bg-white dark:bg-slate-900/90 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600"
+                    className="w-full pl-10 pr-4 py-3 sm:py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-base sm:text-xs text-slate-900 dark:text-white bg-white dark:bg-slate-900/90 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600"
                     required
                   />
                 </div>
@@ -304,7 +304,7 @@ export default function RegisterPage() {
                     placeholder={role === 'faculty' ? 's.jenkins@univ.edu' : 'a.rivera@student.univ.edu'}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-white bg-white dark:bg-slate-900/90 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600"
+                    className="w-full pl-10 pr-4 py-3 sm:py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-base sm:text-xs text-slate-900 dark:text-white bg-white dark:bg-slate-900/90 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600"
                     required
                   />
                 </div>
@@ -320,13 +320,13 @@ export default function RegisterPage() {
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-white bg-white dark:bg-slate-900/90 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600"
+                    className="w-full pl-10 pr-10 py-3 sm:py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-base sm:text-xs text-slate-900 dark:text-white bg-white dark:bg-slate-900/90 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600"
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors p-1"
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -341,7 +341,7 @@ export default function RegisterPage() {
                   <select
                     value={department}
                     onChange={(e) => setDepartment(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-white bg-white dark:bg-slate-900/90 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all appearance-none"
+                    className="w-full pl-10 pr-4 py-3 sm:py-2.5 min-h-[44px] rounded-xl border border-slate-200 dark:border-slate-800 text-base sm:text-xs text-slate-900 dark:text-white bg-white dark:bg-slate-900/90 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all appearance-none"
                   >
                     <option value="Computer Science & Engineering">Computer Science & Engineering</option>
                     <option value="Electrical & Electronic Engineering">Electrical & Electronic Engineering</option>
@@ -369,7 +369,7 @@ export default function RegisterPage() {
                       placeholder="e.g. CSE-2024-042 or 2024-1-60-042"
                       value={studentId}
                       onChange={(e) => setStudentId(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-white bg-white dark:bg-slate-900/90 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600"
+                      className="w-full pl-10 pr-4 py-3 sm:py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-base sm:text-xs text-slate-900 dark:text-white bg-white dark:bg-slate-900/90 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600"
                       required
                     />
                   </div>
@@ -388,7 +388,7 @@ export default function RegisterPage() {
                       <select
                         value={designation}
                         onChange={(e) => setDesignation(e.target.value)}
-                        className="w-full pl-10 pr-2 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-white bg-white dark:bg-slate-900/90 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all appearance-none"
+                        className="w-full pl-10 pr-2 py-3 sm:py-2.5 min-h-[44px] rounded-xl border border-slate-200 dark:border-slate-800 text-base sm:text-xs text-slate-900 dark:text-white bg-white dark:bg-slate-900/90 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all appearance-none"
                       >
                         <option value="Professor">Professor</option>
                         <option value="Associate Professor">Associate Professor</option>
@@ -409,7 +409,7 @@ export default function RegisterPage() {
                         placeholder="e.g. FAC-2024-102"
                         value={facultyId}
                         onChange={(e) => setFacultyId(e.target.value)}
-                        className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-white bg-white dark:bg-slate-900/90 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600"
+                        className="w-full pl-10 pr-4 py-3 sm:py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-base sm:text-xs text-slate-900 dark:text-white bg-white dark:bg-slate-900/90 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600"
                         required
                       />
                     </div>
@@ -421,7 +421,7 @@ export default function RegisterPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className={`w-full py-3.5 rounded-xl text-white text-xs font-bold flex items-center justify-center gap-2 shadow-md transition-all disabled:opacity-50 mt-2 ${
+                className={`w-full py-3.5 min-h-[48px] rounded-xl text-white text-xs sm:text-sm font-bold flex items-center justify-center gap-2 shadow-md transition-all disabled:opacity-50 mt-2 touch-manipulation ${
                   role === 'faculty' 
                     ? 'bg-indigo-600 hover:bg-indigo-700 shadow-indigo-200 dark:shadow-none' 
                     : 'bg-slate-900 dark:bg-blue-600 hover:bg-slate-800 dark:hover:bg-blue-700 shadow-slate-200 dark:shadow-none'
