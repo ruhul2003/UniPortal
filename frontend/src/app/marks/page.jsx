@@ -210,29 +210,29 @@ function MarksPageContent() {
       </div>
 
       {/* Unified Section Navigation Tabs (Attendance & Marks) */}
-      <div className="flex items-center gap-3 p-1.5 rounded-2xl bg-slate-200/80 dark:bg-slate-800/80 w-fit">
+      <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-slate-200/80 dark:bg-slate-800/80 w-full sm:w-fit overflow-x-auto no-scrollbar touch-scroll">
         <button
           onClick={() => setActiveSectionTab('marks')}
-          className={`flex items-center gap-2.5 px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all ${
+          className={`flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 sm:px-5 py-2.5 min-h-[44px] rounded-xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all touch-manipulation active:scale-95 ${
             activeSectionTab === 'marks'
               ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-md'
               : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
-          <Award className="w-4 h-4" />
-          <span>Course Marks & Gradebook</span>
+          <Award className="w-4 h-4 shrink-0" />
+          <span>Course Marks</span>
         </button>
 
         <button
           onClick={() => setActiveSectionTab('attendance')}
-          className={`flex items-center gap-2.5 px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all ${
+          className={`flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 sm:px-5 py-2.5 min-h-[44px] rounded-xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all touch-manipulation active:scale-95 ${
             activeSectionTab === 'attendance'
               ? 'bg-white dark:bg-slate-900 text-teal-600 dark:text-teal-400 shadow-md'
               : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
-          <CheckCircle2 className="w-4 h-4" />
-          <span>Daily Class Attendance Tracker</span>
+          <CheckCircle2 className="w-4 h-4 shrink-0" />
+          <span>Attendance Tracker</span>
         </button>
       </div>
 
@@ -265,18 +265,18 @@ function MarksPageContent() {
       {isFacultyOrAdmin ? (
         <div className="space-y-6">
           {/* Summary Stat Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl shadow-xs">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-3.5 sm:p-5 rounded-2xl shadow-xs">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                   Total Graded
                 </span>
-                <div className="w-9 h-9 rounded-xl bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
+                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
                   <FileSpreadsheet className="w-4 h-4" />
                 </div>
               </div>
-              <p className="text-3xl font-black text-slate-900 dark:text-white mt-3">{totalEntries}</p>
-              <span className="text-xs text-slate-500 mt-1 block">Student records in sheet</span>
+              <p className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mt-2 sm:mt-3">{totalEntries}</p>
+              <span className="text-[10px] sm:text-xs text-slate-500 mt-1 block truncate">Student records</span>
             </div>
 
             <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl shadow-xs">
