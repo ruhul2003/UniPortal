@@ -239,10 +239,10 @@ export default function ResourcesPage() {
               </p>
             </div>
 
-            <div className="flex flex-wrap items-center gap-3 shrink-0">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 shrink-0 w-full lg:w-auto">
               <button
                 onClick={() => setShowQuestionModal(true)}
-                className="px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs transition-all shadow-xs flex items-center justify-center gap-2 group active:scale-95"
+                className="w-full sm:w-auto px-4 sm:px-5 py-3 min-h-[44px] rounded-xl bg-blue-600 hover:bg-blue-500 active:scale-95 text-white font-bold text-xs transition-all shadow-xs flex items-center justify-center gap-2 group touch-manipulation"
               >
                 <ShieldCheck className="w-4 h-4 text-white group-hover:rotate-12 transition-transform" />
                 <span>Upload Past Question Paper</span>
@@ -250,7 +250,7 @@ export default function ResourcesPage() {
 
               <button
                 onClick={() => setShowUploadModal(true)}
-                className="px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 transition-all flex items-center justify-center gap-2 active:scale-95"
+                className="w-full sm:w-auto px-4 sm:px-5 py-3 min-h-[44px] rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-95 text-slate-200 font-semibold text-xs border border-slate-700 transition-all flex items-center justify-center gap-2 touch-manipulation"
               >
                 <Plus className="w-4 h-4 text-blue-400" />
                 <span>Share General Note</span>
@@ -260,8 +260,8 @@ export default function ResourcesPage() {
         </div>
 
         {/* Search & Filter Controls */}
-        <div className="space-y-4">
-          <div className="flex flex-col md:flex-row items-center gap-4">
+        <div className="space-y-3 sm:space-y-4">
+          <div className="flex flex-col md:flex-row items-center gap-3 sm:gap-4">
             {/* Search Input */}
             <div className="relative flex-1 w-full">
               <Search className="w-4 h-4 absolute left-3.5 top-3.5 text-slate-400" />
@@ -275,14 +275,14 @@ export default function ResourcesPage() {
             </div>
 
             {/* Exam Tag Sub-Filter */}
-            <div className="flex items-center gap-2 w-full md:w-auto overflow-x-auto scrollbar-none">
+            <div className="flex items-center gap-2 w-full md:w-auto overflow-x-auto no-scrollbar py-1 touch-scroll">
               <span className="text-xs font-bold text-slate-400 shrink-0">Sub-Tag:</span>
               <div className="flex items-center gap-1.5">
                 {EXAM_SUBTYPES.map(sub => (
                   <button
                     key={sub}
                     onClick={() => setSelectedExamType(sub)}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
+                    className={`px-3 py-1.5 min-h-[36px] rounded-xl text-xs font-bold whitespace-nowrap transition-all touch-manipulation active:scale-95 ${
                       selectedExamType === sub
                         ? 'bg-blue-600 text-white shadow-xs'
                         : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
@@ -296,12 +296,12 @@ export default function ResourcesPage() {
           </div>
 
           {/* Main Category Tabs */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1 touch-scroll">
             {CATEGORIES.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
+                className={`px-3.5 py-2 min-h-[38px] rounded-xl text-xs font-bold whitespace-nowrap transition-all touch-manipulation active:scale-95 ${
                   selectedCategory === cat
                     ? 'bg-blue-600 text-white shadow-xs'
                     : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
