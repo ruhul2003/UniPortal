@@ -19,24 +19,24 @@ export default function StudentDetailsModal({ student, isOpen, onClose, onToggle
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-xs overflow-y-auto">
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 10 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 10 }}
           transition={{ duration: 0.2 }}
-          className="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-100 dark:border-slate-800 overflow-hidden"
+          className="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-100 dark:border-slate-800 overflow-hidden my-auto max-h-[92vh] flex flex-col"
         >
           {/* Header Banner */}
-          <div className="h-28 bg-slate-50 dark:bg-slate-800/90 border-b border-slate-200 dark:border-slate-700 p-6 flex items-start justify-between relative">
-            <div className="flex items-center gap-2">
-              <span className="px-2.5 py-1 rounded-full bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-600 text-[11px] font-bold uppercase tracking-wider shadow-2xs">
+          <div className="h-24 sm:h-28 bg-slate-50 dark:bg-slate-800/90 border-b border-slate-200 dark:border-slate-700 p-4 sm:p-6 flex items-start justify-between relative shrink-0">
+            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 pr-2">
+              <span className="px-2.5 py-1 rounded-full bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-600 text-[10px] sm:text-[11px] font-bold uppercase tracking-wider shadow-2xs">
                 {student.role || 'Student'} Profile
               </span>
               {student.isCR && (
-                <span className="px-2.5 py-1 rounded-full bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-600 text-[11px] font-black flex items-center gap-1 shadow-2xs">
+                <span className="px-2.5 py-1 rounded-full bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-600 text-[10px] sm:text-[11px] font-black flex items-center gap-1 shadow-2xs">
                   <Crown className="w-3.5 h-3.5 fill-slate-700 text-slate-700 dark:fill-slate-200 dark:text-slate-200" />
-                  CR (Class Representative)
+                  CR
                 </span>
               )}
             </div>
@@ -44,17 +44,17 @@ export default function StudentDetailsModal({ student, isOpen, onClose, onToggle
             <button
               onClick={onClose}
               aria-label="Close student profile modal"
-              className="p-1.5 rounded-xl bg-white dark:bg-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-900 border border-slate-200 dark:border-slate-600 transition-colors"
+              className="p-1.5 rounded-xl bg-white dark:bg-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-900 border border-slate-200 dark:border-slate-600 transition-colors touch-manipulation active:scale-95 shrink-0"
             >
               <X className="w-4 h-4" />
             </button>
           </div>
 
           {/* Profile Avatar & Primary Info */}
-          <div className="px-6 pb-6 pt-0 relative">
-            <div className="flex items-end justify-between -mt-12 mb-4">
-              <div className="w-24 h-24 rounded-2xl bg-white dark:bg-slate-900 p-1.5 shadow-xl">
-                <div className="w-full h-full rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-700 dark:text-slate-200 text-2xl font-black relative overflow-hidden">
+          <div className="px-4 sm:px-6 pb-6 pt-0 relative overflow-y-auto max-h-[calc(92vh-120px)] touch-manipulation">
+            <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between -mt-10 sm:-mt-12 mb-4 gap-3">
+              <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-white dark:bg-slate-900 p-1.5 shadow-xl shrink-0">
+                <div className="w-full h-full rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-700 dark:text-slate-200 text-xl sm:text-2xl font-black relative overflow-hidden">
                   {student.avatar ? (
                     <img src={student.avatar} alt={student.name} className="w-full h-full object-cover rounded-xl" />
                   ) : (
@@ -66,7 +66,7 @@ export default function StudentDetailsModal({ student, isOpen, onClose, onToggle
               {canManageCR && isStudentRole && (
                 <button
                   onClick={() => onToggleCR(student)}
-                  className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all shadow-md ${
+                  className={`w-full sm:w-auto px-4 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-md touch-manipulation active:scale-95 ${
                     student.isCR
                       ? 'bg-amber-500 hover:bg-amber-600 text-white'
                       : 'bg-blue-600 hover:bg-blue-700 text-white'
