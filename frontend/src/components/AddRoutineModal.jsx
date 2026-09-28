@@ -79,35 +79,38 @@ export default function AddRoutineModal({ isOpen, onClose, onSubmit, routineToEd
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/40 backdrop-blur-sm overflow-y-auto">
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 15 }}
-          className="bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-modal border border-slate-100 dark:border-slate-800 relative max-h-[90vh] overflow-y-auto"
+          className="bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl max-w-lg w-full p-4 sm:p-8 shadow-modal border border-slate-100 dark:border-slate-800 relative max-h-[92vh] my-auto flex flex-col overflow-hidden"
         >
-          <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800 mb-6">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-100 dark:border-indigo-800 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+          <div className="flex items-center justify-between pb-3 sm:pb-4 border-b border-slate-100 dark:border-slate-800 mb-4 sm:mb-6 shrink-0">
+            <div className="flex items-center gap-2.5 pr-2">
+              <div className="w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-100 dark:border-indigo-800 flex items-center justify-center text-indigo-600 dark:text-indigo-400 shrink-0">
                 {isEditMode ? <Edit3 className="w-4 h-4" /> : <CalendarDays className="w-4 h-4" />}
               </div>
               <div>
-                <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+                <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white leading-tight">
                   {isEditMode ? 'Edit Class Schedule' : 'Add Class Schedule'}
                 </h2>
-                <p className="text-xs text-slate-400">
+                <p className="text-[11px] sm:text-xs text-slate-400">
                   {user?.isCR ? 'Class Representative Timetable Manager' : 'Faculty Timetable Builder'}
                 </p>
               </div>
             </div>
-            <button onClick={onClose} className="p-2 rounded-full text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">
+            <button
+              onClick={onClose}
+              className="p-2 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all touch-manipulation active:scale-95"
+            >
               <X className="w-5 h-5" />
             </button>
           </div>
 
           {error && <p className="mb-4 text-xs text-rose-600 bg-rose-50 dark:bg-rose-950/40 p-3 rounded-xl border border-rose-100 dark:border-rose-900">{error}</p>}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4 overflow-y-auto max-h-[calc(92vh-130px)] touch-manipulation pr-0.5">
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Course Code *</label>
@@ -212,9 +215,19 @@ export default function AddRoutineModal({ isOpen, onClose, onSubmit, routineToEd
               />
             </div>
 
-            <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-end gap-2">
-              <button type="button" onClick={onClose} className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-600 dark:text-slate-300">Cancel</button>
-              <button type="submit" disabled={loading} className="px-5 py-2 rounded-xl bg-slate-900 dark:bg-indigo-600 text-white text-xs font-semibold hover:bg-slate-800 dark:hover:bg-indigo-500">
+            <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2.5 sm:gap-2 shrink-0">
+              <button
+                type="button"
+                onClick={onClose}
+                className="w-full sm:w-auto px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 text-center touch-manipulation active:scale-95"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-slate-900 dark:bg-indigo-600 active:scale-95 text-white text-xs font-semibold hover:bg-slate-800 dark:hover:bg-indigo-500 flex items-center justify-center transition-all disabled:opacity-50 touch-manipulation"
+              >
                 {isEditMode ? (loading ? 'Saving...' : 'Save Changes') : (loading ? 'Adding...' : 'Add Slot')}
               </button>
             </div>
