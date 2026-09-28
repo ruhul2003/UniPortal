@@ -41,49 +41,52 @@ export default function CreateAnnouncementModal({ isOpen, onClose, onSubmit }) {
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/40 backdrop-blur-sm overflow-y-auto">
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 15 }}
-          className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-modal border border-slate-100 relative max-h-[90vh] overflow-y-auto"
+          className="bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl max-w-lg w-full p-4 sm:p-8 shadow-modal border border-slate-100 dark:border-slate-800 relative max-h-[92vh] my-auto flex flex-col overflow-hidden"
         >
-          <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600">
+          <div className="flex items-center justify-between pb-3 sm:pb-4 border-b border-slate-100 dark:border-slate-800 mb-4 sm:mb-6 shrink-0">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-xl bg-blue-50 dark:bg-blue-950/50 border border-blue-100 dark:border-blue-900 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0">
                 <Megaphone className="w-4 h-4" />
               </div>
               <div>
-                <h2 className="text-lg font-bold text-slate-900">Post Announcement</h2>
-                <p className="text-xs text-slate-400">Campus-wide Broadcasting Desk</p>
+                <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white leading-tight">Post Announcement</h2>
+                <p className="text-[11px] sm:text-xs text-slate-400">Campus-wide Broadcasting Desk</p>
               </div>
             </div>
-            <button onClick={onClose} className="p-2 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100">
+            <button
+              onClick={onClose}
+              className="p-2 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all touch-manipulation active:scale-95"
+            >
               <X className="w-5 h-5" />
             </button>
           </div>
 
-          {error && <p className="mb-4 text-xs text-rose-600 bg-rose-50 p-3 rounded-xl border border-rose-100">{error}</p>}
+          {error && <p className="mb-4 text-xs text-rose-600 bg-rose-50 dark:bg-rose-950/40 p-3 rounded-xl border border-rose-100 dark:border-rose-900">{error}</p>}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4 overflow-y-auto max-h-[calc(92vh-130px)] touch-manipulation pr-0.5">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Announcement Title *</label>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Announcement Title *</label>
               <input
                 type="text"
                 placeholder="e.g. Annual Tech Symposium & Hackathon 2026"
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-blue-500/20"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500/20 outline-none"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Tag / Category</label>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Tag / Category</label>
               <select
                 value={formData.tag}
                 onChange={(e) => setFormData({ ...formData, tag: e.target.value })}
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs bg-white"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs bg-white dark:bg-slate-800 text-slate-900 dark:text-white outline-none"
               >
                 <option value="General">General</option>
                 <option value="Urgent">Urgent</option>
@@ -95,13 +98,13 @@ export default function CreateAnnouncementModal({ isOpen, onClose, onSubmit }) {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Description *</label>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Description *</label>
               <textarea
                 rows={4}
                 placeholder="Details about the announcement..."
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-blue-500/20"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500/20 outline-none resize-none"
                 required
               />
             </div>
@@ -112,16 +115,26 @@ export default function CreateAnnouncementModal({ isOpen, onClose, onSubmit }) {
                 id="isPinned"
                 checked={formData.isPinned}
                 onChange={(e) => setFormData({ ...formData, isPinned: e.target.checked })}
-                className="w-4 h-4 text-blue-600 rounded"
+                className="w-4 h-4 text-blue-600 rounded cursor-pointer"
               />
-              <label htmlFor="isPinned" className="text-xs font-medium text-slate-700 flex items-center gap-1">
+              <label htmlFor="isPinned" className="text-xs font-medium text-slate-700 dark:text-slate-300 flex items-center gap-1 cursor-pointer">
                 <Pin className="w-3.5 h-3.5 text-blue-600" /> Pin this Announcement to the Top
               </label>
             </div>
 
-            <div className="pt-4 border-t border-slate-100 flex justify-end gap-2">
-              <button type="button" onClick={onClose} className="px-4 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600">Cancel</button>
-              <button type="submit" disabled={loading} className="px-5 py-2 rounded-xl bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800">
+            <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2.5 sm:gap-2 shrink-0">
+              <button
+                type="button"
+                onClick={onClose}
+                className="w-full sm:w-auto px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 text-center touch-manipulation active:scale-95"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 active:scale-95 text-white text-xs font-semibold flex items-center justify-center gap-2 transition-all shadow-sm disabled:opacity-50 touch-manipulation"
+              >
                 {loading ? 'Publishing...' : 'Broadcast Announcement'}
               </button>
             </div>
