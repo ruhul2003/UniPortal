@@ -23,40 +23,41 @@ export default function DigitalTranscriptModal({ isOpen, onClose, studentData, m
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto bg-slate-950/70 backdrop-blur-md print:p-0 print:bg-white print:static">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-6 overflow-y-auto bg-slate-950/70 backdrop-blur-md print:p-0 print:bg-white print:static">
         
         {/* Modal Container */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
-          className="bg-white dark:bg-slate-900 w-full max-w-4xl rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden flex flex-col max-h-[90vh] print:max-h-none print:shadow-none print:border-none print:rounded-none"
+          className="bg-white dark:bg-slate-900 w-full max-w-4xl rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden flex flex-col max-h-[92vh] my-auto print:max-h-none print:shadow-none print:border-none print:rounded-none"
         >
           {/* Top Modal Controls (Hidden during print) */}
-          <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-900/50 print:hidden">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-blue-600/10 text-blue-600 flex items-center justify-center font-bold">
+          <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-900/50 print:hidden shrink-0">
+            <div className="flex items-center gap-2.5 sm:gap-3 pr-2">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-blue-600/10 text-blue-600 flex items-center justify-center font-bold shrink-0">
                 <GraduationCap className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-slate-900 dark:text-white">
-                  Official Digital Transcript Preview
+                <h3 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white leading-tight">
+                  Official Digital Transcript
                 </h3>
-                <p className="text-xs text-slate-500">Verified Academic Grade Sheet</p>
+                <p className="text-[11px] sm:text-xs text-slate-500">Verified Academic Grade Sheet</p>
               </div>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               <button
                 onClick={handlePrint}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition-all shadow-md"
+                className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition-all shadow-md touch-manipulation active:scale-95"
               >
-                <Printer className="w-4 h-4" />
-                Print / Save PDF
+                <Printer className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                <span className="hidden xs:inline">Print / Save PDF</span>
+                <span className="xs:hidden">Print</span>
               </button>
               <button
                 onClick={onClose}
-                className="p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                className="p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors touch-manipulation active:scale-95"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -64,30 +65,30 @@ export default function DigitalTranscriptModal({ isOpen, onClose, studentData, m
           </div>
 
           {/* Printable Document Body */}
-          <div className="p-8 sm:p-12 overflow-y-auto print:p-0 space-y-8 text-slate-900 dark:text-white bg-white print:text-black">
+          <div className="p-4 sm:p-8 md:p-12 overflow-y-auto print:p-0 space-y-6 sm:space-y-8 text-slate-900 dark:text-white bg-white print:text-black">
             
             {/* University Header */}
-            <div className="text-center border-b-2 border-slate-900 dark:border-slate-100 print:border-black pb-6 space-y-2">
-              <div className="flex items-center justify-center gap-3">
-                <div className="w-12 h-12 rounded-2xl bg-blue-900 text-white flex items-center justify-center font-black text-xl shadow-md">
+            <div className="text-center border-b-2 border-slate-900 dark:border-slate-100 print:border-black pb-4 sm:pb-6 space-y-2">
+              <div className="flex items-center justify-center gap-2.5 sm:gap-3">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-blue-900 text-white flex items-center justify-center font-black text-lg sm:text-xl shadow-md shrink-0">
                   MU
                 </div>
                 <div className="text-left">
-                  <h1 className="text-2xl font-black uppercase tracking-wider text-slate-900 dark:text-white print:text-black">
+                  <h1 className="text-lg sm:text-2xl font-black uppercase tracking-wider text-slate-900 dark:text-white print:text-black leading-tight">
                     Metropolitan University
                   </h1>
-                  <p className="text-xs font-semibold text-slate-500 print:text-slate-700 uppercase tracking-widest">
+                  <p className="text-[10px] sm:text-xs font-semibold text-slate-500 print:text-slate-700 uppercase tracking-widest">
                     Office of the Controller of Examinations • Sylhet, Bangladesh
                   </p>
                 </div>
               </div>
-              <div className="inline-block mt-3 px-4 py-1 rounded-full bg-slate-900 text-white dark:bg-white dark:text-slate-900 font-extrabold text-xs uppercase tracking-widest print:border print:border-black">
+              <div className="inline-block mt-2 sm:mt-3 px-3 sm:px-4 py-1 rounded-full bg-slate-900 text-white dark:bg-white dark:text-slate-900 font-extrabold text-[10px] sm:text-xs uppercase tracking-widest print:border print:border-black">
                 OFFICIAL ACADEMIC TRANSCRIPT & GRADE SHEET
               </div>
             </div>
 
             {/* Student Profile Info Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-xs print:bg-slate-50 print:border-slate-300">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 p-3.5 sm:p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-xs print:bg-slate-50 print:border-slate-300">
               <div>
                 <span className="text-[10px] uppercase font-bold text-slate-400 block">Student Name</span>
                 <span className="font-extrabold text-slate-900 dark:text-white print:text-black">{studentName}</span>
@@ -112,8 +113,8 @@ export default function DigitalTranscriptModal({ isOpen, onClose, studentData, m
                 Academic Course Performance Breakdown
               </h4>
               
-              <div className="border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden print:border-black">
-                <table className="w-full text-left text-xs border-collapse">
+              <div className="border border-slate-200 dark:border-slate-800 rounded-2xl overflow-x-auto print:border-black scrollbar-thin">
+                <table className="w-full min-w-[540px] text-left text-xs border-collapse">
                   <thead>
                     <tr className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-black uppercase text-[10px] tracking-wider border-b border-slate-200 dark:border-slate-700 print:bg-slate-200">
                       <th className="py-3 px-4">Course Code</th>
