@@ -38,6 +38,33 @@ router.get('/', async (req, res) => {
   }
 });
 
+// GET /api/exams/stats - Summary statistics for examinations
+router.get('/stats', async (req, res) => {
+  try {
+    const col = getCol();
+    if (!col) return res.status(503).json({ success: false, error: 'Database unavailable' });
+
+    const total = await col.countDocuments();
+    const midterm = await col.countDocuments({ examType: 'Midterm Exam' });
+    const finalExam = await col.countDocuments({ examType: 'Final Exam' });
+    const todayStr = new Date().toISOString().split('T')[0];
+    const upcoming = await col.countDocuments({ examDate: { $gte: todayStr } });
+
+    return res.json({
+      success: true,
+      stats: {
+        total,
+        midterm,
+        finalExam,
+        upcoming
+      }
+    });
+  } catch (err) {
+    console.error('Error fetching exam stats:', err);
+    return res.status(500).json({ success: false, error: 'Failed to calculate exam statistics' });
+  }
+});
+
 // GET /api/exams/admit-card - Generate personalized admit card metadata for a student
 router.get('/admit-card', async (req, res) => {
   try {
@@ -114,6 +141,20 @@ router.post('/', async (req, res) => {
 
     if (!courseCode || !courseTitle || !examDate || !startTime || !endTime || !room) {
       return res.status(400).json({ success: false, error: 'Course code, title, date, times, and room are required.' });
+    }
+
+    // Check for room & schedule conflicts
+    const clash = await col.findOne({
+      room: room.trim(),
+      examDate: examDate.trim(),
+      startTime: startTime.trim()
+    });
+
+    if (clash) {
+      return res.status(409).json({
+        success: false,
+        error: `Room conflict: Room ${room.trim()} is already occupied on ${examDate} at ${startTime} by ${clash.courseCode} (${clash.courseTitle}).`
+      });
     }
 
     const newExam = {
