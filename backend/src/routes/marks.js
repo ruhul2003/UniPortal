@@ -72,6 +72,68 @@ router.get('/', async (req, res) => {
   }
 });
 
+// GET /api/marks/distribution - Course grade distribution and section performance summary
+router.get('/distribution', async (req, res) => {
+  try {
+    const col = getCol();
+    if (!col) return res.json({ success: true, distribution: null });
+
+    const { courseCode, section, semester } = req.query;
+    let query = { published: true };
+
+    if (courseCode && courseCode !== 'All') query.courseCode = courseCode;
+    if (section && section !== 'All') query.section = section;
+    if (semester && semester !== 'All') query.semester = semester;
+
+    const records = await col.find(query).toArray();
+
+    if (records.length === 0) {
+      return res.json({
+        success: true,
+        distribution: {
+          totalGraded: 0,
+          averageTotal: 0,
+          averageGPA: 0,
+          passRate: 100,
+          grades: { 'A+': 0, 'A': 0, 'A-': 0, 'B+': 0, 'B': 0, 'B-': 0, 'C+': 0, 'C': 0, 'D': 0, 'F': 0 }
+        }
+      });
+    }
+
+    const grades = { 'A+': 0, 'A': 0, 'A-': 0, 'B+': 0, 'B': 0, 'B-': 0, 'C+': 0, 'C': 0, 'D': 0, 'F': 0 };
+    let sumTotal = 0;
+    let sumGPA = 0;
+    let passedCount = 0;
+
+    records.forEach(r => {
+      const g = r.letterGrade || 'F';
+      if (grades[g] !== undefined) grades[g]++;
+      if (g !== 'F') passedCount++;
+      sumTotal += Number(r.total) || 0;
+      sumGPA += Number(r.gpa) || 0;
+    });
+
+    const totalGraded = records.length;
+    const averageTotal = Math.round((sumTotal / totalGraded) * 10) / 10;
+    const averageGPA = Math.round((sumGPA / totalGraded) * 100) / 100;
+    const passRate = Math.round((passedCount / totalGraded) * 100);
+
+    return res.json({
+      success: true,
+      distribution: {
+        totalGraded,
+        averageTotal,
+        averageGPA,
+        passRate,
+        grades
+      }
+    });
+  } catch (error) {
+    console.error('Error calculating grade distribution:', error);
+    res.status(500).json({ success: false, error: 'Failed to calculate grade distribution' });
+  }
+});
+
 // GET /api/marks/student/:studentId - Fetch published marks for a student
 router.get('/student/:studentId', async (req, res) => {
   try {
