@@ -1,13 +1,15 @@
 import express from 'express';
 import { ObjectId } from 'mongodb';
-import { getDb } from '../config/db.js';
 import { generateAcademicAdvice } from '../lib/ai.js';
+import { getDb } from '../config/db.js';
 
 const router = express.Router();
 
 function getCol() {
   const db = getDb();
+
   return db?.collection('marks');
+
 }
 
 // Helper to calculate total, grade, and gpa
@@ -297,12 +299,12 @@ router.post('/bulk-publish', async (req, res) => {
 
     const result = await col.updateMany(
       filter,
-      { 
-        $set: { 
+      {
+        $set: {
           published: Boolean(published),
           publishedBy,
           updatedAt: new Date()
-        } 
+        }
       }
     );
 
