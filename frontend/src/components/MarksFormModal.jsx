@@ -161,24 +161,24 @@ export default function MarksFormModal({ isOpen, onClose, initialData, onSave, i
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm overflow-y-auto">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/60 backdrop-blur-sm overflow-y-auto">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
-          className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl max-w-2xl w-full p-6 sm:p-8 my-8 relative overflow-hidden"
+          className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl sm:rounded-3xl shadow-2xl max-w-2xl w-full p-4 sm:p-8 my-auto max-h-[92vh] flex flex-col relative overflow-hidden"
         >
           {/* Header */}
-          <div className="flex items-center justify-between pb-5 border-b border-slate-100 dark:border-slate-800">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold">
-                <Award className="w-6 h-6" />
+          <div className="flex items-center justify-between pb-3 sm:pb-5 border-b border-slate-100 dark:border-slate-800 shrink-0">
+            <div className="flex items-center gap-2.5 sm:gap-3 pr-2">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold shrink-0">
+                <Award className="w-5 h-5 sm:w-6 sm:h-6" />
               </div>
               <div>
-                <h3 className="text-xl font-bold text-slate-900 dark:text-white">
-                  {initialData ? 'Edit Student Marks' : 'Publish New Student Marks'}
+                <h3 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white leading-tight">
+                  {initialData ? 'Edit Student Marks' : 'Publish Student Marks'}
                 </h3>
-                <p className="text-sm text-slate-500 dark:text-slate-400">
+                <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 line-clamp-1 sm:line-clamp-none">
                   Fill in component scores: CT1, CT2, Mid, Final, Assignment & Attendance
                 </p>
               </div>
@@ -186,7 +186,7 @@ export default function MarksFormModal({ isOpen, onClose, initialData, onSave, i
             <button
               onClick={onClose}
               aria-label="Close marks form modal"
-              className="p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              className="p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors shrink-0 touch-manipulation active:scale-95"
             >
               <X className="w-5 h-5" />
             </button>
@@ -199,7 +199,7 @@ export default function MarksFormModal({ isOpen, onClose, initialData, onSave, i
             </div>
           )}
 
-          <form onSubmit={(e) => handleSubmit(e)} className="mt-6 space-y-6">
+          <form onSubmit={(e) => handleSubmit(e)} className="mt-4 sm:mt-6 space-y-4 sm:space-y-6 overflow-y-auto max-h-[calc(92vh-140px)] touch-manipulation pr-1">
             {/* Student & Course Info Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
@@ -464,11 +464,11 @@ export default function MarksFormModal({ isOpen, onClose, initialData, onSave, i
             </div>
 
             {/* Actions */}
-            <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100 dark:border-slate-800">
+            <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2.5 sm:gap-3 pt-3 border-t border-slate-100 dark:border-slate-800 shrink-0">
               <button
                 type="button"
                 onClick={onClose}
-                className="px-5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-sm"
+                className="w-full sm:w-auto px-5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-sm text-center touch-manipulation active:scale-95"
               >
                 Cancel
               </button>
@@ -477,7 +477,7 @@ export default function MarksFormModal({ isOpen, onClose, initialData, onSave, i
                 type="button"
                 disabled={isSubmitting}
                 onClick={(e) => handleSubmit(e, false)}
-                className="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-900 text-white font-semibold flex items-center gap-2 transition-colors text-sm disabled:opacity-50"
+                className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-900 text-white font-semibold flex items-center justify-center gap-2 transition-colors text-sm disabled:opacity-50 touch-manipulation active:scale-95"
               >
                 <Save className="w-4 h-4" />
                 Save as Draft
@@ -487,7 +487,7 @@ export default function MarksFormModal({ isOpen, onClose, initialData, onSave, i
                 type="submit"
                 disabled={isSubmitting}
                 onClick={(e) => handleSubmit(e, true)}
-                className="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold flex items-center gap-2 transition-colors text-sm disabled:opacity-50 shadow-md shadow-indigo-500/20"
+                className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold flex items-center justify-center gap-2 transition-colors text-sm disabled:opacity-50 shadow-md shadow-indigo-500/20 touch-manipulation active:scale-95"
               >
                 <Send className="w-4 h-4" />
                 {isSubmitting ? 'Saving...' : 'Publish Marks'}
