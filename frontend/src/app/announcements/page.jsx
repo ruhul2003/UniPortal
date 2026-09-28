@@ -54,15 +54,15 @@ export default function AnnouncementsPage() {
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="space-y-8"
+      className="space-y-6 sm:space-y-8 pb-20 md:pb-8 max-w-7xl mx-auto px-1 sm:px-4"
     >
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-slate-100 dark:border-slate-800">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 sm:pb-6 border-b border-slate-100 dark:border-slate-800">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="p-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400">
               <Megaphone className="w-4 h-4" />
             </span>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">Campus Announcements</h1>
+            <h1 className="text-xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">Campus Announcements</h1>
           </div>
           <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
             Broadcasting events, seminars, holidays, and official updates across campus.
@@ -74,7 +74,7 @@ export default function AnnouncementsPage() {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => setIsModalOpen(true)}
-            className="px-5 py-2.5 rounded-xl bg-slate-900 dark:bg-emerald-600 hover:bg-slate-800 dark:hover:bg-emerald-500 text-white text-xs font-semibold flex items-center gap-2 shadow-sm transition-all whitespace-nowrap"
+            className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-slate-900 dark:bg-emerald-600 hover:bg-slate-800 dark:hover:bg-emerald-500 text-white text-xs font-semibold flex items-center justify-center gap-2 shadow-sm transition-all whitespace-nowrap touch-manipulation active:scale-95"
           >
             <Plus className="w-4 h-4 text-emerald-400 dark:text-white" /> Post Announcement
           </motion.button>
