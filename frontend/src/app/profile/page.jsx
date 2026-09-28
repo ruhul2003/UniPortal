@@ -194,10 +194,10 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8 pb-20 md:pb-8 max-w-7xl mx-auto px-1 sm:px-4">
       
       {/* Header Banner */}
-      <div className="bg-slate-900 p-8 rounded-3xl text-white shadow-xl relative overflow-hidden">
+      <div className="bg-slate-900 p-5 sm:p-8 rounded-2xl sm:rounded-3xl text-white shadow-xl relative overflow-hidden">
         <div className="absolute -right-20 -top-20 w-72 h-72 rounded-full bg-blue-600/20 blur-3xl pointer-events-none" />
         
         <div className="flex flex-col sm:flex-row items-center gap-6 relative z-10">
@@ -576,7 +576,7 @@ export default function ProfilePage() {
             <button
               type="submit"
               disabled={saving}
-              className="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold flex items-center gap-2 shadow-md disabled:opacity-50 transition-all"
+              className="w-full sm:w-auto px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 active:scale-95 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-md disabled:opacity-50 transition-all touch-manipulation"
             >
               {saving ? (
                 <RefreshCw className="w-4 h-4 animate-spin" />
