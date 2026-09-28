@@ -4,10 +4,33 @@ import { User } from '../models/User.js';
 
 const router = express.Router();
 
+// GET /api/permits/stats - Aggregated stats for permits
+router.get('/stats', async (req, res) => {
+  try {
+    const total = await PermitRequest.countDocuments();
+    const approved = await PermitRequest.countDocuments({ status: 'Approved' });
+    const pending = await PermitRequest.countDocuments({ status: 'Pending' });
+    const cancelled = await PermitRequest.countDocuments({ status: 'Cancelled' });
+
+    res.json({
+      success: true,
+      stats: {
+        total,
+        approved,
+        pending,
+        cancelled
+      }
+    });
+  } catch (err) {
+    console.error('Fetch permit stats error:', err);
+    res.status(500).json({ error: 'Failed to calculate permit statistics' });
+  }
+});
+
 // GET /api/permits - Fetch permit applications
 router.get('/', async (req, res) => {
   try {
-    const { studentId, facultyId, role, email } = req.query;
+    const { studentId, facultyId, role, email, status, search } = req.query;
     let query = {};
 
     if (studentId) {
@@ -20,12 +43,24 @@ router.get('/', async (req, res) => {
       query.facultyEmail = email;
     }
 
+    if (status && status !== 'All') {
+      query.status = status;
+    }
+
+    if (search && search.trim()) {
+      query.$or = [
+        { passCode: { $regex: search.trim(), $options: 'i' } },
+        { studentName: { $regex: search.trim(), $options: 'i' } },
+        { reason: { $regex: search.trim(), $options: 'i' } }
+      ];
+    }
+
     const permits = await PermitRequest.find(query)
       .sort({ createdAt: -1 })
       .populate('student', 'name email studentId department section avatar dueAmount')
       .populate('faculty', 'name email facultyId acronym designation avatar');
 
-    res.json({ success: true, permits });
+    res.json({ success: true, count: permits.length, permits });
   } catch (err) {
     console.error('Fetch permits error:', err);
     res.status(500).json({ error: 'Failed to fetch permit applications' });
