@@ -78,12 +78,15 @@ export default function MobileBottomNav({ onOpenMenu, hasNotices, hasUrgentNotic
   return (
     <nav 
       aria-label="Mobile Bottom Navigation"
-      className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border-t border-slate-200/80 dark:border-slate-800/80 pb-safe transition-colors"
+      style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 6px)' }}
+      className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border-t border-slate-200/80 dark:border-slate-800/80 transition-colors shadow-lg"
     >
-      <div className="flex items-center justify-around px-2 py-1.5 h-16 max-w-lg mx-auto">
+      <div className="flex items-center justify-around px-2 py-1 h-16 max-w-lg mx-auto">
         {tabs.map((tab, idx) => {
           const Icon = tab.icon;
-          const isActive = !tab.isAction && pathname === tab.href;
+          const isActive = !tab.isAction && (
+            tab.href === '/' ? pathname === '/' : pathname.startsWith(tab.href)
+          );
 
           if (tab.isAction) {
             return (
@@ -122,7 +125,7 @@ export default function MobileBottomNav({ onOpenMenu, hasNotices, hasUrgentNotic
                 {isActive && (
                   <motion.div
                     layoutId="mobile-nav-active-pill"
-                    className="absolute inset-0 bg-blue-50 dark:bg-blue-950/60 rounded-xl"
+                    className="absolute inset-0 bg-blue-50 dark:bg-blue-950/70 border border-blue-200/50 dark:border-blue-800/50 rounded-xl"
                     transition={{ type: 'spring', stiffness: 350, damping: 30 }}
                   />
                 )}
@@ -138,7 +141,7 @@ export default function MobileBottomNav({ onOpenMenu, hasNotices, hasUrgentNotic
                 )}
               </div>
 
-              <span className="text-[10px] mt-0.5 tracking-tight truncate max-w-[64px]">
+              <span className={`text-[10px] mt-0.5 tracking-tight truncate max-w-[64px] ${isActive ? 'font-bold' : 'font-medium'}`}>
                 {tab.name}
               </span>
             </Link>
