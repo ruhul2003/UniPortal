@@ -36,6 +36,7 @@ const SEMESTERS = [
 export default function UploadQuestionModal({ isOpen, onClose, onQuestionUploaded, currentUser }) {
   const [courseCode, setCourseCode] = useState('CSE-101');
   const [courseTitle, setCourseTitle] = useState('Structured Programming Language');
+  const [isCustomCourse, setIsCustomCourse] = useState(false);
   const [semester, setSemester] = useState('Spring 2026');
   const [category, setCategory] = useState('CT Questions (Class Test)');
   const [examType, setExamType] = useState('CT 1');
@@ -49,6 +50,13 @@ export default function UploadQuestionModal({ isOpen, onClose, onQuestionUploade
   if (!isOpen) return null;
 
   const handleCourseChange = (selectedCode) => {
+    if (selectedCode === 'CUSTOM') {
+      setIsCustomCourse(true);
+      setCourseCode('');
+      setCourseTitle('');
+      return;
+    }
+    setIsCustomCourse(false);
     setCourseCode(selectedCode);
     const found = COURSES.find(c => c.code === selectedCode);
     if (found) {
@@ -177,13 +185,14 @@ export default function UploadQuestionModal({ isOpen, onClose, onQuestionUploade
                   Course Code & Title *
                 </label>
                 <select
-                  value={courseCode}
+                  value={isCustomCourse ? 'CUSTOM' : courseCode}
                   onChange={(e) => handleCourseChange(e.target.value)}
                   className="w-full px-3.5 py-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-xs font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 >
                   {COURSES.map(c => (
                     <option key={c.code} value={c.code}>{c.code} - {c.title}</option>
                   ))}
+                  <option value="CUSTOM">+ Other (Specify Custom Course)</option>
                 </select>
               </div>
 
@@ -202,6 +211,38 @@ export default function UploadQuestionModal({ isOpen, onClose, onQuestionUploade
                 </select>
               </div>
             </div>
+
+            {/* Custom Course Code & Title Inputs */}
+            {isCustomCourse && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 p-3.5 rounded-2xl bg-blue-50/50 dark:bg-blue-950/30 border border-blue-200/60 dark:border-blue-900/40">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                    Custom Course Code *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. SWE-201"
+                    value={courseCode}
+                    onChange={(e) => setCourseCode(e.target.value.toUpperCase())}
+                    className="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                    Custom Course Title *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. Software Testing & QA"
+                    value={courseTitle}
+                    onChange={(e) => setCourseTitle(e.target.value)}
+                    className="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  />
+                </div>
+              </div>
+            )}
 
             {/* Exam Category & Sub-Type */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">

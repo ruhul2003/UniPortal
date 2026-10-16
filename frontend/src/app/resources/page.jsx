@@ -219,7 +219,7 @@ export default function ResourcesPage() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 pb-24 lg:pb-8">
         
         {/* Header Banner */}
         <div className="relative overflow-hidden rounded-3xl bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 sm:p-8 text-white shadow-md">
@@ -270,8 +270,17 @@ export default function ResourcesPage() {
                 placeholder="Search by course (e.g. CSE-101), topic, CT 1/2, Midterm, or Final..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                className="w-full pl-10 pr-9 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
               />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xs font-bold"
+                >
+                  ✕
+                </button>
+              )}
             </div>
 
             {/* Exam Tag Sub-Filter */}
@@ -296,20 +305,45 @@ export default function ResourcesPage() {
           </div>
 
           {/* Main Category Tabs */}
-          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1 touch-scroll">
-            {CATEGORIES.map((cat) => (
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1 touch-scroll flex-1">
+              {CATEGORIES.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setSelectedCategory(cat)}
+                  className={`px-3.5 py-2 min-h-[38px] rounded-xl text-xs font-bold whitespace-nowrap transition-all touch-manipulation active:scale-95 ${
+                    selectedCategory === cat
+                      ? 'bg-blue-600 text-white shadow-xs'
+                      : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+
+            {(selectedCategory !== 'All' || selectedExamType !== 'All' || searchQuery) && (
               <button
-                key={cat}
-                onClick={() => setSelectedCategory(cat)}
-                className={`px-3.5 py-2 min-h-[38px] rounded-xl text-xs font-bold whitespace-nowrap transition-all touch-manipulation active:scale-95 ${
-                  selectedCategory === cat
-                    ? 'bg-blue-600 text-white shadow-xs'
-                    : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
-                }`}
+                type="button"
+                onClick={() => {
+                  setSelectedCategory('All');
+                  setSelectedExamType('All');
+                  setSearchQuery('');
+                }}
+                className="shrink-0 text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline px-2 py-1"
               >
-                {cat}
+                Reset
               </button>
-            ))}
+            )}
+          </div>
+
+          <div className="flex items-center justify-between text-xs text-slate-500 font-medium px-1">
+            <span>Showing <strong className="text-slate-800 dark:text-slate-200">{resources.length}</strong> resources</span>
+            {selectedCategory !== 'All' && (
+              <span className="px-2 py-0.5 rounded-md bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 font-semibold text-[11px]">
+                Filter: {selectedCategory}
+              </span>
+            )}
           </div>
         </div>
 
