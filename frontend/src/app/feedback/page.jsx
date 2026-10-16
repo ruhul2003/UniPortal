@@ -48,6 +48,7 @@ export default function FeedbackPage() {
   // Filters
   const [selectedFacultyFilter, setSelectedFacultyFilter] = useState('all');
   const [selectedDeptFilter, setSelectedDeptFilter] = useState('all');
+  const [selectedRatingFilter, setSelectedRatingFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
 
   // Modal State
@@ -109,17 +110,25 @@ export default function FeedbackPage() {
   const filteredFeedback = feedbackList.filter(item => {
     const matchesDept = selectedDeptFilter === 'all' || item.department === selectedDeptFilter;
     const matchesFaculty = selectedFacultyFilter === 'all' || item.facultyId === selectedFacultyFilter;
+    const itemRating = Number(item.rating) || 0;
+    const matchesRating = 
+      selectedRatingFilter === 'all' ||
+      (selectedRatingFilter === '5' && itemRating === 5) ||
+      (selectedRatingFilter === '4+' && itemRating >= 4) ||
+      (selectedRatingFilter === '3+' && itemRating >= 3);
     const matchesSearch = 
       item.courseCode?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.courseTitle?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.facultyName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.comment?.toLowerCase().includes(searchQuery.toLowerCase());
 
-    return matchesDept && matchesFaculty && matchesSearch;
+    return matchesDept && matchesFaculty && matchesRating && matchesSearch;
   });
 
+  const activeFacultyName = faculties.find(f => f._id === selectedFacultyFilter)?.name;
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 pb-24 lg:pb-8">
       
       {/* Header Banner */}
       <section className="relative overflow-hidden rounded-3xl bg-slate-900 p-8 sm:p-10 text-white shadow-2xl border border-amber-500/20">
@@ -221,43 +230,98 @@ export default function FeedbackPage() {
       </section>
 
       {/* Control Bar: Filters & Search */}
-      <div className="p-4 rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4">
-        
-        {/* Search */}
-        <div className="relative w-full sm:w-80">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-          <input
-            type="text"
-            placeholder="Search by course code, teacher, or keyword..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800/50 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
-          />
+      <div className="p-4 rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-xl space-y-3">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+          
+          {/* Search */}
+          <div className="relative w-full sm:w-80">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              placeholder="Search by course code, teacher, or keyword..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-10 pr-9 py-2.5 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800/50 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xs font-bold"
+              >
+                ✕
+              </button>
+            )}
+          </div>
+
+          {/* Faculty & Department Filter dropdowns */}
+          <div className="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
+            <select
+              value={selectedDeptFilter}
+              onChange={(e) => setSelectedDeptFilter(e.target.value)}
+              className="flex-1 sm:flex-none px-3 py-2.5 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs font-bold bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 focus:outline-none"
+            >
+              <option value="all">All Departments</option>
+              <option value="Computer Science & Engineering">Computer Science & Eng.</option>
+              <option value="Software Engineering">Software Engineering</option>
+              <option value="Electrical & Electronic Engineering">Electrical & Electronic Eng.</option>
+            </select>
+
+            <select
+              value={selectedFacultyFilter}
+              onChange={(e) => setSelectedFacultyFilter(e.target.value)}
+              className="flex-1 sm:flex-none px-3 py-2.5 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs font-bold bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 focus:outline-none"
+            >
+              <option value="all">All Faculty Teachers</option>
+              {faculties.map(f => (
+                <option key={f._id} value={f._id}>{f.name}</option>
+              ))}
+            </select>
+          </div>
         </div>
 
-        {/* Faculty & Department Filter dropdowns */}
-        <div className="flex items-center gap-3 w-full sm:w-auto">
-          <select
-            value={selectedDeptFilter}
-            onChange={(e) => setSelectedDeptFilter(e.target.value)}
-            className="px-3 py-2 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs font-bold bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 focus:outline-none"
-          >
-            <option value="all">All Departments</option>
-            <option value="Computer Science & Engineering">Computer Science & Eng.</option>
-            <option value="Software Engineering">Software Engineering</option>
-            <option value="Electrical & Electronic Engineering">Electrical & Electronic Eng.</option>
-          </select>
-
-          <select
-            value={selectedFacultyFilter}
-            onChange={(e) => setSelectedFacultyFilter(e.target.value)}
-            className="px-3 py-2 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs font-bold bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 focus:outline-none"
-          >
-            <option value="all">All Faculty Teachers</option>
-            {faculties.map(f => (
-              <option key={f._id} value={f._id}>{f.name}</option>
+        {/* Rating Filter Tabs & Active Faculty Indicator */}
+        <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
+            <span className="text-[11px] font-bold text-slate-400 dark:text-slate-500 mr-1 flex items-center gap-1">
+              <Filter className="w-3 h-3" /> Rating:
+            </span>
+            {[
+              { id: 'all', label: 'All Ratings' },
+              { id: '5', label: '5.0 Stars', stars: true },
+              { id: '4+', label: '4.0+ Stars', stars: true },
+              { id: '3+', label: '3.0+ Stars', stars: true }
+            ].map(tab => (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setSelectedRatingFilter(tab.id)}
+                className={`px-3 py-1 rounded-xl text-xs font-bold transition-all flex items-center gap-1 touch-manipulation whitespace-nowrap ${
+                  selectedRatingFilter === tab.id
+                    ? 'bg-amber-500 text-slate-950 shadow-xs'
+                    : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                }`}
+              >
+                {tab.stars && <Star className="w-3 h-3 fill-current" />}
+                <span>{tab.label}</span>
+              </button>
             ))}
-          </select>
+          </div>
+
+          {(selectedFacultyFilter !== 'all' || selectedDeptFilter !== 'all' || selectedRatingFilter !== 'all' || searchQuery) && (
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedFacultyFilter('all');
+                setSelectedDeptFilter('all');
+                setSelectedRatingFilter('all');
+                setSearchQuery('');
+              }}
+              className="text-[11px] font-bold text-amber-600 dark:text-amber-400 hover:underline"
+            >
+              Reset Filters
+            </button>
+          )}
         </div>
       </div>
 
